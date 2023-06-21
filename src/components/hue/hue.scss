@@ -69,7 +69,12 @@
     var(--gradient-end)
   );
 
-  --gradient-direction: 160deg;
+  @supports (background: linear-gradient(in oklch, black, white)) {
+    --gradient-direction: in oklch 160deg;
+  }
+  @supports not (background: linear-gradient(in oklch, black, white)) {
+    --gradient-direction: 160deg;
+  }
   --gradient-start: oklch(95% 0.02 var(--hue));
   --gradient-end: oklch(93% 0 var(--hue));
   
@@ -221,9 +226,7 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
   line-height: inherit;
-  min-height: 100dvh;
 }
 
 
@@ -366,7 +369,7 @@ a[class*="btn"] {
     fill: currentColor;
   }
   &.gradient {
-    path {
+    svg {
       fill: url(#svg-gradient);
     }
   }
