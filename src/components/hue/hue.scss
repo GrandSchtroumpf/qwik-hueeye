@@ -129,7 +129,7 @@
     var(--gradient-start),
     var(--gradient-end)
   );
-  &.btn, &.btn-fill, &.btn-outlined {
+  &.btn, &.btn-fill, &.btn-outline {
     background-image: var(--background-image);
     &:hover {
       background-image: linear-gradient(
@@ -315,7 +315,7 @@ a[class*="btn"] {
   }
 }
 
-.btn-outlined {
+.btn-outline {
   transition: background-color 0.1s ease-in-out;
   background-color: transparent;
   border: var(--border-width, 1px) solid var(--color, var(--outline));
@@ -377,7 +377,7 @@ a[class*="btn"] {
 }
 
 
-.btn, .btn-fill, .btn-icon, .btn-outlined {
+.btn, .btn-fill, .btn-icon, .btn-outline {
   font-size: 0.9rem;
   // Use :disabled for buttons & .disabled for anchors
   &:disabled, &.disabled {

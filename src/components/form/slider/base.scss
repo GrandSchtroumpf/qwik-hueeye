@@ -7,7 +7,7 @@
   height: 48px;
   display: grid;
   align-items: center;
-  &.outlined {
+  &.outline {
     --fieldset-padding-inline: 16px;
     border: 1px solid var(--outline);
     box-sizing: border-box;

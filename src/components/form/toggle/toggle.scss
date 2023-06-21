@@ -5,7 +5,7 @@
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  &.outlined {
+  &.outline {
     border: solid 1px var(--outline);
   }
   &.fill {

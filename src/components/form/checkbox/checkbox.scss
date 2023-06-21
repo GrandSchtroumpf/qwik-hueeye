@@ -6,7 +6,7 @@ $size: 24px;
   gap: 8px;
   border-radius: 4px;
   padding: var(--size-1) var(--size-2);
-  &.outlined {
+  &.outline {
     border: solid 1px var(--outline);
   }
   &.fill {
