@@ -7,3 +7,4 @@ export * from './components/toaster/toaster';
 export * from './components/tabs/tabs';
 export * from './components/svg-gradient';
 export * from './components/types';
+export * from './components/hue/hue';
