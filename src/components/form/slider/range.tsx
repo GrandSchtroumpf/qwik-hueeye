@@ -1,5 +1,6 @@
-import { Slot, component$, useStyles$, event$, useSignal, useVisibleTask$, createContextId, useContextProvider, useContext, $, useId } from "@builder.io/qwik";
+import { Slot, component$, useStyles$, event$, useSignal, useVisibleTask$, createContextId, useContextProvider, useContext, $ } from "@builder.io/qwik";
 import { useOnReset, clsq } from "../../utils";
+import { useNameId } from "../field";
 import type { FieldsetAttributes, InputAttributes } from "../types";
 import styles from './range.scss?inline';
 
@@ -19,7 +20,7 @@ function useRangeProvider(props: RangeProps) {
   const track = useSignal<HTMLElement>();
   const startInput = useSignal<HTMLInputElement>();
   const endInput = useSignal<HTMLInputElement>();
-  const nameId = props.name ?? useId();
+  const nameId = useNameId(props);
   
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;

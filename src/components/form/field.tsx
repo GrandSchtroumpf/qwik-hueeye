@@ -34,16 +34,22 @@ export const useFieldClass = (state: FieldState<any>, ...classes: string[]) => {
 }
 
 export const FieldGroupContext = createContextId<{ name?: string }>('FieldGroupContext');
+
+export const useNameId = (props: { name?: string | null }) => {
+  const id = useId();
+  return props.name ?? id;
+}
+
 /** Get name from the group if any */
 export const useGroupName = (props: { name?: string }) => {
   if (props.name) return props.name;
   const { name } = useContext(FieldGroupContext, { name: null });
-  return name ?? useId();
+  return useNameId({ name });
 }
 
 /** Combine name from the group */
 export const useRecordName = (props: { name?: string }) => {
-  const nameId = props.name ?? useId();
+  const nameId = useNameId(props);
   const { name: groupName } = useContext(FieldGroupContext, { name: null});
   if (!groupName) return nameId;
   return `${groupName}.${nameId}`;

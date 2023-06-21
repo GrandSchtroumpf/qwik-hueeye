@@ -1,7 +1,7 @@
 import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvider, createContextId, useContext, $, useVisibleTask$, useTask$ } from "@builder.io/qwik";
 import { Popover } from "../../dialog/popover";
 import type { Signal } from "@builder.io/qwik";
-import { FieldContext } from "../field";
+import { FieldContext, useNameId } from "../field";
 import type { FieldProps } from "../field";
 import type { DisplayProps } from "../types";
 import type { SelectionItemProps } from "../selection-list/types";
@@ -30,7 +30,7 @@ export const Select = component$((props: SelectProps) => {
   const opened = useSignal(false);
   const multi = props.multi ?? false;
   const display = useSignal('');
-  const nameId = props.name ?? useId();
+  const nameId = useNameId(props);
   const popoverId = useId();
 
   // Listeners
