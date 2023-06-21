@@ -23,7 +23,6 @@
 
 
 :root, ::backdrop {
-  --hue: 0;
   --chroma: 0.01;
   @media (prefers-color-scheme: dark) {
     --chroma: 0.02;

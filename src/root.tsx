@@ -5,6 +5,9 @@ import { useHueEyeProvider } from "./components/hue/hue";
 export const HueProvider = component$(() => {
   useHueEyeProvider();
   useStyles$(`
+    html {
+      --hue: 0;
+    }
     body {
       display: flex;
       flex-direction: column;
@@ -18,6 +21,8 @@ export const HueProvider = component$(() => {
     main {
       background-color: var(--surface);
       flex: 1;
+      padding: var(--size-2);
+      box-sizing: border-box;
     }
   `);
   return <Slot/>;
@@ -36,7 +41,7 @@ export default () => {
           <h1>HueEye</h1>
         </header>
         <main>
-
+          <button class="btn-fill primary">Primary button</button>
         </main>
         <footer>
           <p>This is a random footer</p>
