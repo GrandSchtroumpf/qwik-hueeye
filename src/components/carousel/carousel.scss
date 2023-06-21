@@ -1,0 +1,34 @@
+.carousel {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-previous, .carousel-next {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  height: 100%;
+  background-color: var(--surface-higher);
+  display: block;
+}
+.carousel-previous {
+  left: 0;
+}
+.carousel-next {
+  right: 0;
+}
+
+.carousel-list {
+  margin-block: 0;
+  padding: var(--size-2);
+  list-style: none;
+  display: flex;
+  gap: var(--carousel-gap, var(--size-2));
+  overflow-x: auto;
+
+}
+
+.carousel-item {
+
+}

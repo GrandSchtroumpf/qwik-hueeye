@@ -1,0 +1,95 @@
+$size: 16px;
+$padding: 2px;
+$distance: calc($size - $padding);
+
+.switch-group {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-1);
+  border-radius: 4px;
+  padding: var(--size-1) var(--size-2);
+  &.outlined {
+    border: solid 1px var(--outline);
+  }
+  &.fill {
+    background-color: var(--surface);
+  }
+  &:focus-within, &:active {
+    border-color: var(--primary);
+  }
+  &:has(input:invalid) {
+    border-color: var(--error);
+  }
+}
+
+.switch {
+  label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-1);
+    padding: 4px;
+    cursor: pointer;
+  }
+  .track {
+    box-sizing: border-box;
+    height: calc($size + 4px);
+    width: calc(2 * $size + 4px);
+    display: flex;
+    align-items: center;
+    padding: 2 * $padding;
+    border-radius: $size;
+    border: 1px solid var(--text);
+  }
+  .thumb {
+    transform-origin: center;
+    height: calc(0.8 * $size);
+    width: calc(0.8 * $size);
+    border-radius: $size;
+    background-color: var(--text);
+    transform: scale(0.9);
+    transition: transform 0.2s var(--ease-out);
+  }
+  input {
+    z-index: -1;
+    position: absolute;
+    opacity: 0;
+    &:checked + label .track {
+      border-color: var(--primary);
+      background-color: var(--primary);
+      .thumb {
+        background-color: var(--on-primary);
+        transform: translateX($distance);
+      }
+    }
+    &:active + label .track {
+      .thumb {
+        transform: scale(1.1, 1) translateX(-2px);
+      }
+    }
+  }
+
+  &:focus-within {
+    outline: solid 1px var(--divider);
+    .track {
+      background-color: var(--surface);
+    }
+  }
+
+  &:hover {
+    color: var(--text);
+    .track {
+      background-color: var(--surface);
+    }
+    .thumb {
+      background-color: var(--text);
+      transform: scale(1.1);
+    }
+    input:checked + .track {
+      .thumb {
+        transform: scale(1.1) translateX($distance);
+      }
+    }
+  }
+}

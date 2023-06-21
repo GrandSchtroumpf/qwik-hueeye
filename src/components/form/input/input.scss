@@ -1,0 +1,16 @@
+.field {
+  input {
+    flex: 1;
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    color: currentColor;
+    &::placeholder {
+      color: var(--text);
+      opacity: 0.5;
+    }
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
