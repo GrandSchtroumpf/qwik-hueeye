@@ -40,43 +40,23 @@ demo: https://qwik-playground.vercel.app/
 
 ## Components
 
-### btn
-As btn are style only we can use it class CSS classes.
-Here are some example of implementation
-```jsx
-export default component$(() => {
-  return <>
-    <button class="btn">basic button</button>
-    <button class="btn-outline primary">outline button with primary color</button>
-    <a class="btn-fill secondary">Fill anchor with primary color</a>
-    <Link class="btn-icon warn">
-      <svg>{/* Some warning icon */}</svg>
-    </Link>
-  </>
-})
-```
-Currently the `btn-*` classes are included in the global style. It'll surely move into it's own context later.
+- [button](src/components/button)
+- [accordion](src/components/accordion)
+- [dialog](src/components/dialog)
+- [navlist](src/components/navlist)
 
-You can also apply gradient on your btn: 
-```jsx
-export default component$(() => {
-  return <>
-    <button class="btn gradient">gradient btn</button>
-    <button class="btn-outline gradient">gradient outline btn</button>
-    <button class="btn-fill gradient">gradient fill btn</button>
-    <button class="btn-icon gradient">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle cx="12" cy="12" r="10"/>
-      </svg>
-    </button>
-  </>
-})
-```
 
 ## ...More component later
 Documentation takes time...
 You can take a look at the list of component here : 
-- [accordion](src/components/accordion/accordion.tsx)
-- [navlist](src/components/navlist/navlist.tsx)
 - [tabs](src/components/tabs/tabs.tsx)
 - [toaster](src/components/toaster/toaster.tsx)
+- [checkbox](src/components/form/checkbox/checkbox.tsx)
+- [radio](src/components/form/radio/radio.tsx)
+- [slider](src/components/form/slider/slider.tsx)
+- [range](src/components/form/slider/range.tsx)
+- [toggle](src/components/form/toggle/toggle.tsx)
+- [switch](src/components/form/switch/switch.tsx)
+- [form-field](src/components/form/form-field/form-field.tsx)
+- [input](src/components/form/input/input.tsx)
+- [select](src/components/form/select/select.tsx)
