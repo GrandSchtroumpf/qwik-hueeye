@@ -1,49 +1,65 @@
-import { useContext, component$, createContextId, Slot, useStore, useSignal, $, useComputed$, useContextProvider, useStyles$ } from "@builder.io/qwik";
-import { closeDialog } from "./utils";
-import type { QwikMouseEvent } from "@builder.io/qwik";
-import type { DialogState } from "./utils";
+import { component$, useTask$, Slot, useSignal, $, useComputed$, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import type { QwikMouseEvent , Signal, QRL } from "@builder.io/qwik";
+import type { DialogAttributes } from "../types";
+import { clsq } from "../utils";
 import styles from './dialog.scss?inline';
 
-const DialogContext = createContextId<DialogState>('DialogContext');
-
-// TODO: create an onCloseQRL method
-
-export const useModal = () => {
-  const state = useStore<DialogState>({
-    ref: useSignal<HTMLDialogElement>(),
-    opened: false,
-    closing: false,
-  });
-
-  useContextProvider(DialogContext, state);
-  
-  return {
-    state,
-    open: $(() => {
-      const dialog = state.ref.value;
-      if (!dialog) throw new Error('Cannot find dialog in the template ?');
-      state.opened = true;
-      dialog.showModal();
-    }),
-    close: $(() => closeDialog(state)),
-  }
-}
-
-interface ModalProps {
+interface ModalProps extends Omit<DialogAttributes, 'open'> {
   type?: 'bottom-sheet' | 'modal' | 'sidenav';
+  open: Signal<boolean>;
+  onOpen$?: QRL<() => void>;
+  onClose$?: QRL<() => void>;
 }
 
 export const Modal = component$((props: ModalProps) => {
   useStyles$(styles);
-  const state = useContext(DialogContext);
-  const classes = useComputed$(() => [
-    props.type ?? 'modal',
-    state.closing ? 'closing' : ''
-  ].join(' '));
-  const onClick = $((event: QwikMouseEvent<HTMLDialogElement, MouseEvent>, element: HTMLDialogElement) => {
-    if (event.target === element) closeDialog(state);
+  const ref = useSignal<HTMLDialogElement>();
+  const closing = useSignal(false);
+  const opened = props.open;
+  const type = props.type ?? 'modal';
+  const propsClass = props.class;
+  const { onOpen$, onClose$ }  = props;
+
+  // prevent default closing to keep state in sync
+  useVisibleTask$(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        opened.value = false;
+      }
+    }
+    ref.value?.addEventListener("keydown", handler);
+    return (() => ref.value?.removeEventListener("keydown", handler));
+  });
+
+  useTask$(({ track }) => {
+    track(() => opened.value);
+    if (!ref.value) return;
+    if (opened.value) {
+      ref.value.showModal();
+      if (onOpen$) onOpen$();
+    } else {
+      closing.value = true;
+      if (onClose$) onClose$();
+      setTimeout(() => {
+        closing.value = false;
+        ref.value?.close();
+      }, 300);
+    }
   })
-  return <dialog class={classes} ref={state.ref} onClick$={onClick}>
+
+  const classes = useComputed$(() => clsq(
+    type,
+    propsClass,
+    closing.value ? 'closing' : '',
+    opened.value ? 'opened' : 'closed',
+  ));
+
+  const onClick = $((event: QwikMouseEvent<HTMLDialogElement, MouseEvent>, element: HTMLDialogElement) => {
+    if (event.target === element) opened.value = false;
+  });
+
+  return <dialog class={classes} ref={ref} onClick$={onClick}>
     <Slot />
   </dialog>
 })

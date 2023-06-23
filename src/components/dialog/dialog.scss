@@ -2,49 +2,55 @@ dialog {
   border: none;
   padding: 0;
   overflow: hidden;
+  background-color: var(--overlay);
+  box-shadow: var(--overlay-shadow);
+
+  &.modal::backdrop,
+  &.bottom-sheet::backdrop,
+  &.sidenav::backdrop {
+    opacity: 0.32;
+    background-color: var(--text);
+    animation: fade 0.2s linear;
+  }
+
   &:not(.popover)::backdrop {
     opacity: 0.24;
     background-color: var(--on-background);
   }
   &.modal {
     border-radius: 8px;
-    animation: fade 0.2s var(--ease-out);
+    animation: scalein 0.2s var(--ease-out);
+
     &.closing {
       opacity: 0;
-      animation: scaleout 0.1s var(--ease-in);
+      animation: scaleout 0.2s var(--ease-in);
     }
   }
   &.bottom-sheet {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     margin-bottom: 0;
-    animation: slidein 0.3s var(--ease-out);
-    &::backdrop {
-      opacity: 0.24;
-      background-color: var(--on-background);
-    }
+    animation: slideUp 0.3s var(--ease-out);
     &.closing {
       transform: translateY(100%);
-      animation: slideout 0.2s var(--ease-in);
+      animation: slideDown 0.2s var(--ease-in);
     }
   }
   &.sidenav {
     margin-left: 0;
-    max-height: 100%; // browser set max-height: calc(100% - 6px -2em)
+    max-height: 100%; // Firefox set max-height: calc(100% - 6px -2em)
     height: auto;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
-    animation: slideRight 0.2s var(--ease-out);
+    animation: slideLeft 0.2s var(--ease-out);
     &.closing {
-      opacity: 1;
-      animation: slideBackLeft 0.2s var(--ease-in);
+      transform: translateX(-100%);
+      animation: slideRight 0.2s var(--ease-in);
     }
   }
   &.popover {
-    background-color: var(--overlay);
     z-index: 1;
     border-radius: 4px;
-    box-shadow: var(--overlay-shadow);
     &.closing {
       opacity: 0;
     }
@@ -52,15 +58,29 @@ dialog {
       opacity: 0;
     }
   }
-  .content {
-    padding: 8px 16px;
+  .dialog-content {
+    padding: var(--size-1) var(--size-2);
   }
-  .actions {
+  .dialog-actions {
     display: flex;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: var(--background-variant);
-    color: var(--on-background-variant);
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--size-1);
+    padding: var(--size-1) var(--size-2);
+    background-color: var(--background);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  dialog.modal {
+    border: solid 1px var(--outline);
+  }
+  dialog.bottom-sheet {
+    border: solid 1px var(--outline);
+    border-bottom: none;
+  }
+  dialog.sidenav {
+    border-right: solid 1px var(--outline);
   }
 }
 
@@ -88,5 +108,39 @@ dialog {
       background-color: oklch(20% var(--chroma) var(--hue));
       opacity: 0.3;
     }
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(100%);
   }
 }

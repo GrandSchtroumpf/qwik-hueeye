@@ -1,6 +1,7 @@
 # Qwik Hue Eye
 
 A UI library for qwik with a strong focus on color management with native CSS variables.
+
 ⚠️ This is an **experimental** library with a TON of improvements to come.
 
 ```

@@ -5,6 +5,7 @@ import type { DialogAttributes } from "../types";
 import type { PopoverOption} from "./utils";
 import { setMenuPosition } from "./utils";
 import styles from './dialog.scss?inline';
+import { clsq } from "../utils";
 
 
 interface PopoverProps extends Omit<DialogAttributes, 'open'> {
@@ -80,11 +81,11 @@ export const Popover = component$((props: PopoverProps) => {
   });
 
 
-  const classes = useComputed$(() => [
+  const classes = useComputed$(() => clsq(
     'popover',
     propsClass,
-    closing.value ? 'closing' : '',
-  ].join(' '));
+    closing.value ? 'closing' : ''
+  ));
 
   return <dialog class={classes} ref={ref} >
     <Slot />
