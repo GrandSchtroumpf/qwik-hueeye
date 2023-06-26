@@ -27,9 +27,7 @@ export const Navlist = component$((props: NavAttributes) => {
     if (key === ' ') (event.target as HTMLElement).click();
   }));
   return <nav {...props} ref={ref} class={clsq('nav-list', props.class)}>
-    <ul role="list">
-      <Slot/>
-    </ul>
+    <Slot/>
   </nav>
 });
 
@@ -41,11 +39,9 @@ export const NavLink = component$((props: LinkProps) => {
     if (isSamePathname(url.pathname, href)) result['aria-current'] = 'page';
     return result;
   });
-  return <li>
-    <Link {...props} {...aria.value}>
-      <Slot/>
-    </Link>
-  </li>
+  return <Link {...props} {...aria.value}>
+    <Slot/>
+  </Link>
 });
 
 
@@ -58,9 +54,7 @@ export const NavAnchor = component$((props: NavAnchorProps) => {
     if (isSamePathname(url.pathname, href)) result['aria-current'] = 'page';
     return result;
   });
-  return <li>
-    <a {...props} {...aria.value}>
-      <Slot/>
-    </a>
-  </li>
+  return <a {...props} {...aria.value}>
+    <Slot/>
+  </a>
 });

@@ -2,7 +2,6 @@
 
 This is a simple list of link with some a11y bonus:
 - keyboard navigation
-- use `ul` tag to annonce the amount of links
 - set `aria-current="page"` if current page
 
 Note: there are some known [issues](https://github.com/BuilderIO/qwik/issues/4041) with the `aria-current="page"`.

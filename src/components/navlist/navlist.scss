@@ -1,14 +1,6 @@
 .nav-list {
-  ul {
-    margin-block: 0;
-    padding-left: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-  }
-  li {
-    display: contents;
-  }
+  display: flex;
+  flex-direction: column;
   a {
     -webkit-tap-highlight-color: transparent;
     text-decoration: none;
