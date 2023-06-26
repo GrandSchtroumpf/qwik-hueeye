@@ -86,7 +86,7 @@ $distance: calc($size - $padding);
       background-color: var(--text);
       transform: scale(1.1);
     }
-    input:checked + .track {
+    input:checked + label .track {
       .thumb {
         transform: scale(1.1) translateX($distance);
       }

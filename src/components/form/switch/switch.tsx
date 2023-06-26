@@ -1,6 +1,7 @@
 import { Slot, component$, useStyles$, useContextProvider, useSignal, $, useId } from "@builder.io/qwik";
 import { nextFocus, previousFocus, useKeyboard, clsq } from "../../utils";
 import { FieldGroupContext, useRecordName } from "../field";
+import { useFormValue } from "../form";
 import type { FieldsetAttributes, InputAttributes } from "../types";
 import styles from './switch.scss?inline';
 
@@ -40,8 +41,10 @@ export const Switch = component$((props: SwitchProps) => {
   useStyles$(styles);
   const id = useId();
   const name = useRecordName(props);
+  const initialChecked = !!useFormValue<string | string[]>(name);
+
   return <div class="switch">
-    <input {...props} type="checkbox" role="switch" id={id} name={name} />
+    <input {...props} type="checkbox" role="switch" id={id} name={name} checked={initialChecked}/>
     <label for={id}>
       <div class="track" aria-hidden="true">
         <span class="thumb"></span>

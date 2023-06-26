@@ -1,6 +1,7 @@
 import { Slot, component$, useStyles$, event$, useSignal, useVisibleTask$, createContextId, useContextProvider, useContext, $ } from "@builder.io/qwik";
 import { useOnReset, clsq } from "../../utils";
 import { useNameId } from "../field";
+import { useFormValue } from "../form";
 import type { FieldsetAttributes, InputAttributes } from "../types";
 import styles from './range.scss?inline';
 
@@ -20,7 +21,7 @@ function useRangeProvider(props: RangeProps) {
   const track = useSignal<HTMLElement>();
   const startInput = useSignal<HTMLInputElement>();
   const endInput = useSignal<HTMLInputElement>();
-  const nameId = useNameId(props);
+  const baseName = useNameId(props);
   
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
@@ -72,7 +73,7 @@ function useRangeProvider(props: RangeProps) {
   });
 
   const service = {
-    nameId,
+    baseName,
     slider,
     track,
     startInput,
@@ -108,13 +109,11 @@ export const Range = component$((props: RangeProps) => {
 
   // Update position on reset
   useOnReset(slider, $(() => {
-    const inputs = slider.value?.querySelectorAll<HTMLInputElement>('input');
-    const start = inputs!.item(0);
-    const end = inputs!.item(1);
-    start.value = start.min;
-    end.value = end.max;
-    setPosition(start, 'start');
-    setPosition(end, 'end');
+    requestAnimationFrame(() => {
+      const inputs = slider.value?.querySelectorAll<HTMLInputElement>('input');
+      setPosition(inputs!.item(0), 'start');
+      setPosition(inputs!.item(1), 'end');
+    })
   }));
 
   return <fieldset {...props} class={clsq('range', props.class)} ref={slider}>
@@ -126,43 +125,49 @@ export const Range = component$((props: RangeProps) => {
 interface ThumbProps extends Omit<InputAttributes, 'type' | 'children' | 'step' | 'min' | 'max'> {}
 
 export const ThumbStart = component$((props: ThumbProps) => {
-  const { nameId, startInput, min, max, step, resize, focusLeft, move} = useRangeContext();
+  const { baseName, startInput, min, max, step, resize, focusLeft, move} = useRangeContext();
+  const name = baseName + '.start';
+  const initialValue = useFormValue<string | number>(name);
+  const value = props.value ?? initialValue ?? min;
   return <>
     <input
       type="range" 
-      name={nameId + '.start'}
+      name={name}
       ref={startInput}
       min={min}
       max={max}
       step={step}
-      value={min}
+      value={value}
       onFocus$={(_, el) => focusLeft(el)}
       onInput$={(_, el) => move(el, 'start')}
       onMouseUp$={resize}
       onTouchEnd$={resize}
       onTouchCancel$={resize}
       {...props} />
-    <div class="thumb start" data-value={min}></div>
+    <div class="thumb start" data-value={value}></div>
   </>
 
 });
 export const ThumbEnd = component$((props: ThumbProps) => {
-  const { nameId, endInput, min, max, step, resize, focusRight, move} = useRangeContext();
+  const { baseName, endInput, min, max, step, resize, focusRight, move} = useRangeContext();
+  const name = baseName + '.end';
+  const initialValue = useFormValue<string | number>(name);
+  const value = props.value ?? initialValue ?? max;
   return <>
     <input 
       type="range" 
-      name={nameId + '.end'}
+      name={name}
       ref={endInput}
       min={min}
       max={max}
       step={step}
-      value={max}
+      value={value}
       onFocus$={(_, el) => focusRight(el)}
       onInput$={(_, el) => move(el, 'end')}
       onMouseUp$={resize}
       onTouchEnd$={resize}
       onTouchCancel$={resize}
       {...props} />
-    <div class="thumb end" data-value={max}></div>
+    <div class="thumb end" data-value={value}></div>
   </>
 });

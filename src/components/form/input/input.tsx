@@ -2,7 +2,7 @@ import type { QwikJSX} from "@builder.io/qwik";
 import { useSignal } from "@builder.io/qwik";
 import { component$, Slot, useContext, useStyles$ } from "@builder.io/qwik";
 import type { FieldProps} from "../field";
-import { useFormController } from "../form";
+import { useFormValue } from "../form";
 import { FormFieldContext } from "../form-field/form-field";
 import styles from './input.scss?inline';
 
@@ -15,11 +15,12 @@ export const Input = component$((props: InputProps) => {
   useStyles$(styles);
   const { id } = useContext(FormFieldContext);
   const ref = useSignal<HTMLInputElement>();
-  useFormController(ref);
+  const initialValue = useFormValue(props.name);
+  const value = props.value ?? initialValue;
 
   return <div class="field">
     <Slot name="prefix"/>
-    <input {...props} id={id} ref={ref}/>
+    <input {...props} id={id} ref={ref} value={value}/>
     <Slot name="suffix"/>
   </div>
 })

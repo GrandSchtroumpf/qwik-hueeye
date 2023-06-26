@@ -1,8 +1,9 @@
 import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId } from "@builder.io/qwik";
+import type { FieldsetAttributes } from "../types";
 import type { FieldProps } from "../field";
 import { FieldContext } from "../field";
-import type { FieldsetAttributes } from "../types";
-import { ArrowsKeys, nextFocus, previousFocus, useKeyboard, clsq } from "../../utils";
+import { useFormValue } from "../form";
+import { ArrowsKeys, nextFocus, previousFocus, useKeyboard, clsq  } from "../../utils";
 import { toggleAll } from "../utils";
 import styles from './toggle.scss?inline';
 
@@ -65,7 +66,11 @@ export const Toggle = component$((props: ToggleProps) => {
   const { name } = useContext(FieldContext);
   const { multi } = useContext(ToggleGroupContext);
   const type = multi ? 'checkbox' : 'radio';
-  const checked = useSignal(false);
+  const initialValue = useFormValue<string | string[]>(name);
+  const initialChecked = multi
+    ? !!initialValue?.includes(props.value)
+    : props.value === initialValue;
+  const checked = useSignal(initialChecked);
 
   const toggle = $(() => checked.value = !checked.value);
 
