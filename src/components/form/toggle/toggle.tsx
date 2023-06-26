@@ -1,13 +1,11 @@
 import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
-import type { FieldProps } from "../field";
 import { FieldContext } from "../field";
 import { useFormValue } from "../form";
 import { ArrowsKeys, nextFocus, previousFocus, useKeyboard, clsq  } from "../../utils";
 import { toggleAll } from "../utils";
 import styles from './toggle.scss?inline';
 
-export interface CheckgroupProps extends FieldProps, Omit<FieldsetAttributes, 'role' | 'tabIndex' | 'onKeyDown$'> {}
 
 const disabledKeys = [...ArrowsKeys, 'Enter', ' ', 'ctrl+a'];
 

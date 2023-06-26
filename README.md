@@ -44,6 +44,7 @@ demo: https://qwik-playground.vercel.app/
 - [accordion](src/components/accordion)
 - [dialog](src/components/dialog)
 - [navlist](src/components/navlist)
+- [form](src/components/form)
 
 
 ## ...More component later
@@ -52,6 +53,7 @@ You can take a look at the list of component here :
 - [tabs](src/components/tabs/tabs.tsx)
 - [toaster](src/components/toaster/toaster.tsx)
 - [checkbox](src/components/form/checkbox/checkbox.tsx)
+- [checklist](src/components/form/checkbox/checkgroup.tsx)
 - [radio](src/components/form/radio/radio.tsx)
 - [slider](src/components/form/slider/slider.tsx)
 - [range](src/components/form/slider/range.tsx)
