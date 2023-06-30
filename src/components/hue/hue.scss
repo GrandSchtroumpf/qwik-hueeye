@@ -253,9 +253,30 @@ pre {
 }
 
 
+//////////////
+/// BUTTON ///
+//////////////
+
 
 a[class*="btn"] {
   text-decoration: none;
+}
+
+.btn, .btn-fill, .btn-outline, .btn-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-1);
+  box-sizing: border-box;
+}
+
+.btn, .btn-fill, .btn-icon, .btn-outline, .btn-expand {
+  font-size: 0.9rem;
+  // Use :disabled for buttons & .disabled for anchors
+  &:disabled, &.disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 
@@ -376,17 +397,112 @@ a[class*="btn"] {
     svg {
       fill: url(#svg-gradient);
     }
-  }
-  
+  } 
 }
 
 
-.btn, .btn-fill, .btn-icon, .btn-outline {
-  font-size: 0.9rem;
-  // Use :disabled for buttons & .disabled for anchors
-  &:disabled, &.disabled {
-    opacity: 0.5;
-    cursor: default;
-    pointer-events: none;
+.btn svg, .btn-fill svg, .btn-outline svg, .btn-expand svg {
+  fill: currentColor;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+
+
+.btn-expand {
+  border: none;
+  border-radius: var(--size-1);
+  height: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.2s var(--ease-out);
+  &[aria-expanded="true"] {
+    transition: max-width 0.2s var(--ease-in);
+    max-width: var(--btn-expand-width, 200px);
   }
+  &.fill {
+    background-color: var(--color, var(--background));
+    color: var(--on-color, var(--text));
+  }
+  &.fill.gradient {
+    background-image: var(--background-image);
+    color: var(--on-gradient);
+  }
+  &.outline {
+    background-color: transparent;
+    color: var(--on-color, var(--text));
+  }
+  &.outline.gradient {
+    background-image: var(--background-image);
+    color: var(--text);
+    isolation: isolate;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: var(--border-width, 1px);
+      background-color: var(--background);
+      border-radius: calc(var(--size-1) - var(--border-width, 1px));
+      z-index: -1;
+    }
+    &:hover::before {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--background));
+    }
+    &:active::before {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--background));
+    }
+  }
+}
+
+///////////////
+/// TOOLTIP ///
+///////////////
+
+[class*="tooltip"] {
+  position: relative;
+  &::after {
+    content: attr(aria-label);
+    pointer-events: none;
+    padding: var(--size-0) var(--size-1);
+    position: absolute;
+    height: fit-content;
+    width: fit-content;
+
+    box-shadow: var(--overlay-shadow);
+    background-color: var(--overlay);
+    border-radius: var(--size-0);
+    color: var(--secondary-text);
+    white-space: nowrap;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.2s var(--ease-in),
+      transform 0.2s var(--ease-in);
+  }
+  &:hover::after {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+}
+.tooltip-top::after {
+  bottom: 110%;
+  left: -50%;
+}
+.tooltip-right::after {
+  top: 25%;
+  left: 110%;
+}
+.tooltip-bottom::after {
+  top: 110%;
+  left: -50%;
+}
+.tooltip-left::after {
+  top: 25%;
+  right: 110%;
 }
