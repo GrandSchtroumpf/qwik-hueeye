@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack } from "@builder.io/qwik";
+import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack, QwikChangeEvent } from "@builder.io/qwik";
 import type { QwikJSX, Signal, QwikSubmitEvent, QRL} from "@builder.io/qwik";
 import type { FormFieldRecord } from "./types";
 import { getDeepValue, getFormValue } from "./utils";
@@ -8,6 +8,7 @@ type FormAttributes = QwikJSX.IntrinsicElements['form'];
 
 export interface FormProps<T extends FormFieldRecord> extends Omit<FormAttributes, 'onSubmit$'> {
   onSubmit$?: QRL<(value: T, form: HTMLFormElement, event: QwikSubmitEvent<HTMLFormElement>) => any>;
+  onChange$?: QRL<(value: T, form: HTMLFormElement, event: QwikChangeEvent<HTMLFormElement>) => any>;
   value?: Signal<T>;
   initialValue?: T
 }
@@ -41,7 +42,7 @@ export function useForm<T extends FormFieldRecord>() {
 }
 
 export const Form = component$((props: FormProps<any>) => {
-  const { onSubmit$, initialValue, ...attributes } = props;
+  const { onSubmit$, onChange$, initialValue, ...attributes } = props;
   const ref = useSignal<HTMLFormElement>();
   const state = useStore<FormState>({
     submitted: false,
@@ -51,9 +52,10 @@ export const Form = component$((props: FormProps<any>) => {
   }, { deep: false });
   useContextProvider<FormState<any>>(FormContext, state);
 
-  const change = event$(() => {
+  const change = event$((event: QwikChangeEvent<HTMLFormElement>, form: HTMLFormElement) => {
     state.dirty = true;
     state.value = getFormValue(ref.value!);
+    if (onChange$) onChange$(state.value, form, event);
   })
   
   const submit = $((event: QwikSubmitEvent<HTMLFormElement>, form: HTMLFormElement) => {
