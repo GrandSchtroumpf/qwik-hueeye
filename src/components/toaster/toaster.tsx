@@ -17,7 +17,7 @@ interface ToastProps {
   role: 'alert' | 'status';
   class?: string;
 }
-export type ToastParams = Partial<Omit<ToastProps, 'text'>>
+export type ToastParams = Partial<Omit<ToastProps, 'content'>>
 
 export const ToasterContext = createContextId<{
   toaster: Signal<HTMLElement>,
