@@ -7,6 +7,7 @@ import styles from './toaster.scss?inline';
 interface ToastProps {
   id: string;
   duration: number;
+  exitDuration: number;
   position: 'start' | 'center' | 'end';
   content: string | QRL<(props: ToastProps) => JSXNode>;
   /**
@@ -59,6 +60,7 @@ export const useToaster = () => {
     add: $((content: ToastProps['content'], params: ToastParams = {}) => {
       params.id ||= crypto.randomUUID();
       params.duration ||= 1500;
+      params.exitDuration ||= 300;
       params.position ||= 'center';
       params.role ||= 'status';
       flip(toaster.value);
@@ -97,7 +99,7 @@ export const Toast = component$((props: ToastProps) => {
     }
     const leave = () => {
       leaving.value = true;
-      setTimeout(remove, 300);
+      setTimeout(remove, props.exitDuration);
     };
     if (!props.duration) return leave();
     const timeout = setTimeout(leave, props.duration);
