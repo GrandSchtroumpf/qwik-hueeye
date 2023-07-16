@@ -4,7 +4,7 @@ import type { UlAttributes } from "../types";
 import { clsq, cssvar }  from '../utils';
 import styles from './toaster.scss?inline';
 
-interface ToastProps {
+export interface ToastProps {
   id: string;
   duration: number;
   position: 'start' | 'center' | 'end';
