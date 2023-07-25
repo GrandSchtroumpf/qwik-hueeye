@@ -34,12 +34,10 @@ export const Navlist = component$((props: NavAttributes) => {
 export const NavLink = component$((props: LinkProps) => {
   const { url } = useLocation();
   const href = props.href;
-  const aria = useComputed$(() => {
-    const result: AriaAttributes = {};
-    if (isSamePathname(url.pathname, href)) result['aria-current'] = 'page';
-    return result;
-  });
-  return <Link {...props} {...aria.value}>
+  const aria: AriaAttributes = {
+    'aria-current': isSamePathname(url.pathname, href) ? 'page' : null as any
+  };
+  return <Link {...props} {...aria}>
     <Slot/>
   </Link>
 });

@@ -33,7 +33,7 @@
   
   
   
-  .theme, :root, ::backdrop {
+  ::backdrop, .theme, :root {
     accent-color: var(--primary);
     --primary-hue: var(--hue);
     --secondary-hue: calc(var(--hue) + 90);
