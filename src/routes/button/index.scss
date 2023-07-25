@@ -1,0 +1,24 @@
+#button-page {
+  section {
+    overflow-x: auto;
+    h2 {
+      position: sticky;
+      left: 0
+    }
+  }
+  table {
+    margin-block: var(--size-3);
+    margin-inline: auto;
+  }
+  
+  th, td {
+    padding: var(--size-1) var(--size-2);
+  }
+  
+  th:first-of-type {
+    text-align: left;
+  }
+  td {
+    text-align: center;
+  }
+}

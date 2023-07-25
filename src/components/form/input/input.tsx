@@ -13,14 +13,14 @@ interface InputProps extends InputAttributes, FieldProps {
 
 export const Input = component$((props: InputProps) => {
   useStyles$(styles);
-  const { id } = useContext(FormFieldContext);
+  const field = useContext(FormFieldContext, null);
   const ref = useSignal<HTMLInputElement>();
   const initialValue = useFormValue(props.name);
   const value = props.value ?? initialValue;
 
   return <div class="field">
     <Slot name="prefix"/>
-    <input {...props} id={id} ref={ref} value={value}/>
+    <input {...props} id={field?.id} ref={ref} value={value}/>
     <Slot name="suffix"/>
   </div>
 })

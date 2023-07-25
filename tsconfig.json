@@ -15,7 +15,10 @@
     "skipLibCheck": true,
     "incremental": true,
     "isolatedModules": true,
-    "types": ["vite/client"]
+    "types": ["node", "vite/client"],
+    "paths": {
+      "qwik-hueeye": ["./src/index.ts"]
+    }
   },
   "include": ["src"]
 }
