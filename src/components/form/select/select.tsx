@@ -113,6 +113,7 @@ export const Select = component$((props: SelectProps) => {
         aria-autocomplete="none"
         aria-expanded={opened.value}
         aria-controls={popoverId}
+        aria-labelledby={'label-' + id}
         onClick$={onClick$}
       >
         <span class={display.value ? 'value' : 'placeholder'}>

@@ -25,6 +25,8 @@ export default component$(() => {
         <NavLink href="/tabs">Tabs</NavLink>
         <NavLink href="/button">Button</NavLink>
         <NavLink href="/dialog">Dialog</NavLink>
+        <NavLink href="/tooltip">Tooltip</NavLink>
+        <NavLink href="/toaster">Toaster</NavLink>
       </Navlist>
     </div>
     <header class="page-header">

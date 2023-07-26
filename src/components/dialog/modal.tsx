@@ -41,10 +41,10 @@ export const Modal = component$((props: ModalProps) => {
     } else {
       closing.value = true;
       if (onClose$) onClose$();
-      setTimeout(() => {
+      ref.value.addEventListener('animationend', () => {
         closing.value = false;
         ref.value?.close();
-      }, 300);
+      }, { once: true })
     }
   })
 

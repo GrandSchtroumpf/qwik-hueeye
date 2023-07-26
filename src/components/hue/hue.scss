@@ -488,26 +488,25 @@
         transform 0.2s var(--ease-in);
     }
     &:hover::after {
+      z-index: 1;
       opacity: 1;
       transform: scale(1);
-      transition: opacity 0.2s var(--ease-out),
-        transform 0.2s var(--ease-out);
+      transition: opacity 0.2s 0.5s var(--ease-out),
+        transform 0.2s 0.5s var(--ease-out);
     }
   }
   .tooltip-top::after {
     bottom: 110%;
-    left: -50%;
+    right: -25%;
   }
   .tooltip-right::after {
-    top: 25%;
     left: 110%;
   }
   .tooltip-bottom::after {
     top: 110%;
-    left: -50%;
+    right: -25%;
   }
   .tooltip-left::after {
-    top: 25%;
     right: 110%;
   }
 }

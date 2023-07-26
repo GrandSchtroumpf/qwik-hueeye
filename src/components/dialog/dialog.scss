@@ -1,29 +1,27 @@
 dialog {
+  --closing-duration: var(--modal-closing-duration, 300);
   border: none;
   padding: 0;
   overflow: hidden;
   background-color: var(--overlay);
   box-shadow: var(--overlay-shadow);
 
-  &.modal::backdrop,
-  &.bottom-sheet::backdrop,
-  &.sidenav::backdrop {
-    opacity: 0.32;
+  &::backdrop {
+    opacity: 0.16;
     background-color: var(--text);
     animation: fade 0.2s linear;
   }
-
-  &:not(.popover)::backdrop {
-    opacity: 0.24;
-    background-color: var(--on-background);
+  &.closing::backdrop {
+    animation: fade 0.2s reverse backwards;
   }
+
+
   &.modal {
     border-radius: 8px;
     animation: scalein 0.2s var(--ease-out);
-
     &.closing {
       opacity: 0;
-      animation: scaleout 0.2s var(--ease-in);
+      animation: scaleout var(--closing-duration) var(--ease-in);
     }
   }
   &.bottom-sheet {
@@ -33,7 +31,7 @@ dialog {
     animation: slideUp 0.3s var(--ease-out);
     &.closing {
       transform: translateY(100%);
-      animation: slideDown 0.2s var(--ease-in);
+      animation: slideDown var(--closing-duration) var(--ease-in);
     }
   }
   &.sidenav {
@@ -45,16 +43,13 @@ dialog {
     animation: slideLeft 0.2s var(--ease-out);
     &.closing {
       transform: translateX(-100%);
-      animation: slideRight 0.2s var(--ease-in);
+      animation: slideRight var(--closing-duration) var(--ease-in);
     }
   }
   &.popover {
     z-index: 1;
     border-radius: 4px;
     &.closing {
-      opacity: 0;
-    }
-    &::backdrop {
       opacity: 0;
     }
   }
@@ -91,9 +86,6 @@ dialog {
     &.closing {
       animation: fadeout 0.1s var(--ease-in);
     }
-    &::backdrop {
-      opacity: 0;
-    }
   }
 }
 
@@ -103,10 +95,6 @@ dialog {
     animation: scalein 0.1s var(--ease-out);
     &.closing {
       animation: scaleout 0.1s var(--ease-in);
-    }
-    &::backdrop {
-      background-color: oklch(20% var(--chroma) var(--hue));
-      opacity: 0.3;
     }
   }
 }
