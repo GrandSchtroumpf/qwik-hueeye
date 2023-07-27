@@ -1,4 +1,4 @@
-import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId } from "@builder.io/qwik";
+import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId, QwikChangeEvent, QRL, Signal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
 import { FieldContext } from "../field";
 import { useFormValue } from "../form";
@@ -11,8 +11,11 @@ const disabledKeys = [...ArrowsKeys, 'Enter', ' ', 'ctrl+a'];
 
 const ToggleGroupContext = createContextId<{ multi: boolean }>('ToggleGroupContext');
 
-interface ToggleGroupProps extends FieldsetAttributes {
+interface ToggleGroupProps extends Omit<FieldsetAttributes, 'onChange$'> {
   multi?: boolean;
+  value?: string;
+  'bind:value'?: Signal<string>;
+  onChange$?: QRL<(value: string, event: QwikChangeEvent<HTMLInputElement>, fieldset: HTMLFieldSetElement) => any>
 }
 
 export const ToggleGroup = component$((props: ToggleGroupProps) => {
@@ -20,8 +23,28 @@ export const ToggleGroup = component$((props: ToggleGroupProps) => {
   const root = useSignal<HTMLElement>();
   const active = useSignal('');
   const id = useId();
-  const nameId = props.name ?? id;
-  const multi = props.multi ?? false;
+  const {
+    name = id,
+    multi = false,
+    value,
+    ["bind:value"]: bindValue,
+    onChange$,
+    ...attr
+  } = props;
+  if (onChange$ || bindValue) {
+    attr.onChange$ = $((event: QwikChangeEvent<HTMLInputElement>, fieldset: HTMLFieldSetElement) => {
+      if (onChange$) onChange$(event.target.value, event, fieldset);
+      if (bindValue) bindValue.value = event.target.value;
+    });
+  }
+
+  useVisibleTask$(() => {
+    const initial = bindValue?.value ?? value;
+    if (initial) {
+      const input = root.value?.querySelector(`input[value="${initial}"]`) as HTMLInputElement;
+      if (input) input.checked = true;
+    }
+  });
 
   useContextProvider(ToggleGroupContext, { multi });
 
@@ -42,14 +65,14 @@ export const ToggleGroup = component$((props: ToggleGroupProps) => {
   }));
 
   useContextProvider(FieldContext, {
-    name: nameId,
+    name,
     change: $((event: any, input: HTMLInputElement) => {
       if (multi) return;
       active.value = input.checked ? input.id : '';
     }),
   });
 
-  return <fieldset {...props} ref={root} class={clsq('toggle-group', props.class)}>
+  return <fieldset {...attr} ref={root} class={clsq('toggle-group', props.class)}>
     <Slot />
   </fieldset>
 

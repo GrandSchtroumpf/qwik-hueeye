@@ -1,5 +1,5 @@
 dialog {
-  --closing-duration: var(--modal-closing-duration, 300);
+  --closing-duration: var(--modal-closing-duration, 300ms);
   border: none;
   padding: 0;
   overflow: hidden;

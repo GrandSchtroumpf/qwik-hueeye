@@ -1,19 +1,20 @@
-import { useStyles$ } from "@builder.io/qwik";
-import type { QwikJSX} from "@builder.io/qwik";
+import { useSignal, useStyles$ } from "@builder.io/qwik";
 import { component$ } from "@builder.io/qwik";
 import styles from './index.scss?inline';
+import { cssvar, Toggle, ToggleGroup } from "qwik-hueeye";
 
-export const Icon = component$((props: QwikJSX.IntrinsicElements['svg']) => {
-  return <svg viewBox="0 0 24 24" {...props}>
+export const Icon = component$(() => {
+  return <svg viewBox="0 0 24 24">
     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
   </svg>
 });
 
 export default component$(() => {
   useStyles$(styles);
+  const btnRadius = useSignal('var(--size-1)');
   return <section id="button-page" aria-labelledby="button-title">
     <h2 id="button-title">Buttons</h2>
-    <table>
+    <table {...cssvar({ btnRadius })}>
       <thead>
         <tr>
           <th></th>
@@ -112,5 +113,12 @@ export default component$(() => {
         </tr>
       </tbody>
     </table>
+    {/* Use a radio group instead */}
+    <ToggleGroup name="toggle" class="outline primary" bind:value={btnRadius}>
+      <legend>Select radius</legend>
+      <Toggle value="0px">Flat</Toggle>
+      <Toggle value="var(--size-1)">Normal</Toggle>
+      <Toggle value="20px">Round</Toggle>
+    </ToggleGroup>
   </section>
-})
+}) 

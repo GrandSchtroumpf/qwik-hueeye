@@ -272,6 +272,13 @@
   
   .btn, .btn-fill, .btn-icon, .btn-outline, .btn-expand {
     font-size: 0.9rem;
+    border-radius: var(--btn-radius, var(--size-1));
+    &.flat {
+      --btn-radius: 0;
+    }
+    &.round {
+      --btn-radius: 20px;
+    }
     // Use :disabled for buttons & .disabled for anchors
     &:disabled, &.disabled {
       opacity: 0.5;
@@ -286,7 +293,6 @@
     padding: 8px 16px;
     background-color: transparent;
     border: none;
-    border-radius: 20px;
     color: var(--color, var(--text));
     &:hover {
       background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
@@ -321,7 +327,6 @@
     background-color: var(--color, var(--background));
     color: var(--on-color, var(--text));
     padding: 8px 16px;
-    border-radius: 20px;
     &:hover {
       background-color: color-mix(
         in oklch,
@@ -349,7 +354,6 @@
     background-color: transparent;
     border: var(--border-width, 1px) solid var(--color, var(--outline));
     padding: 8px 16px;
-    border-radius: 40px;
     &:hover {
       background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
     }
@@ -381,7 +385,6 @@
   .btn-icon {
     border: none;
     background-color: transparent;
-    border-radius: 20px;
     height: 40px;
     width: 40px;
     padding: 8px;

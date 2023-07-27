@@ -6,7 +6,7 @@ import { clsq } from '../../utils';
 import { useFormValue } from "../form";
 import styles from './radio.scss?inline';
 
-export interface RadioGroupProps extends FieldProps, Omit<FieldsetAttributes, 'role' | 'tabIndex' | 'onKeyDown$'> {}
+export interface RadioGroupProps extends FieldProps, Omit<FieldsetAttributes, 'role'> {}
 
 
 export const RadioGroup = component$((props: RadioGroupProps) => {

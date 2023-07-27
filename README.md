@@ -4,6 +4,8 @@ A UI library for qwik with a strong focus on color management with native CSS va
 
 ⚠️ This is an **experimental** library with a TON of improvements to come.
 
+See demo: https://qwik-playground.vercel.app/ 
+
 ```
 npm i qwik-hueeye
 ```
