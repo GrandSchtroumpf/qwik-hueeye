@@ -21,4 +21,11 @@
   td {
     text-align: center;
   }
+
+  .radio-group {
+    justify-content: space-around;
+    .radio-item {
+      flex: 1;
+    }
+  }
 }

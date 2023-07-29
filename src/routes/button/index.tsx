@@ -1,7 +1,7 @@
 import { useSignal, useStyles$ } from "@builder.io/qwik";
 import { component$ } from "@builder.io/qwik";
 import styles from './index.scss?inline';
-import { cssvar, Toggle, ToggleGroup } from "qwik-hueeye";
+import { cssvar, Radio, RadioGroup } from "qwik-hueeye";
 
 export const Icon = component$(() => {
   return <svg viewBox="0 0 24 24">
@@ -114,11 +114,11 @@ export default component$(() => {
       </tbody>
     </table>
     {/* Use a radio group instead */}
-    <ToggleGroup name="toggle" class="outline primary" bind:value={btnRadius}>
+    <RadioGroup name="toggle" class="outline primary" bind:value={btnRadius}>
       <legend>Select radius</legend>
-      <Toggle value="0px">Flat</Toggle>
-      <Toggle value="var(--size-1)">Normal</Toggle>
-      <Toggle value="20px">Round</Toggle>
-    </ToggleGroup>
+      <Radio value="0px">Flat</Radio>
+      <Radio value="var(--size-1)">Normal</Radio>
+      <Radio value="20px">Round</Radio>
+    </RadioGroup>
   </section>
 }) 

@@ -1,9 +1,9 @@
-import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId, QwikChangeEvent, QRL, Signal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$ } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
 import { FieldContext } from "../field";
-import { useFormValue } from "../form";
 import { ArrowsKeys, nextFocus, previousFocus, useKeyboard, clsq  } from "../../utils";
 import { toggleAll } from "../utils";
+import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
 import styles from './toggle.scss?inline';
 
 
@@ -11,41 +11,19 @@ const disabledKeys = [...ArrowsKeys, 'Enter', ' ', 'ctrl+a'];
 
 const ToggleGroupContext = createContextId<{ multi: boolean }>('ToggleGroupContext');
 
-interface ToggleGroupProps extends Omit<FieldsetAttributes, 'onChange$'> {
+interface ToggleGroupProps extends FieldsetAttributes, ControlValueProps<string | string[]> {
   multi?: boolean;
-  value?: string;
-  'bind:value'?: Signal<string>;
-  onChange$?: QRL<(value: string, event: QwikChangeEvent<HTMLInputElement>, fieldset: HTMLFieldSetElement) => any>
 }
+
 
 export const ToggleGroup = component$((props: ToggleGroupProps) => {
   useStyles$(styles);
   const root = useSignal<HTMLElement>();
   const active = useSignal('');
   const id = useId();
-  const {
-    name = id,
-    multi = false,
-    value,
-    ["bind:value"]: bindValue,
-    onChange$,
-    ...attr
-  } = props;
-  if (onChange$ || bindValue) {
-    attr.onChange$ = $((event: QwikChangeEvent<HTMLInputElement>, fieldset: HTMLFieldSetElement) => {
-      if (onChange$) onChange$(event.target.value, event, fieldset);
-      if (bindValue) bindValue.value = event.target.value;
-    });
-  }
-
-  useVisibleTask$(() => {
-    const initial = bindValue?.value ?? value;
-    if (initial) {
-      const input = root.value?.querySelector(`input[value="${initial}"]`) as HTMLInputElement;
-      if (input) input.checked = true;
-    }
-  });
-
+  const { multi = false, name = id } = props;
+  const attr = extractControlProps(props);
+  useControlValueProvider(props);
   useContextProvider(ToggleGroupContext, { multi });
 
   useKeyboard(root, disabledKeys, $((event, el) => {
@@ -86,14 +64,19 @@ export const Toggle = component$((props: ToggleProps) => {
   const id = useId();
   const { name } = useContext(FieldContext);
   const { multi } = useContext(ToggleGroupContext);
+  const bindValue = useControlValue<string | string[]>();
   const type = multi ? 'checkbox' : 'radio';
-  const initialValue = useFormValue<string | string[]>(name);
-  const initialChecked = multi
-    ? !!initialValue?.includes(props.value)
-    : props.value === initialValue;
-  const checked = useSignal(initialChecked);
+  const checked = useComputed$(() => bindValue.value === props.value);
 
-  const toggle = $(() => checked.value = !checked.value);
+  const toggle = $(() => {
+    if (multi) {
+      bindValue.value = bindValue.value.includes(props.value)
+        ? (bindValue.value as string[]).filter(v => v !== props.value)
+        : bindValue.value.concat(props.value);
+    } else {
+      bindValue.value = bindValue.value === props.value ? '' : props.value;
+    }
+  });
 
   return  <div class="toggle">
     <input id={id} type={type} name={name} bind:checked={checked} value={props.value} onClick$={toggle}/>

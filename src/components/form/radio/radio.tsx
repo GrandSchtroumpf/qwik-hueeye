@@ -1,17 +1,23 @@
-import { component$, Slot, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
-import type { FieldProps} from '../field';
+import { $, component$, QwikChangeEvent, Slot, useComputed$, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
 import { FieldGroupContext, useGroupName } from '../field';
 import type { FieldsetAttributes, InputAttributes } from "../../types";
 import { clsq } from '../../utils';
-import { useFormValue } from "../form";
+import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
 import styles from './radio.scss?inline';
 
-export interface RadioGroupProps extends FieldProps, Omit<FieldsetAttributes, 'role'> {}
+export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, ControlValueProps<string | string[]> {}
 
 
 export const RadioGroup = component$((props: RadioGroupProps) => {
   useContextProvider(FieldGroupContext, { name: props.name });
-  return <fieldset {...props} class={clsq("radio-group", props.class)} role="radiogroup">
+  const bindValue = useControlValueProvider(props);
+  const attr = extractControlProps(props);
+
+  const changeValue = $((event: QwikChangeEvent) => {
+    bindValue.value = (event.target as HTMLInputElement).value;
+  });
+
+  return <fieldset {...attr} onChange$={changeValue} class={clsq("radio-group", props.class)} role="radiogroup">
     <Slot />
   </fieldset>
 });
@@ -22,11 +28,12 @@ export const Radio = component$((props: RadioProps) => {
   useStyles$(styles);
   const id = useId();
   const name = useGroupName(props);
-  const initialValue = useFormValue(name);
-  const initialChecked = !!initialValue && initialValue === props.value;
-  
+  const value = props.value as string;
+  const bindValue = useControlValue<string>();
+  const checked = useComputed$(() => bindValue.value === value);
+
   return <div class="radio-item">
-    <input id={id} type="radio" {...props} name={name} value={props.value} checked={initialChecked} />
+    <input id={id} type="radio" {...props} name={name} value={value} bind:checked={checked}/>
     <label for={id}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <circle r="8" cx="12" cy="12"/>
