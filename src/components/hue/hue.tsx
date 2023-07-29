@@ -3,7 +3,7 @@ import { SvgGradient } from "../svg-gradient";
 import './hue.scss';
 
 interface HueEyeState {
-  hue: Signal<number | string | undefined>;
+  hue: Signal<number | undefined>;
 }
 
 const HueEyeSession = component$(() => {
@@ -17,7 +17,7 @@ const HueEyeSession = component$(() => {
     if (!theme) return;
     const state = JSON.parse(theme);
     if (!state.hue) return;
-    hue.value = state.hue;
+    hue.value = Number(state.hue);
     document.documentElement.style.setProperty('--hue', state.hue);
   });
 

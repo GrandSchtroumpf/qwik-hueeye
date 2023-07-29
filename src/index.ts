@@ -11,5 +11,5 @@ export * from './components/types';
 export * from './components/hue/hue';
 export * from './components/utils/clsq';
 export * from './components/utils/cssvar';
-export * from './components/utils/effect';
+export * from './components/utils/hooks';
 export * from './components/if';

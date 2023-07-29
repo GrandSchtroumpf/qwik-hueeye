@@ -1,11 +1,13 @@
-import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, useTask$ } from "@builder.io/qwik";
+import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $ } from "@builder.io/qwik";
 import { useFormValue } from "./form";
+import { useOnChange } from "qwik-hueeye";
 
 export interface ControlValueProps<T> {
+  required?: boolean;
   name?: string;
   value?: T;
-  'bind:value'?: Signal<T>;
-  onValueChange$?: QRL<(value: T) => any>
+  'bind:value'?: Signal<T | undefined>;
+  onValueChange$?: QRL<(value: T) => any>;
 }
 
 export const ControlValueContext = createContextId<Signal<any>>('ControlValueContext');
@@ -17,10 +19,9 @@ export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?
   const initialValue = props.value ?? value ?? initial ?? '' as T;
   const signalValue = useSignal<T>(props.value ?? value ?? '' as T);
   const bindValue = props["bind:value"] ?? signalValue;
-  useTask$(({ track }) => {
-    track(() => bindValue.value);
-    if (props.onValueChange$) props.onValueChange$(bindValue.value);
-  })
+  useOnChange(bindValue, $((change) => {
+    if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);
+  }));
   useContextProvider(ControlValueContext, bindValue);
   return {bindValue, initialValue};
 }

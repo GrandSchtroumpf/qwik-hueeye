@@ -13,11 +13,11 @@ export default component$(() => {
     localTheme.value?.style.setProperty('--hue', `${rand}`);
   });
 
-  const changeHue = $((event: any, input: HTMLInputElement) => {
-    document.documentElement.style.setProperty('--hue', input.value);
+  const changeHue = $((hue: number) => {
+    document.documentElement.style.setProperty('--hue', hue.toString());
   });
-  const changeChroma = $((event: any, input: HTMLInputElement) => {
-    document.documentElement.style.setProperty('--chroma', input.value);
+  const changeChroma = $((chroma: number) => {
+    document.documentElement.style.setProperty('--chroma', chroma.toString());
   });
 
   return <section id="welcome-page" aria-labelledby="welcome-title">
@@ -47,11 +47,11 @@ export default component$(() => {
       {/* TODO: improve labelling */}
       <div class="theme-slider">
         <label>Hue: </label>
-        <Slider name="hue" min="0" max="360" onChange$={changeHue}></Slider>
+        <Slider name="hue" min="0" max="360" onValueChange$={changeHue}></Slider>
       </div>
       <div class="theme-slider">
         <label>Chroma: </label>
-        <Slider name="chroma" min="0" max="0.1" step="0.01" onChange$={changeChroma}></Slider>
+        <Slider name="chroma" min="0" max="0.1" step="0.01" onValueChange$={changeChroma}></Slider>
       </div>
     </article>
 

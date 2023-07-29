@@ -3,7 +3,7 @@ import { useOnReset, clsq } from "../../utils";
 import { ControlValueProps, extractControlProps, useControlValueProvider } from "../control";
 import styles from './slider.scss?inline';
 
-interface SliderProps extends ControlValueProps<string | number | undefined> {
+interface SliderProps extends ControlValueProps<number> {
   position?: 'start' | 'end';
   min?: string | number;
   max?: string | number;
@@ -11,9 +11,11 @@ interface SliderProps extends ControlValueProps<string | number | undefined> {
   id?: string;
   class?: string;
 }
+
 function round(value: number, step: number) {
   return Math.round(value / step) * step;
 }
+
 export const Slider = component$((props: SliderProps) => {
   useStyles$(styles);
   const sliderEl = useSignal<HTMLElement>();
@@ -44,7 +46,16 @@ export const Slider = component$((props: SliderProps) => {
 
   return <div class={clsq('slider', props.position)} ref={sliderEl}>
     <div class="track" ref={trackEl}></div>
-    <input type="range" {...attr} ref={inputEl} step={step} min={min} max={max} value={bindValue.value} onInput$={move} onChange$={(e, i) => bindValue.value = i.valueAsNumber}/>
+    <input {...attr} 
+      type="range"
+      ref={inputEl}
+      step={step}
+      min={min}
+      max={max}
+      value={bindValue.value}
+      onInput$={move}
+      onChange$={(e, i) => bindValue.value = i.valueAsNumber}
+    />
     <div class="thumb" data-value={bindValue.value ?? min ?? 0}></div>
   </div>
 });
