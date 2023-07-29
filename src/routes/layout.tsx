@@ -1,5 +1,5 @@
-import { component$, Slot, useSignal, useStyles$, useVisibleTask$ } from '@builder.io/qwik';
-import { Slider } from 'qwik-hueeye';
+import { component$, Slot, useSignal, useStyles$ } from '@builder.io/qwik';
+import { Slider, useHueEye } from 'qwik-hueeye';
 import { NavLink, Navlist } from 'qwik-hueeye';
 import { SvgGradient } from 'qwik-hueeye';
 import { Toaster, useToasterProvider } from 'qwik-hueeye';
@@ -9,13 +9,9 @@ import styles from './layout.scss?inline';
 export default component$(() => {
   useStyles$(styles);
   useToasterProvider();
-
-  const hue = useSignal('0');
+  const { hue } = useHueEye();
   const open = useSignal(false);
-  useVisibleTask$(({ track }) => {
-    track(() => hue.value);
-    document.documentElement.style.setProperty('--hue', hue.value);
-  })
+
   return <>
     <div class={clsq('nav-overlay', open.value ? 'open' : 'close')} onClick$={() => open.value = false}>
       <Navlist aria-label="primary">
@@ -41,7 +37,7 @@ export default component$(() => {
       <h1>Playground</h1>
       <label class="hue-slider">
         Hue
-        <Slider position="end" min="0" max="360" onChange$={(e, input) => hue.value = input.value}></Slider>
+        <Slider bind:value={hue} position="end" min="0" max="360"></Slider>
       </label>
     </header>
     <main>

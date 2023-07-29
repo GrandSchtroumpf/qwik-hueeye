@@ -12,8 +12,9 @@ export const ControlValueContext = createContextId<Signal<any>>('ControlValueCon
 export function useControlValue<T>() {
   return useContext<Signal<T>>(ControlValueContext)
 }
-export function useControlValueProvider<T>(props: ControlValueProps<T>) {
+export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?: T) {
   const value = useFormValue<T>(props.name);
+  const initialValue = props.value ?? value ?? initial ?? '' as T;
   const signalValue = useSignal<T>(props.value ?? value ?? '' as T);
   const bindValue = props["bind:value"] ?? signalValue;
   useTask$(({ track }) => {
@@ -21,7 +22,7 @@ export function useControlValueProvider<T>(props: ControlValueProps<T>) {
     if (props.onValueChange$) props.onValueChange$(bindValue.value);
   })
   useContextProvider(ControlValueContext, bindValue);
-  return bindValue;
+  return {bindValue, initialValue};
 }
 
 export const extractControlProps = <T extends ControlValueProps<any>>(props: T) => {

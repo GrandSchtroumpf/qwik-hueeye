@@ -5,8 +5,8 @@ import type { LinkProps} from "@builder.io/qwik-city";
 import { useLocation } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { ArrowsKeys, nextFocus, previousFocus, useKeyboard, clsq } from "../utils";
-import styles from './navlist.scss?inline';
 import { AnchorAttributes, NavAttributes } from "../types";
+import styles from './navlist.scss?inline';
 
 const disabledKeys = [...ArrowsKeys, ' '];
 

@@ -16,7 +16,7 @@ export const CheckGroup = component$((props: CheckgroupProps) => {
   const lastActive = useSignal<HTMLElement | null>();
   const { checkAllRef, toggleAll, next, previous } = useMultiSelectionList();
 
-  const bindValue = useControlValueProvider(props);
+  const {bindValue} = useControlValueProvider(props);
   const attr = extractControlProps(props);
 
   const changeValue = $((event: QwikChangeEvent, fieldset: HTMLFieldSetElement) => {

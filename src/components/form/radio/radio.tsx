@@ -11,7 +11,7 @@ export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, Contr
 export const RadioGroup = component$((props: RadioGroupProps) => {
   const name = useNameId(props);
   useContextProvider(FieldGroupContext, { name });
-  const bindValue = useControlValueProvider(props);
+  const {bindValue} = useControlValueProvider(props);
   const attr = extractControlProps(props);
 
   const changeValue = $((event: QwikChangeEvent) => {

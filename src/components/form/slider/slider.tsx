@@ -1,41 +1,50 @@
-import { component$, useStyles$, event$, useSignal, $ } from "@builder.io/qwik";
+import { component$, useStyles$, useSignal, $, useVisibleTask$, event$ } from "@builder.io/qwik";
 import { useOnReset, clsq } from "../../utils";
-import { useFormValue } from "../form";
-import type { InputAttributes } from "../types";
+import { ControlValueProps, extractControlProps, useControlValueProvider } from "../control";
 import styles from './slider.scss?inline';
 
-interface SliderProps extends Omit<InputAttributes, 'type' | 'children'> {
+interface SliderProps extends ControlValueProps<string | number | undefined> {
   position?: 'start' | 'end';
+  min?: string | number;
+  max?: string | number;
+  step?: string | number;
+  id?: string;
+  class?: string;
 }
-
 function round(value: number, step: number) {
   return Math.round(value / step) * step;
 }
-
 export const Slider = component$((props: SliderProps) => {
   useStyles$(styles);
-  const slider = useSignal<HTMLElement>();
-  const track = useSignal<HTMLElement>();
+  const sliderEl = useSignal<HTMLElement>();
+  const trackEl = useSignal<HTMLElement>();
+  const inputEl = useSignal<HTMLInputElement>();
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const initialValue = useFormValue<string | number>(props.name);
+  const {bindValue, initialValue} = useControlValueProvider(props);
+  const attr = extractControlProps(props);
 
-  useOnReset(slider, $(() => {
-    const input = slider.value?.querySelector<HTMLInputElement>('input');
-    requestAnimationFrame(() => move(null, input!))
-  }));
-
-  const move = event$((event: any, input: HTMLInputElement) => {
+  const move = event$(() => {
+    const input = inputEl.value;
+    if (!input) return;
     const percent = input.valueAsNumber / (max - min);
-    const position = percent * (track.value!.clientWidth - 20);
-    slider.value?.style.setProperty('--position', `${position}px`);
+    const position = percent * (trackEl.value!.clientWidth - 20);
+    sliderEl.value?.style.setProperty('--position', `${position}px`);
     input.nextElementSibling?.setAttribute('data-value', `${round(input.valueAsNumber, step)}`);
   });
 
-  return <div class={clsq('slider', props.position)} ref={slider}>
-    <div class="track" ref={track}></div>
-    <input type="range" {...props} step={step} min={min} max={max} onInput$={move} value={initialValue}/>
-    <div class="thumb" data-value={props.value ?? min ?? 0}></div>
+  useOnReset(sliderEl, $(() => bindValue.value = initialValue));
+
+  useVisibleTask$(({ track }) => {
+    track(() => bindValue.value);
+    if (typeof bindValue.value !== 'number' && !bindValue.value) return;
+    move();
+  });
+
+  return <div class={clsq('slider', props.position)} ref={sliderEl}>
+    <div class="track" ref={trackEl}></div>
+    <input type="range" {...attr} ref={inputEl} step={step} min={min} max={max} value={bindValue.value} onInput$={move} onChange$={(e, i) => bindValue.value = i.valueAsNumber}/>
+    <div class="thumb" data-value={bindValue.value ?? min ?? 0}></div>
   </div>
 });

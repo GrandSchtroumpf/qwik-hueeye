@@ -1,6 +1,6 @@
 import { component$, event$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { Form, Input } from "qwik-hueeye";
+import { Form, Input, Slider } from "qwik-hueeye";
 import { Select, Option } from "qwik-hueeye";
 import { Range, ThumbEnd, ThumbStart } from "qwik-hueeye";
 import { FormField, Label } from "qwik-hueeye";
@@ -100,6 +100,7 @@ export default component$(() => {
       start: 10,
       end: 90
     },
+    slider: 45,
     radio: 'c',
     checkbox: ['a', 'c'],
     toggle: 'medium'
@@ -126,6 +127,7 @@ export default component$(() => {
       <ThumbStart></ThumbStart>
       <ThumbEnd></ThumbEnd>
     </Range>
+    <Slider name="slider" />
     <SwitchGroup name="switch" class="outline">
       <legend>Switches</legend>
       <Switch name="a">Switch 1</Switch>

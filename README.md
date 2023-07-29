@@ -17,11 +17,13 @@ import { HueEyeProvider } from 'qwik-hueeye';
 
 export default () => {
   return (
-  <QwikCityProvider>
-    <HueEyeProvider>
-      {/* head & body here */}
-    </HueEyeProvider>
-  </QwikCityProvider>
+    ...
+    <body>
+      <HueEyeProvider> { /* <-- Add provider here */}
+        <RouterOutlet />
+        <ServiceWorkerRegister />
+      </HueEyeProvider>
+    </body>
   );
 };
 ```

@@ -34,23 +34,20 @@ export const RouterHead = component$(() => {
   );
 });
 
-
-
-
 export default () => {
 
   return (
     <QwikCityProvider>
-      <HueEyeProvider>
-        <head>
-          <meta charSet="utf-8" />
-          <RouterHead />
-        </head>
-        <body>
+      <head>
+        <meta charSet="utf-8" />
+        <RouterHead />
+      </head>
+      <body>
+        <HueEyeProvider storage>
           <RouterOutlet />
           <ServiceWorkerRegister />
-        </body>
-      </HueEyeProvider>
+        </HueEyeProvider>
+      </body>
     </QwikCityProvider>
   );
 };
