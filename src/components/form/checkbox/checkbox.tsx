@@ -1,18 +1,23 @@
-import { component$, Slot, useStyles$, useId } from "@builder.io/qwik";
-import { useFormValue } from "../form";
+import { component$, Slot, useStyles$, useId, useComputed$ } from "@builder.io/qwik";
 import type { InputAttributes } from "../types";
 import styles from './checkbox.scss?inline';
+import { useGroupName } from "../field";
+import { useControlValue } from "../control";
 
-interface CheckboxProps extends Omit<InputAttributes, 'type' | 'children'> {}
+interface CheckboxProps extends Omit<InputAttributes, 'type' | 'children'> {
+  value?: string;
+}
 
 export const Checkbox = component$((props: CheckboxProps) => {
   useStyles$(styles);
   const id = useId();
-  const initialValue = useFormValue<string>(props.name);
-  const initialChecked = !!initialValue && initialValue === props.value;
+  const name = useGroupName(props);
+  const value = props.value;
+  const bindValue = useControlValue<string[]>();
+  const checked = useComputed$(() => !!value && bindValue.value.includes(value));
 
   return <div class="checkbox">
-    <input {...props} id={id} type="checkbox" checked={initialChecked}/>
+    <input {...props} name={name} id={id} bind:checked={checked} type="checkbox"/>
     <label for={id}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="none"></path>

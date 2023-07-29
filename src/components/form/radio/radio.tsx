@@ -1,5 +1,5 @@
 import { $, component$, QwikChangeEvent, Slot, useComputed$, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
-import { FieldGroupContext, useGroupName } from '../field';
+import { FieldGroupContext, useGroupName, useNameId } from '../field';
 import type { FieldsetAttributes, InputAttributes } from "../../types";
 import { clsq } from '../../utils';
 import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
@@ -9,7 +9,8 @@ export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, Contr
 
 
 export const RadioGroup = component$((props: RadioGroupProps) => {
-  useContextProvider(FieldGroupContext, { name: props.name });
+  const name = useNameId(props);
+  useContextProvider(FieldGroupContext, { name });
   const bindValue = useControlValueProvider(props);
   const attr = extractControlProps(props);
 
@@ -17,7 +18,7 @@ export const RadioGroup = component$((props: RadioGroupProps) => {
     bindValue.value = (event.target as HTMLInputElement).value;
   });
 
-  return <fieldset {...attr} onChange$={changeValue} class={clsq("radio-group", props.class)} role="radiogroup">
+  return <fieldset {...attr} name={name} onChange$={changeValue} class={clsq("radio-group", props.class)} role="radiogroup">
     <Slot />
   </fieldset>
 });
@@ -33,7 +34,7 @@ export const Radio = component$((props: RadioProps) => {
   const checked = useComputed$(() => bindValue.value === value);
 
   return <div class="radio-item">
-    <input id={id} type="radio" {...props} name={name} value={value} bind:checked={checked}/>
+    <input id={id} type="radio" {...props} name={name} value={value} checked={checked.value}/>
     <label for={id}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <circle r="8" cx="12" cy="12"/>

@@ -4,12 +4,18 @@
   gap: var(--size-2);
   border-radius: 4px;
   border: none;
-  padding: var(--size-1) var(--size-2);
+  padding: var(--size-2) 0;
   &.outline {
     border: solid 1px var(--outline);
+    padding: var(--size-1) var(--size-2);
   }
   &.fill {
     background-color: var(--surface);
+    padding: var(--size-1) var(--size-2);
+  }
+  &.column {
+    flex-direction: column;
+    align-items: flex-start;
   }
   &:focus-within, &:active {
     border-color: var(--color, var(--primary));
