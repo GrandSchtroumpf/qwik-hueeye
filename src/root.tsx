@@ -9,7 +9,7 @@ export default () => {
     <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
-        <title>Qwik Blank App</title>
+        <title>Qwik Hueeye Playground</title>
       </head>
       <body>
         <HueEyeProvider>

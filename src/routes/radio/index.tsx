@@ -17,6 +17,16 @@ export default component$(() => {
         <Radio value="cheese">Cheese</Radio>
       </RadioGroup>
     </article>
+    <article>
+      <h2>Vertical options</h2>
+      <RadioGroup class="column" onValueChange$={v => console.log(v)}>
+        <legend>Meal Options</legend>
+        <Radio value="pickles">Pickles</Radio>
+        <Radio value="tomatoes">Tomatoes</Radio>
+        <Radio value="lettuce">Lettuce</Radio>
+        <Radio value="cheese">Cheese</Radio>
+      </RadioGroup>
+    </article>
 
   </section>
 })

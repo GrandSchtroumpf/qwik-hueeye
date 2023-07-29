@@ -10,6 +10,7 @@
   .container {
     width: 250px;
     max-width: 80vw;
+    padding: var(--size-2);
     article {
       display: flex;
       flex-direction: column;
