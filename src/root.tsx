@@ -41,16 +41,16 @@ export default () => {
 
   return (
     <QwikCityProvider>
-      <head>
-        <meta charSet="utf-8" />
-        <RouterHead />
-      </head>
-      <body>
-        <HueEyeProvider>
+      <HueEyeProvider>
+        <head>
+          <meta charSet="utf-8" />
+          <RouterHead />
+        </head>
+        <body>
           <RouterOutlet />
           <ServiceWorkerRegister />
-        </HueEyeProvider>
-      </body>
+        </body>
+      </HueEyeProvider>
     </QwikCityProvider>
   );
 };
