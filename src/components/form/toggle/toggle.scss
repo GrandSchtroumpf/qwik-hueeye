@@ -5,11 +5,12 @@
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  &.outline {
-    border: solid 1px var(--outline);
-  }
+  border: solid 1px var(--outline);
   &.fill {
     background-color: var(--surface);
+  }
+  &.vertical {
+    flex-direction: column;
   }
   &:focus-within, &:active {
     border-color: var(--primary);

@@ -15,7 +15,7 @@
   &.fill {
     background-color: var(--surface);
   }
-  &.column {
+  &.vertical {
     flex-direction: column;
     align-items: flex-start;
     gap: 0; // we need padding for a11y, but gap make space too large

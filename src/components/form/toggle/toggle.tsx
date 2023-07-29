@@ -79,7 +79,7 @@ export const Toggle = component$((props: ToggleProps) => {
   });
 
   return  <div class="toggle">
-    <input id={id} type={type} name={name} bind:checked={checked} value={props.value} onClick$={toggle}/>
+    <input id={id} type={type} name={name} checked={checked.value} value={props.value} onClick$={toggle}/>
     <label for={id}>
       <Slot/>
     </label>

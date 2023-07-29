@@ -9,7 +9,7 @@ export default component$(() => {
     <h1 id="radio-title">Radio</h1>
     <article>
       <h2>Select one option</h2>
-      <RadioGroup onValueChange$={v => console.log(v)}>
+      <RadioGroup>
         <legend>Meal Options</legend>
         <Radio value="pickles">Pickles</Radio>
         <Radio value="tomatoes">Tomatoes</Radio>
@@ -19,7 +19,7 @@ export default component$(() => {
     </article>
     <article>
       <h2>Vertical options</h2>
-      <RadioGroup class="column" onValueChange$={v => console.log(v)}>
+      <RadioGroup class="vertical">
         <legend>Meal Options</legend>
         <Radio value="pickles">Pickles</Radio>
         <Radio value="tomatoes">Tomatoes</Radio>
