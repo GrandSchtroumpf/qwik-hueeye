@@ -1,18 +1,18 @@
-import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvider, createContextId, useContext, $, useVisibleTask$, useTask$ } from "@builder.io/qwik";
+import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvider, createContextId, useContext, $, useVisibleTask$, useTask$, useComputed$ } from "@builder.io/qwik";
 import { Popover } from "../../dialog/popover";
-import type { Signal , QRL } from "@builder.io/qwik";
+import type { Signal } from "@builder.io/qwik";
 import { useNameId } from "../field";
-import type { FieldProps } from "../field";
 import type { DisplayProps } from "../types";
 import type { SelectionItemProps } from "../selection-list/types";
 import { FormFieldContext } from "../form-field/form-field";
 import { focusNextInput, focusPreviousInput, useKeyboard } from "../../utils";
 import { toggleAll } from "../utils";
-import { useFormValue } from "../form";
+import { ControlValueProps, useControlValue, useControlValueProvider } from "../control";
+import { useOnChange } from "../../utils/hooks";
 import styles from './select.scss?inline';
 
 
-interface SelectProps<T = any> extends FieldProps<T>, DisplayProps<T> {
+interface SelectProps<T = any> extends ControlValueProps<T>, DisplayProps<T> {
   multi?: boolean;
   placeholder?: string;
 }
@@ -21,7 +21,6 @@ const SelectContext = createContextId<{
   opened: Signal<boolean>,
   multi: boolean,
   name: string,
-  change: QRL<() => void>
 }>('SelectContext');
 
 const disabledKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'ctrl+a'];
@@ -53,12 +52,18 @@ export const Select = component$((props: SelectProps) => {
     if (opened.value && !multi) opened.value = false;
     if (!opened.value) opened.value = true;
   });
+
+  const { bindValue } = useControlValueProvider<string | string[]>(props, multi ? [] : '');
+  useOnChange(bindValue, $(value => {
+    console.log(value);
+    update();
+  }));
   
   // Use useTask$ once this issue is fixed: https://github.com/BuilderIO/qwik/issues/4609
-  const initialValue = useFormValue<string | string[]>(name);
-  useVisibleTask$(() => {
-    if (typeof initialValue === 'string' || initialValue?.length) update();
-  });
+  // const initialValue = useFormValue<string | string[]>(name);
+  // useVisibleTask$(() => {
+  //   if (typeof initialValue === 'string' || initialValue?.length) update();
+  // });
 
   useTask$(({ track }) => {
     track(() => opened.value);
@@ -95,7 +100,6 @@ export const Select = component$((props: SelectProps) => {
     name,
     multi,
     opened,
-    change: $(() => update()),
   });
 
 
@@ -134,32 +138,74 @@ export const Select = component$((props: SelectProps) => {
 });
 
 
-export const Option = component$((props: SelectionItemProps) => {
-  const { multi, opened, name, change } = useContext(SelectContext);
+const SingleOption = component$((props: SelectionItemProps) => {
+  const value = props.value;
+  const { opened, name } = useContext(SelectContext);
   const id = useId();
-  const ref = useSignal<HTMLInputElement>();
-  const initialValue = useFormValue<string | string[]>(name);
-  
-  useKeyboard(ref, ['Enter', ' '], $((event, input) => {
-    if (event.key === 'Enter' || event.key === ' ') input.click();
-  }));
-  
+  const bindValue = useControlValue<string>();
+  const checked = useComputed$(() => bindValue.value === value);
+  const toggle = $(() => {
+    opened.value = false;
+    bindValue.value = checked.value ? '' : value;
+  });
+  return  <div class="option">
+    <input id={id} type="radio" name={name} checked={checked.value} value={value} onClick$={toggle}/>
+    <label for={id}>
+      <Slot/>
+    </label>
+  </div>
+});
+
+const MultiOption = component$((props: SelectionItemProps) => {
+  const value = props.value;
+  const { name } = useContext(SelectContext);
+  const id = useId();
+  const bindValue = useControlValue<string[]>();
+  const checked = useComputed$(() => bindValue.value.includes(value));
+  const toggle = $(() => {
+    bindValue.value = checked.value
+      ? bindValue.value.filter(v => v !== value)
+      : bindValue.value.concat(value);
+  });
+  return <div class="option">
+    <input id={id} type="checkbox" name={name} checked={checked.value} value={value} onClick$={toggle}/>
+    <label for={id}>
+      <Slot/>
+    </label>
+  </div>
+})
+
+export const Option = component$((props: SelectionItemProps) => {
+  const { multi } = useContext(SelectContext);
   if (multi) {
-    const initialChecked = !!initialValue?.includes(props.value ?? '');
-    return <div class="option">
-      <input id={id} ref={ref} role="option" type="checkbox" name={name} value={props.value} checked={initialChecked} onChange$={change}/>
-      <label for={id}>
-        <Slot/>
-      </label>
-    </div>
+    return <MultiOption {...props}>
+      <Slot/>
+    </MultiOption>
   } else {
-    const initialChecked = props.value === initialValue;
-    return <div class="option">
-      <input id={id} ref={ref} role="option" type="radio" name={name} value={props.value} checked={initialChecked} onChange$={change} />
-      <label for={id} onClick$={() =>  opened.value = false}>
-        <Slot/>
-      </label>
-    </div>
+    return <SingleOption {...props}>
+      <Slot/>
+    </SingleOption>
   }
+  // useKeyboard(ref, ['Enter', ' '], $((event, input) => {
+  //   if (event.key === 'Enter' || event.key === ' ') input.click();
+  // }));
+  
+  // if (multi) {
+  //   const initialChecked = !!initialValue?.includes(props.value ?? '');
+  //   return <div class="option">
+  //     <input id={id} ref={ref} role="option" type="checkbox" name={name} value={props.value} checked={initialChecked} onChange$={change}/>
+  //     <label for={id}>
+  //       <Slot/>
+  //     </label>
+  //   </div>
+  // } else {
+  //   const initialChecked = props.value === initialValue;
+  //   return <div class="option">
+  //     <input id={id} ref={ref} role="option" type="radio" name={name} value={props.value} checked={initialChecked} onChange$={change} />
+  //     <label for={id} onClick$={() =>  opened.value = false}>
+  //       <Slot/>
+  //     </label>
+  //   </div>
+  // }
   
 });

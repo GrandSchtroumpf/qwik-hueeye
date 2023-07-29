@@ -1,6 +1,6 @@
 import type { LiAttributes } from "../types";
 
 export interface SelectionItemProps extends LiAttributes {
-  value?: string;
+  value: string;
   mode?: 'radio' | 'toggle';
 }

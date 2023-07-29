@@ -17,8 +17,11 @@ export function useControlValue<T>() {
 export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?: T) {
   const value = useFormValue<T>(props.name);
   const initialValue = props.value ?? value ?? initial ?? '' as T;
-  const signalValue = useSignal<T>(props.value ?? value ?? '' as T);
+  const signalValue = useSignal<T>(initialValue);
   const bindValue = props["bind:value"] ?? signalValue;
+
+  // TODO: add onReset here with the initialValue
+
   useOnChange(bindValue, $((change) => {
     if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);
   }));

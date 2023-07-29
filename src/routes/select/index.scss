@@ -1,5 +1,9 @@
-#radio-page {
+#select-page {
   article, h1, h2 {
     margin-bottom: var(--size-2);
+  }
+
+  .field {
+    min-width: 200px;
   }
 }
