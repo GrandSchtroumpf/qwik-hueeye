@@ -17,6 +17,7 @@ export const FormContext = createContextId<FormState<any>>('FormContext');
 
 
 export interface FormState<T extends FormFieldRecord = any> {
+  formRef: Signal<HTMLFormElement | undefined>
   submitted: boolean;
   dirty: boolean;
   invalid: boolean;
@@ -35,6 +36,7 @@ export function useFormValue<T>(name?: string) {
 
 export function useForm<T extends FormFieldRecord>() {
   return useContext<FormState<T>, FormState<T>>(FormContext, {
+    formRef: useSignal(),
     submitted: false,
     dirty: false,
     invalid: false,
@@ -46,6 +48,7 @@ export const Form = component$((props: FormProps<any>) => {
   const { onSubmit$, onChange$, initialValue, ...attributes } = props;
   const ref = useSignal<HTMLFormElement>();
   const state = useStore<FormState>({
+    formRef: ref,
     submitted: false,
     dirty: false,
     invalid: false,

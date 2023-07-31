@@ -1,5 +1,5 @@
-import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $ } from "@builder.io/qwik";
-import { useFormValue } from "./form";
+import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
+import { useForm, useFormValue } from "./form";
 import { useOnChange } from "qwik-hueeye";
 
 export interface ControlValueProps<T> {
@@ -15,12 +15,20 @@ export function useControlValue<T>() {
   return useContext<Signal<T>>(ControlValueContext)
 }
 export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?: T) {
+  const { formRef } = useForm();
   const value = useFormValue<T>(props.name);
   const initialValue = props.value ?? value ?? initial ?? '' as T;
   const signalValue = useSignal<T>(initialValue);
   const bindValue = props["bind:value"] ?? signalValue;
 
-  // TODO: add onReset here with the initialValue
+  useVisibleTask$(() => {
+    const handler = (event: Event) => {
+      event.preventDefault();
+      bindValue.value = initialValue;
+    }
+    formRef.value?.addEventListener('reset', handler);
+    return () => formRef.value?.removeEventListener('reset', handler);
+  });
 
   useOnChange(bindValue, $((change) => {
     if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);

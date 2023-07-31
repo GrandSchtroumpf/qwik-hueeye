@@ -17,7 +17,7 @@ export const Checkbox = component$((props: CheckboxProps) => {
   const checked = useComputed$(() => !!value && bindValue.value.includes(value));
 
   return <div class="checkbox">
-    <input {...props} name={name} id={id} bind:checked={checked} type="checkbox"/>
+    <input {...props} name={name} id={id} checked={checked.value} type="checkbox"/>
     <label for={id}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="none"></path>

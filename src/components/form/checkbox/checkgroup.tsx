@@ -4,8 +4,8 @@ import { useMultiSelectionList, MultiSelectionListContext } from '../selection-l
 import { FieldGroupContext, useGroupName } from "../field";
 import type { FieldsetAttributes, InputAttributes, UlAttributes } from "../../types";
 import { ArrowsKeys, useKeyboard, clsq } from "../../utils";
-import styles from './checkbox.scss?inline';
 import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
+import styles from './checkbox.scss?inline';
 
 export interface CheckgroupProps extends Omit<FieldsetAttributes, 'role' | 'tabIndex' | 'onKeyDown$'>, ControlValueProps<string[]> {}
 
@@ -39,8 +39,7 @@ export const CheckGroup = component$((props: CheckgroupProps) => {
       (lastActive.value) ? lastActive.value.focus() : next();
     }
     if (event.target instanceof HTMLInputElement) {
-      const radio = event.target;
-      if (key === 'Enter') radio.click();
+      if (key === 'Enter') event.target.click();
     }
   }));
 
@@ -78,7 +77,7 @@ export const CheckItem = component$((props: CheckItemProps) => {
   const name = useGroupName(props);
   const value = props.value;
   const bindValue = useControlValue<string[]>();
-  const checked = useComputed$(() => bindValue.value.includes(value));
+  const checked = useComputed$(() => !!value && bindValue.value.includes(value));
 
   return <li class="check-item">
     <input class="checkbox-input" {...props} name={name} id={id} checked={checked.value} type="checkbox" onChange$={updateMode}/>

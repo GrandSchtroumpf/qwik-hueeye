@@ -1,5 +1,5 @@
-import { component$, useStyles$, useSignal, $, useVisibleTask$, event$ } from "@builder.io/qwik";
-import { useOnReset, clsq } from "../../utils";
+import { component$, useStyles$, useSignal, useVisibleTask$, event$ } from "@builder.io/qwik";
+import { clsq } from "../../utils";
 import { ControlValueProps, extractControlProps, useControlValueProvider } from "../control";
 import styles from './slider.scss?inline';
 
@@ -24,7 +24,7 @@ export const Slider = component$((props: SliderProps) => {
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const {bindValue, initialValue} = useControlValueProvider(props);
+  const { bindValue } = useControlValueProvider(props);
   const attr = extractControlProps(props);
 
   const move = event$(() => {
@@ -35,8 +35,6 @@ export const Slider = component$((props: SliderProps) => {
     sliderEl.value?.style.setProperty('--position', `${position}px`);
     input.nextElementSibling?.setAttribute('data-value', `${round(input.valueAsNumber, step)}`);
   });
-
-  useOnReset(sliderEl, $(() => bindValue.value = initialValue));
 
   useVisibleTask$(({ track }) => {
     track(() => bindValue.value);

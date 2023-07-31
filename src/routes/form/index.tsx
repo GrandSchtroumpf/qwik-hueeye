@@ -1,6 +1,6 @@
 import { component$, event$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { Form, Input, Slider } from "qwik-hueeye";
+import { Form, Input, MultiSelect, Slider } from "qwik-hueeye";
 import { Select, Option } from "qwik-hueeye";
 import { Range, ThumbEnd, ThumbStart } from "qwik-hueeye";
 import { FormField, Label } from "qwik-hueeye";
@@ -113,14 +113,14 @@ export default component$(() => {
     </FormField>
     <FormField class="outline">
       <Label>Select from the list</Label>
-      <Select name="select" placeholder="Movie" multi>
+      <MultiSelect name="select" placeholder="Movie">
         <Option>-- Select a movie --</Option>
         {MOVIES.map(movie => (
           <Option key={movie.id} value={movie.id}>
             {movie.title}
           </Option>
         ))}
-      </Select>
+      </MultiSelect>
     </FormField>
     <Range name="range" class="outline">
       <legend>Select a range</legend>
@@ -130,8 +130,8 @@ export default component$(() => {
     <Slider name="slider" />
     <SwitchGroup name="switch" class="outline">
       <legend>Switches</legend>
-      <Switch name="a">Switch 1</Switch>
-      <Switch name="b">Switch 1</Switch>
+      <Switch name="a">Switch A</Switch>
+      <Switch name="b">Switch B</Switch>
     </SwitchGroup>
     <ToggleGroup name="toggle" class="outline primary">
       <legend>Toggle Group</legend>

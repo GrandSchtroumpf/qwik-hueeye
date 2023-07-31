@@ -5,7 +5,7 @@ import { useNameId } from "../field";
 import type { DisplayProps } from "../types";
 import type { SelectionItemProps } from "../selection-list/types";
 import { FormFieldContext } from "../form-field/form-field";
-import { focusNextInput, focusPreviousInput, useKeyboard, useOnReset } from "../../utils";
+import { focusNextInput, focusPreviousInput, useKeyboard } from "../../utils";
 import { ControlValueProps, useControlValue, useControlValueProvider } from "../control";
 import styles from './select.scss?inline';
 
@@ -51,8 +51,15 @@ export const BaseSelect = component$((props: SelectProps) => {
     if (!opened.value) opened.value = true;
   });
 
-  const { bindValue, initialValue } = useControlValueProvider<string | string[]>(props, multi ? [] : '');
-  useOnReset(origin, $(() => bindValue.value = initialValue));
+  // TODO: move this into the MultiSelect
+  const toggleAll = event$(() => {
+    const checkboxes = origin.value?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    if (!checkboxes) return;
+    if (bindValue.value?.length === checkboxes.length) return bindValue.value = [];
+    bindValue.value = Array.from(checkboxes).filter(c => !!c.value).map(c => c.value);
+  });
+ 
+  const { bindValue } = useControlValueProvider<string | string[]>(props, multi ? [] : '');
   
   // Customer display function
   const displayText = useComputed$(() => props.display$?.(bindValue.value));
@@ -80,7 +87,7 @@ export const BaseSelect = component$((props: SelectProps) => {
     const active = origin.value?.querySelector<HTMLElement>('input:checked');
     // Wait for dialog to open
     if (active) requestAnimationFrame(() => active.focus()) ;
-  })
+  });
 
   useKeyboard(origin, disabledKeys, $((event, el) => {
     const key = event.key;
@@ -94,12 +101,7 @@ export const BaseSelect = component$((props: SelectProps) => {
         if (event.target instanceof HTMLInputElement) event.target.click();
         if (!multi) opened.value = false;
       }
-      if (event.ctrlKey && key === 'a' && multi) {
-        const checkboxes = origin.value?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
-        if (!checkboxes) return;
-        if (bindValue.value?.length === checkboxes.length) return bindValue.value = [];
-        bindValue.value = Array.from(checkboxes).filter(c => !!c.value).map(c => c.value);
-      }
+      if (event.ctrlKey && key === 'a' && multi) toggleAll();
     }
   }));
 
@@ -156,7 +158,7 @@ const SingleOption = component$((props: SelectionItemProps) => {
     opened.value = false;
     bindValue.value = checked.value ? '' : value;
   });
-  return  <div class="option">
+  return <div class="option">
     <input id={id} type="radio" name={name} checked={checked.value} value={value} onClick$={toggle}/>
     <label for={id}>
       <Slot/>

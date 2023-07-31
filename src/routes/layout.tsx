@@ -20,6 +20,7 @@ export default component$(() => {
         <NavLink href="/select">Select</NavLink>
         <NavLink href="/checkbox">Checkbox</NavLink>
         <NavLink href="/radio">Radio</NavLink>
+        <NavLink href="/switch">Switch</NavLink>
         <NavLink href="/toggle">Toggle</NavLink>
         <NavLink href="/accordion">Accordion</NavLink>
         <NavLink href="/tabs">Tabs</NavLink>
