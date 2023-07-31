@@ -16,7 +16,7 @@ export type EventHandler = QRL<(event: QwikFocusEvent<HTMLInputElement>, element
 
 
 export interface DisplayProps<T = any> {
-  display$?: QRL<(value: T) => string>;
+  display$?: QRL<(value?: T) => string | undefined>;
 }
 
 export * from '../types';

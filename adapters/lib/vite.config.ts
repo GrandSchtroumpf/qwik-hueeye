@@ -11,6 +11,9 @@ export default extendConfig(baseConfig, () => {
         formats: ['es', 'cjs'] as LibraryFormats[],
         fileName: (format) => `index.qwik.${format === 'es' ? 'mjs' : 'cjs'}`,
       },
+      rollupOptions: {
+        preserveModules: true,
+      }
     },
   };
 });

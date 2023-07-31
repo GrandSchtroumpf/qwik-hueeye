@@ -1,22 +1,28 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { Select, Label, FormField, Option } from "qwik-hueeye";
+import { Select, Label, FormField, Option, MultiSelect } from "qwik-hueeye";
 import style from './index.scss?inline';
 
+const options: Record<string, string> = {
+  pickles: 'Pickles',
+  tomatoes: 'Tomatoes',
+  lettuce: 'Lettuce',
+  cheese: 'Cheese'
+}
 
 export default component$(() => {
   useStyles$(style);
+
   return <section id="select-page" aria-labelledby="select-title">
     <h1 id="select-title">Select</h1>
     <article>
       <h2>Select one option</h2>
       <FormField>
         <Label>Meal Options</Label> 
-        <Select placeholder="Options">
-          <Option value="">-- Select an Option --</Option>
-          <Option value="pickles">Pickles</Option>
-          <Option value="tomatoes">Tomatoes</Option>
-          <Option value="lettuce">Lettuce</Option>
-          <Option value="cheese">Cheese</Option>
+        <Select placeholder="Options" value="pickles">
+          <Option>-- Select an Option --</Option>
+          {Object.entries(options).map(([key, text]) => (
+            <Option key={key} value={key}>{text}</Option>
+          ))}
         </Select>
       </FormField>
     </article>
@@ -24,12 +30,11 @@ export default component$(() => {
       <h2>Multiple options</h2>
       <FormField class="fill">
         <Label>Meal Options</Label> 
-        <Select placeholder="Options" multi>
-          <Option value="pickles">Pickles</Option>
-          <Option value="tomatoes">Tomatoes</Option>
-          <Option value="lettuce">Lettuce</Option>
-          <Option value="cheese">Cheese</Option>
-        </Select>
+        <MultiSelect placeholder="Options" display$={v => v?.map(key => options[key]).join(', ')}>
+          {Object.entries(options).map(([key, text]) => (
+            <Option key={key} value={key}>{text}</Option>
+          ))}
+        </MultiSelect>
       </FormField>
     </article>
 
