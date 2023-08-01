@@ -3,7 +3,8 @@
   padding: var(--size-1) var(--size-2);
   box-sizing: border-box;
   display: flex;
-  border-radius: 4px;
+  gap: var(--size-1);
+  border-radius: var(--size-0);
   overflow: hidden;
   border: solid 1px var(--outline);
   &.fill {
@@ -30,7 +31,7 @@
     height: 100%;
     margin: 0;
     opacity: 0;
-    &:focus:not(:checked) + label {
+    &:focus-visible + label {
       // Use divider because surface-low is same as outline
       outline: solid 1px var(--divider);
       background-color: var(--surface-low);
@@ -46,6 +47,7 @@
     padding: 8px 16px;
     text-align: center;
     position: relative;
+    border-radius: var(--size-0);
     &:hover {
       background-color: var(--surface-low);
     }

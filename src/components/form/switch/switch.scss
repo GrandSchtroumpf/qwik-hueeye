@@ -31,7 +31,7 @@ $distance: calc($size - $padding);
     align-items: center;
     gap: var(--size-1);
     padding: 4px;
-    border-radius: var(--size-1);
+    border-radius: var(--size-0);
     cursor: pointer;
   }
   .track {

@@ -9,7 +9,7 @@ export default component$(() => {
     <h1 id="toggle-title">Toggle</h1>
     <article>
       <h2>Select one option</h2>
-      <ToggleGroup onValueChange$={v => console.log(v)}>
+      <ToggleGroup>
         <legend>Meal Options</legend>
         <Toggle value="pickles">Pickles</Toggle>
         <Toggle value="tomatoes">Tomatoes</Toggle>
@@ -20,6 +20,16 @@ export default component$(() => {
     <article>
       <h2>Vertical options</h2>
       <ToggleGroup class="vertical">
+        <legend>Meal Options</legend>
+        <Toggle value="pickles">Pickles</Toggle>
+        <Toggle value="tomatoes">Tomatoes</Toggle>
+        <Toggle value="lettuce">Lettuce</Toggle>
+        <Toggle value="cheese">Cheese</Toggle>
+      </ToggleGroup>
+    </article>
+    <article>
+      <h2>Multi options</h2>
+      <ToggleGroup class="fill primary" multi>
         <legend>Meal Options</legend>
         <Toggle value="pickles">Pickles</Toggle>
         <Toggle value="tomatoes">Tomatoes</Toggle>

@@ -51,7 +51,6 @@ export const BaseSelect = component$((props: SelectProps) => {
     if (!opened.value) opened.value = true;
   });
 
-  // TODO: move this into the MultiSelect
   const toggleAll = event$(() => {
     const checkboxes = origin.value?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
     if (!checkboxes) return;
