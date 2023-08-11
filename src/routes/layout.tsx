@@ -22,6 +22,7 @@ export default component$(() => {
         <NavLink href="/radio">Radio</NavLink>
         <NavLink href="/switch">Switch</NavLink>
         <NavLink href="/toggle">Toggle</NavLink>
+        <NavLink href="/slider">Slider</NavLink>
         <NavLink href="/accordion">Accordion</NavLink>
         <NavLink href="/tabs">Tabs</NavLink>
         <NavLink href="/button">Button</NavLink>
