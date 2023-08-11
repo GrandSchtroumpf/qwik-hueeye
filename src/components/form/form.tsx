@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack, useTask$ } from "@builder.io/qwik";
+import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack } from "@builder.io/qwik";
 import type { QwikJSX, Signal, QwikSubmitEvent, QRL} from "@builder.io/qwik";
 import type { FormFieldRecord } from "./types";
 import { getDeepValue } from "./utils";

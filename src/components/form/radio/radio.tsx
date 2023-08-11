@@ -2,7 +2,7 @@ import { component$, Slot, useComputed$, useContextProvider, useId, useStyles$ }
 import { FieldGroupContext, useGroupName, useNameId } from '../field';
 import type { FieldsetAttributes, InputAttributes } from "../../types";
 import { clsq } from '../../utils';
-import { ControlValueProps, extractControlProps, useControlValue, useControlProvider } from "../control";
+import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider } from "../control";
 import styles from './radio.scss?inline';
 
 export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, ControlValueProps<string | string[]> {}
@@ -11,7 +11,7 @@ export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, Contr
 export const RadioGroup = component$((props: RadioGroupProps) => {
   const name = useNameId(props);
   useContextProvider(FieldGroupContext, { name });
-  const {rootRef, onValueChange} = useControlProvider('item', props);
+  const {rootRef, onValueChange} = useControlItemProvider(props);
   const attr = extractControlProps(props);
 
   return <fieldset {...attr} ref={rootRef} name={name} onChange$={onValueChange} class={clsq("radio-group", props.class)} role="radiogroup">

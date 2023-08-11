@@ -1,15 +1,15 @@
-import { component$, Slot, useComputed$, useContext, useContextProvider, useId, useSignal, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, Slot, useComputed$, useContextProvider, useId, useSignal, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
 import { FieldGroupContext, useGroupName } from "../field";
 import type { FieldsetAttributes, InputAttributes, UlAttributes } from "../../types";
 import { clsq } from "../../utils";
-import { ControlContext, ControlValueProps, extractControlProps, useControlProvider, useControlValue } from "../control";
+import { ControlValueProps, extractControlProps, useControlList, useControlListProvider, useControlValue } from "../control";
 import styles from './checkbox.scss?inline';
 
 export interface CheckgroupProps extends Omit<FieldsetAttributes, 'role' | 'tabIndex' | 'onKeyDown$'>, ControlValueProps<string[]> {}
 
 export const CheckGroup = component$((props: CheckgroupProps) => {
   useStyles$(styles);
-  const { rootRef, onValueChange } = useControlProvider('list', props);
+  const { rootRef, onValueChange } = useControlListProvider(props);
   const attr = extractControlProps(props);
   
   useContextProvider(FieldGroupContext, { name: props.name });
@@ -22,18 +22,18 @@ export const CheckGroup = component$((props: CheckgroupProps) => {
 
 export const CheckAll = component$(() => {
   const checkAllRef = useSignal<HTMLInputElement>();
-  const { rootRef, bindValue, toggleAll } = useContext(ControlContext);
+  const { rootRef, bindValue, toggleAll } = useControlList<string>();
   // If there is an initialValue, verify the mode of the checkAll element
   useVisibleTask$(({ track }) => {
-    track(() => bindValue.value);
+    const change = track(() => bindValue.value);
     if (!checkAllRef.value || !rootRef.value) return;
-    if (!bindValue.value?.length) {
+    if (!change?.length) {
       checkAllRef.value.indeterminate = false;
       checkAllRef.value.checked = false;
     } else {
       const all = rootRef.value.querySelectorAll('input[value]');
-      checkAllRef.value.indeterminate = all.length !== bindValue.value.length;
-      checkAllRef.value.checked = all.length === bindValue.value.length;
+      checkAllRef.value.indeterminate = all.length !== change.length;
+      checkAllRef.value.checked = all.length === change.length;
     }
   });
   useStyles$(styles);

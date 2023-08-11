@@ -2,7 +2,7 @@ import { Slot, component$, useStyles$, useContextProvider, useId, useComputed$ }
 import { clsq } from "../../utils";
 import { FieldGroupContext, useRecordName } from "../field";
 import type { FieldsetAttributes, InputAttributes } from "../types";
-import { ControlValueProps, useControlProvider, useControlValue } from "../control";
+import { ControlValueProps, useControlRecordProvider, useControlValue } from "../control";
 import styles from './switch.scss?inline';
 
 interface SwitchGroupProps extends FieldsetAttributes, ControlValueProps<Record<string, boolean>> {}
@@ -10,7 +10,7 @@ interface SwitchGroupProps extends FieldsetAttributes, ControlValueProps<Record<
 export const SwitchGroup = component$((props: SwitchGroupProps) => {
   useStyles$(styles);
   useContextProvider(FieldGroupContext, { name: props.name });
-  const { rootRef, onValueChange } = useControlProvider('record', props);
+  const { rootRef, onValueChange } = useControlRecordProvider(props);
 
   return <fieldset {...props} onChange$={onValueChange} class={clsq("switch-group", props.class)} ref={rootRef}>
     <Slot/>

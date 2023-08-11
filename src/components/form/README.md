@@ -134,12 +134,12 @@ type: `string`
 type: `string[]`
 ```jsx
 <Form initialValue={{ toppings: ['cheese', 'mushroom'] }}>
-  <ToggleGroup name="toppings" multi>
+  <MultiToggleGroup name="toppings">
     <legend>Which toppings for your Pizza ?</legend>
     <Toggle value="pepperoni">Pepperoni</Toggle>
     <Toggle value="cheese">Cheese</Toggle>
     <Toggle value="mushroom">Mushroom</Toggle>
-  </ToggleGroup>
+  </MultiToggleGroup>
 </Form>
 ```
 

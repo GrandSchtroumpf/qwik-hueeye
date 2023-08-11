@@ -1,47 +1,53 @@
-import { $, component$,  Slot, useSignal, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$ } from "@builder.io/qwik";
+import { component$,  Slot, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$ } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
-import { FieldContext } from "../field";
 import { clsq  } from "../../utils";
-import { ControlValueProps, extractControlProps, useControlValue, useControlProvider } from "../control";
+import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider, useControlListProvider } from "../control";
 import styles from './toggle.scss?inline';
 
-const ToggleGroupContext = createContextId<{ multi: boolean }>('ToggleGroupContext');
+const ToggleGroupContext = createContextId<{ name: string, multi: boolean }>('ToggleGroupContext');
 
-interface ToggleGroupProps extends FieldsetAttributes, ControlValueProps<string | string[]> {
-  multi?: boolean;
-}
+interface ToggleGroupProps extends FieldsetAttributes, ControlValueProps<string> {}
 
 export const ToggleGroup = component$((props: ToggleGroupProps) => {
   useStyles$(styles);
-  const active = useSignal('');
   const id = useId();
-  const { multi = false, name = id } = props;
   const attr = extractControlProps(props);
-  const { rootRef, onValueChange } = useControlProvider(multi ? 'list' : 'item', props);
-  useContextProvider(ToggleGroupContext, { multi });
+  const { rootRef, onValueChange } = useControlItemProvider(props);
+  useContextProvider(ToggleGroupContext, {
+    multi: false,
+    name: props.name ?? id
+  });
+  
+  return <fieldset {...attr} ref={rootRef} onChange$={onValueChange} class={clsq('toggle-group', props.class)}>
+    <Slot />
+  </fieldset>
+});
 
-  useContextProvider(FieldContext, {
-    name,
-    change: $((event: any, input: HTMLInputElement) => {
-      if (multi) return;
-      active.value = input.checked ? input.id : '';
-    }),
+interface MultiToggleGroupProps extends FieldsetAttributes, ControlValueProps<string[]> {}
+export const MultiToggleGroup = component$((props: MultiToggleGroupProps) => {
+  useStyles$(styles);
+  console.log('Multi Toggle')
+  const id = useId();
+  const attr = extractControlProps(props);
+  const { rootRef, onValueChange } = useControlListProvider(props);
+  useContextProvider(ToggleGroupContext, {
+    multi: true,
+    name: props.name ?? id
   });
 
   return <fieldset {...attr} ref={rootRef} onChange$={onValueChange} class={clsq('toggle-group', props.class)}>
     <Slot />
   </fieldset>
+});
 
-})
+
 
 interface ToggleProps {
   value: string;
 }
-
 export const Toggle = component$((props: ToggleProps) => {
   const id = useId();
-  const { name } = useContext(FieldContext);
-  const { multi } = useContext(ToggleGroupContext);
+  const { multi, name } = useContext(ToggleGroupContext);
   const value = props.value;
   const bindValue = useControlValue<string | string[]>();
   const type = multi ? 'checkbox' : 'radio';
