@@ -1,11 +1,15 @@
-import { Slot, component$, useStyles$, event$, useSignal, useVisibleTask$, createContextId, useContextProvider, useContext, $ } from "@builder.io/qwik";
-import { useOnReset, clsq } from "../../utils";
+import { Slot, component$, useStyles$, event$, useSignal, useVisibleTask$, createContextId, useContextProvider, useContext } from "@builder.io/qwik";
+import { clsq } from "../../utils";
 import { useNameId } from "../field";
-import { useFormValue } from "../form";
 import type { FieldsetAttributes, InputAttributes } from "../types";
 import styles from './range.scss?inline';
+import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
 
-interface RangeProps extends FieldsetAttributes {
+interface Range {
+  start: number;
+  end: number;
+}
+interface RangeProps extends FieldsetAttributes, ControlValueProps<Range> {
   min?: number | string;
   max?: number | string;
   step?: number | string;
@@ -91,9 +95,15 @@ function useRangeProvider(props: RangeProps) {
   return service;
 }
 
+
+
+// TODO: use style attribute instead of JS properties to set width & position
+
 export const Range = component$((props: RangeProps) => {
   useStyles$(styles);
-  const { slider, track, setPosition } = useRangeProvider(props);
+  const { baseName, slider, track, setPosition, min, max } = useRangeProvider(props);
+  const { bindValue } = useControlValueProvider(props, { start: min, end: max });
+  const attr = extractControlProps(props);
 
   // Update UI on resize
   useVisibleTask$(() => {
@@ -106,17 +116,18 @@ export const Range = component$((props: RangeProps) => {
     return () => obs.disconnect();
   });
   
+  useVisibleTask$(({ track }) => {
+    track(() => bindValue.value?.start);
+    const input = slider.value?.querySelector<HTMLInputElement>(`input[name="${baseName}.start"]`);
+    if (input) setPosition(input, 'start');
+  })
+  useVisibleTask$(({ track }) => {
+    track(() => bindValue.value?.end);
+    const input = slider.value?.querySelector<HTMLInputElement>(`input[name="${baseName}.end"]`);
+    if (input) setPosition(input, 'end');
+  })
 
-  // Update position on reset
-  useOnReset(slider, $(() => {
-    requestAnimationFrame(() => {
-      const inputs = slider.value?.querySelectorAll<HTMLInputElement>('input');
-      setPosition(inputs!.item(0), 'start');
-      setPosition(inputs!.item(1), 'end');
-    })
-  }));
-
-  return <fieldset {...props} class={clsq('range', props.class)} ref={slider}>
+  return <fieldset {...attr} class={clsq('range', props.class)} ref={slider}>
     <div class="track" ref={track}></div>
     <Slot/>
   </fieldset>
@@ -127,8 +138,8 @@ interface ThumbProps extends Omit<InputAttributes, 'type' | 'children' | 'step' 
 export const ThumbStart = component$((props: ThumbProps) => {
   const { baseName, startInput, min, max, step, resize, focusLeft, move} = useRangeContext();
   const name = baseName + '.start';
-  const initialValue = useFormValue<string | number>(name);
-  const value = props.value ?? initialValue ?? min;
+  const bindValue = useControlValue<Range>();
+
   return <>
     <input
       type="range" 
@@ -137,22 +148,23 @@ export const ThumbStart = component$((props: ThumbProps) => {
       min={min}
       max={max}
       step={step}
-      value={value}
+      value={bindValue.value.start}
       onFocus$={(_, el) => focusLeft(el)}
       onInput$={(_, el) => move(el, 'start')}
+      onChange$={(_, el) => bindValue.value = { ...bindValue.value, start: el.valueAsNumber }}
       onMouseUp$={resize}
       onTouchEnd$={resize}
       onTouchCancel$={resize}
       {...props} />
-    <div class="thumb start" data-value={value}></div>
+    <div class="thumb start" data-value={bindValue.value.start}></div>
   </>
 
 });
 export const ThumbEnd = component$((props: ThumbProps) => {
   const { baseName, endInput, min, max, step, resize, focusRight, move} = useRangeContext();
   const name = baseName + '.end';
-  const initialValue = useFormValue<string | number>(name);
-  const value = props.value ?? initialValue ?? max;
+  const bindValue = useControlValue<Range>();
+
   return <>
     <input 
       type="range" 
@@ -161,13 +173,14 @@ export const ThumbEnd = component$((props: ThumbProps) => {
       min={min}
       max={max}
       step={step}
-      value={value}
+      value={bindValue.value.end}
       onFocus$={(_, el) => focusRight(el)}
       onInput$={(_, el) => move(el, 'end')}
+      onChange$={(_, el) => bindValue.value = { ...bindValue.value, end: el.valueAsNumber }}
       onMouseUp$={resize}
       onTouchEnd$={resize}
       onTouchCancel$={resize}
       {...props} />
-    <div class="thumb end" data-value={value}></div>
+    <div class="thumb end" data-value={bindValue.value.end}></div>
   </>
 });

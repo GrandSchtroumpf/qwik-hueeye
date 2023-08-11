@@ -24,7 +24,7 @@ export const Slider = component$((props: SliderProps) => {
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const { bindValue } = useControlValueProvider(props);
+  const { bindValue } = useControlValueProvider(props, min);
   const attr = extractControlProps(props);
 
   const move = event$(() => {

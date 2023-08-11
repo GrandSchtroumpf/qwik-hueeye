@@ -1,16 +1,16 @@
-import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack, QwikChangeEvent } from "@builder.io/qwik";
+import { $, component$, createContextId, useContextProvider, useStore, Slot, useContext, useSignal, event$, untrack, useTask$ } from "@builder.io/qwik";
 import type { QwikJSX, Signal, QwikSubmitEvent, QRL} from "@builder.io/qwik";
 import type { FormFieldRecord } from "./types";
-import { getDeepValue, getFormValue } from "./utils";
+import { getDeepValue } from "./utils";
 
 type FormAttributes = QwikJSX.IntrinsicElements['form'];
 
 
 export interface FormProps<T extends FormFieldRecord> extends Omit<FormAttributes, 'onSubmit$'> {
   onSubmit$?: QRL<(value: T, form: HTMLFormElement, event: QwikSubmitEvent<HTMLFormElement>) => any>;
-  onChange$?: QRL<(value: T, form: HTMLFormElement, event: QwikChangeEvent<HTMLFormElement>) => any>;
-  value?: Signal<T>;
-  initialValue?: T
+  onValueChange$?: QRL<(value: T) => any>;
+  'bind:value'?: Signal<T>;
+  value?: T
 }
 
 export const FormContext = createContextId<FormState<any>>('FormContext');
@@ -22,6 +22,7 @@ export interface FormState<T extends FormFieldRecord = any> {
   dirty: boolean;
   invalid: boolean;
   value: T;
+  bindValue: Signal<T>;
 }
 
 
@@ -41,33 +42,36 @@ export function useForm<T extends FormFieldRecord>() {
     dirty: false,
     invalid: false,
     value: undefined,
+    bindValue: useSignal()
   } as any);
 }
 
 export const Form = component$((props: FormProps<any>) => {
-  const { onSubmit$, onChange$, initialValue, ...attributes } = props;
+  const { onSubmit$, onValueChange$, 'bind:value': bindValue, value, ...attr } = props;
   const ref = useSignal<HTMLFormElement>();
+  const initial = value ?? bindValue?.value ?? {};
+  const signalValue = useSignal(initial);
   const state = useStore<FormState>({
     formRef: ref,
     submitted: false,
     dirty: false,
     invalid: false,
-    value: initialValue ?? {},
+    value: initial,
+    bindValue: bindValue ?? signalValue,
   }, { deep: false });
   useContextProvider<FormState<any>>(FormContext, state);
 
-  const change = event$((event: QwikChangeEvent<HTMLFormElement>, form: HTMLFormElement) => {
+  const change = event$(() => {
     state.dirty = true;
-    state.value = getFormValue(ref.value!);
-    if (onChange$) onChange$(state.value, form, event);
-  })
+    if (onValueChange$) onValueChange$(state.value);
+  });
   
   const submit = $((event: QwikSubmitEvent<HTMLFormElement>, form: HTMLFormElement) => {
     state.submitted = true;
     if (onSubmit$) onSubmit$(state.value, form, event);
   });
 
-  return <form {...attributes} ref={ref} onSubmit$={submit} onChange$={change} preventdefault:submit>
+  return <form {...attr} ref={ref} onSubmit$={submit} onChange$={change} preventdefault:submit>
     <Slot/>
   </form>
 });

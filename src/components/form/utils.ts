@@ -64,13 +64,14 @@ export function getFormValue<T>(form: HTMLFormElement) {
   return result as T;
 }
 
-export function getDeepValue<T>(base: Record<string, any>, key: string): T | undefined {
+export function getDeepValue<T>(base?: Record<string, any>, key?: string): T | undefined {
+  if (!base || !key) return;
   const [prefix, ...rest] = key.split('.');
   if (!rest.length) return base[prefix];
   if (prefix in base) return getDeepValue(base[prefix], rest.join('.'));
 }
 
-function setDeepValue(base: Record<string, any>, key: string, value: any) {
+export function setDeepValue(base: Record<string, any>, key: string, value: any) {
   const [prefix, ...rest] = key.split('.');
   if (rest.length) {
     base[prefix] ||= {};

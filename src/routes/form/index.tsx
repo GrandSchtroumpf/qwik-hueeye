@@ -89,7 +89,7 @@ export default component$(() => {
     form.reset();
   });
 
-  const value = {
+  const initial = {
     title: 'Hello World',
     select: [MOVIES[3].id, MOVIES[6].id],
     switch: {
@@ -106,7 +106,7 @@ export default component$(() => {
     toggle: 'medium'
   };
 
-  return <Form class="form-page" onSubmit$={save} initialValue={value}>
+  return <Form class="form-page" onSubmit$={save} value={initial}>
     <FormField class="outline">
       <Label>Text here</Label>
       <Input value="Hello World" name="title" placeholder="Some Text here" />

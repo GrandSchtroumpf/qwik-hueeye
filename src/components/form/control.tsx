@@ -1,7 +1,8 @@
-import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
+import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $, useVisibleTask$, useTask$ } from "@builder.io/qwik";
 import { useForm, useFormValue } from "./form";
 import { useOnChange } from "qwik-hueeye";
 import { ArrowsKeys, focusNextInput, focusPreviousInput, useKeyboard } from "../utils";
+import { getDeepValue, setDeepValue } from "./utils";
 
 export interface ControlValueProps<T> {
   required?: boolean;
@@ -16,12 +17,22 @@ export function useControlValue<T>() {
   return useContext<Signal<T>>(ControlValueContext)
 }
 export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?: T) {
-  const { formRef } = useForm();
+  const { formRef, bindValue: formBindValue } = useForm();
   const value = useFormValue<T>(props.name);
   const initialValue = props.value ?? value ?? initial ?? '' as T;
   const signalValue = useSignal<T>(initialValue);
   const bindValue = props["bind:value"] ?? signalValue;
 
+  // Update control on form value changes
+  useTask$(({ track }) => {
+    // TODO: maybe use a store for formBindValue to avoid JSON.stringify comparison
+    const change = track(() => getDeepValue(formBindValue.value, props.name));
+    if (JSON.stringify(change) === JSON.stringify(bindValue.value)) return;
+    bindValue.value = change as any;
+  });
+
+
+  // Update control on form reset
   useVisibleTask$(() => {
     const handler = (event: Event) => {
       event.preventDefault();
@@ -31,9 +42,16 @@ export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?
     return () => formRef.value?.removeEventListener('reset', handler);
   });
 
+  // Forward changes
   useOnChange(bindValue, $((change) => {
+    if (props.name && formRef.value) {
+      const old = structuredClone(formBindValue.value);
+      setDeepValue(old, props.name, change);
+      formBindValue.value = old;
+    }
     if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);
   }));
+
   useContextProvider(ControlValueContext, bindValue);
   return {bindValue, initialValue};
 }
@@ -68,7 +86,6 @@ export function useControlProvider<S extends ControlStrategy, T extends Strategy
   const toggleList = $(() => {
     if (!rootRef.value) return;
     const checkboxes = rootRef.value.querySelectorAll('input[type="checkbox"][value]') as NodeListOf<HTMLInputElement>;
-    console.log('Toggle List', checkboxes);
     (bindValue.value as string[]) = bindValue.value?.length === checkboxes.length
       ? []
       : Array.from(checkboxes).map(c => c.value);

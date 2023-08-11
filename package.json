@@ -58,5 +58,8 @@
     "undici": "5.22.1",
     "vite": "^4.4.7",
     "vite-tsconfig-paths": "^4.2.0"
+  },
+  "dependencies": {
+    "@builder.io/qwik-worker": "^0.0.1"
   }
 }
