@@ -47,19 +47,21 @@ export function useForm<T extends FormFieldRecord>() {
 }
 
 export const Form = component$((props: FormProps<any>) => {
-  const { onSubmit$, onValueChange$, 'bind:value': bindValue, value, ...attr } = props;
+  const { onSubmit$, onValueChange$, 'bind:value': propsBindValue, value, ...attr } = props;
   const ref = useSignal<HTMLFormElement>();
-  const initial = value ?? bindValue?.value ?? {};
+  const initial = value ?? propsBindValue?.value ?? {};
   const signalValue = useSignal(initial);
-  const state = useStore<FormState>({
+  const bindValue = propsBindValue ?? signalValue;
+
+  const state = useStore<Omit<FormState, 'bindValue'>>({
     formRef: ref,
     submitted: false,
     dirty: false,
     invalid: false,
     value: initial,
-    bindValue: bindValue ?? signalValue,
   }, { deep: false });
-  useContextProvider<FormState<any>>(FormContext, state);
+
+  useContextProvider<FormState<any>>(FormContext, {...state, bindValue});
 
   const change = event$(() => {
     state.dirty = true;
@@ -68,7 +70,7 @@ export const Form = component$((props: FormProps<any>) => {
   
   const submit = $((event: QwikSubmitEvent<HTMLFormElement>, form: HTMLFormElement) => {
     state.submitted = true;
-    if (onSubmit$) onSubmit$(state.value, form, event);
+    if (onSubmit$) onSubmit$(bindValue.value, form, event);
   });
 
   return <form {...attr} ref={ref} onSubmit$={submit} onChange$={change} preventdefault:submit>

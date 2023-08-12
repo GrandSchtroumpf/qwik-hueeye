@@ -78,8 +78,8 @@ export function useControllerProvider<T>(props: ControlValueProps<T>, initial?: 
   const signalValue = useSignal<T>(initialValue);
 
   // TODO: only use bind value when user wants one
-  const bindValue = props["bind:value"] ?? signalValue;
-  
+  const bindValue = props["bind:value"] ?? signalValue;  
+
   // Update control on form value changes
   useTask$(({ track }) => {
     if (!formRef.value) return;

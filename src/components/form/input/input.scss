@@ -5,6 +5,7 @@
     border: none;
     background-color: transparent;
     color: currentColor;
+    font-family: var(--font-family);
     &::placeholder {
       color: var(--text);
       opacity: 0.5;

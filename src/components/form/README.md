@@ -56,11 +56,11 @@ type: `string[]`
 <Form initialValue={{ movies: ['titanic', 'babylon'] }}>
   <FormField>
     <Label>Select a movie for this week</Label>
-    <Select name="movies" placeholder="Movie" multi>
+    <MultiSelect name="movies" placeholder="Movies">
       <Option value="lotr">Lord of the Ring</Option>
       <Option value="titanic">Titanic</Option>
       <Option value="babylon">Babylon</Option>
-    </Select>
+    </MultiSelect>
   </FormField>
 </Form>
 ```

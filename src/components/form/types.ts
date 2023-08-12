@@ -16,7 +16,10 @@ export type EventHandler = QRL<(event: QwikFocusEvent<HTMLInputElement>, element
 
 
 export interface DisplayProps<T = any> {
-  display$?: QRL<(value?: T) => string | undefined>;
+  /** 
+   * Method used to customize how selected options are displayed
+   */
+  display$?: QRL<(value: T) => string | undefined>;
 }
 
 export * from '../types';

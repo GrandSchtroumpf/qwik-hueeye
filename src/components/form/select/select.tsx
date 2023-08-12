@@ -6,7 +6,7 @@ import type { DisplayProps } from "../types";
 import type { SelectionItemProps } from "../selection-list/types";
 import { FormFieldContext } from "../form-field/form-field";
 import { focusNextInput, focusPreviousInput, useKeyboard } from "../../utils";
-import { ControlValueProps, useControlValue, useControlValueProvider } from "../control";
+import { ControlValueProps, useControlValue, useControllerProvider } from "../control";
 import styles from './select.scss?inline';
 
 
@@ -58,7 +58,7 @@ export const BaseSelect = component$((props: SelectProps) => {
     bindValue.value = Array.from(checkboxes).filter(c => !!c.value).map(c => c.value);
   });
  
-  const { bindValue } = useControlValueProvider<string | string[]>(props, multi ? [] : '');
+  const { bindValue } = useControllerProvider<string | string[]>(props, multi ? [] : '');
   
   // Customer display function
   const displayText = useComputed$(() => props.display$?.(bindValue.value));

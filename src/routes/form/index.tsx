@@ -91,6 +91,10 @@ export default component$(() => {
 
   const initial = {
     title: 'Hello World',
+    date: new Date(),
+    time: new Date(),
+    month: new Date(),
+    datetime: new Date(),
     select: [MOVIES[3].id, MOVIES[6].id],
     switch: {
       a: true,
@@ -109,8 +113,26 @@ export default component$(() => {
   return <Form class="form-page" onSubmit$={save} value={initial}>
     <FormField class="outline">
       <Label>Text here</Label>
-      <Input value="Hello World" name="title" placeholder="Some Text here" />
+      <Input name="title" placeholder="Some Text here" />
     </FormField>
+    <fieldset class="date-inputs">
+      <FormField class="outline">
+        <Label>Date</Label>
+        <Input type="date" name="date" placeholder="Today's date" />
+      </FormField>
+      <FormField class="outline">
+        <Label>Time</Label>
+        <Input type="time" name="time" placeholder="Today's date" />
+      </FormField>
+      <FormField class="outline">
+        <Label>Month</Label>
+        <Input type="month" name="month" placeholder="Today's date" />
+      </FormField>
+      <FormField class="outline">
+        <Label>Datetime</Label>
+        <Input type="datetime-local" name="datetime" placeholder="Today's date" />
+      </FormField>
+    </fieldset>
     <FormField class="outline">
       <Label>Select from the list</Label>
       <MultiSelect name="select" placeholder="Movie">
