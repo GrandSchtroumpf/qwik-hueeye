@@ -1,6 +1,6 @@
 import { component$,  Slot, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$, $ } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
-import { clsq  } from "../../utils";
+import { clsq, useKeyboard  } from "../../utils";
 import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider, useControlListProvider } from "../control";
 import styles from './toggle.scss?inline';
 
@@ -13,6 +13,13 @@ export const ToggleGroup = component$((props: ToggleGroupProps) => {
   const id = useId();
   const attr = extractControlProps(props);
   const { rootRef, onValueChange } = useControlItemProvider(props);
+
+  useKeyboard(rootRef, ['Enter', ' '], $((event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (event.target instanceof HTMLInputElement) event.target.click();
+    }
+  }))
+
   useContextProvider(ToggleGroupContext, {
     multi: false,
     name: props.name ?? id
