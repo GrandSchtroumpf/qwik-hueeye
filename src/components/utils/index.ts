@@ -27,6 +27,24 @@ export function useKeyboard<T extends HTMLElement>(
   });
 }
 
+export const useGridKeyboard = (root: Signal<HTMLElement | undefined>, selector: string = 'li > a') => {
+  useVisibleTask$(() => {
+    const handler = $((event: KeyboardEvent) => {
+      if (!root.value) return;
+      const key = event.key;
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key)) event.preventDefault();
+      if (key === 'ArrowRight') nextFocus(root.value.querySelectorAll<HTMLElement>(selector));
+      if (key === 'ArrowLeft') previousFocus(root.value.querySelectorAll<HTMLElement>(selector));
+      if (key === 'ArrowDown') nextLine(root.value, selector);
+      if (key === 'ArrowUp') previousLine(root.value, selector);
+      if (key === 'End') lastFocus(root.value.querySelectorAll<HTMLElement>(selector));
+      if (key === 'Escape') leaveFocus(root.value);
+    });
+    root.value?.addEventListener('keydown', handler);
+    return () => root.value?.removeEventListener('keydown', handler);
+  });
+}
+
 export const ArrowsKeys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'];
 
 
@@ -34,27 +52,64 @@ export const nextFocus = $((list?: NodeListOf<HTMLElement>) => {
   if (!list) return;
   const focusedEl = document.activeElement as HTMLElement;
   if (!focusedEl) return list[0]?.focus();
-  const index = Array.from(list).indexOf(focusedEl);
+  const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl))
   const nextIndex = (index + 1) % list.length;
   list[nextIndex].focus();
 });
 export const focusNextInput = $((root: HTMLElement) => {
   const list = root.querySelectorAll('input');
   nextFocus(list);
-})
+});
+
 export const previousFocus = $((list?: NodeListOf<HTMLElement>) => {
   if (!list) return;
   const focusedEl = document.activeElement as HTMLElement;
   if (!focusedEl) return list[list.length - 1]?.focus();
-  const index = Array.from(list).indexOf(focusedEl);
+  const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl))
   const nextIndex = (index - 1 + list.length) % list.length;
   list[nextIndex].focus();
 });
 export const focusPreviousInput = $((root: HTMLElement) => {
   const list = root.querySelectorAll('input');
   previousFocus(list);
+});
+
+export const lastFocus = $((list?: NodeListOf<HTMLElement>) => {
+  if (!list) return;
+  list.item(list.length-1).focus();
 })
 
+const nextLine = $((root: HTMLElement, selector: string) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  const focusedEl = document.activeElement as HTMLElement;
+  const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
+  const { width: rootWidth } = root.getBoundingClientRect();
+  const { width: itemWidth } = list[0].getBoundingClientRect();
+  const line = Math.floor(rootWidth / itemWidth);
+  const nextIndex = (index + line) % list.length;
+  list[nextIndex].focus();
+});
+
+const previousLine = $((root: HTMLElement, selector: string) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  const focusedEl = document.activeElement as HTMLElement;
+  const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
+  const { width: rootWidth } = root.getBoundingClientRect();
+  const { width: itemWidth } = list[0].getBoundingClientRect();
+  const line = Math.floor(rootWidth / itemWidth);
+  const nextIndex = (index - line + list.length) % list.length;
+  list[nextIndex].focus();
+});
+
+const leaveFocus = $((root: HTMLElement) => {
+  const focusableSelector = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  const focusables = document.querySelectorAll<HTMLElement>(focusableSelector);
+  for (const focusable of focusables) {
+    if (root.compareDocumentPosition(focusable) === Node.DOCUMENT_POSITION_FOLLOWING) {
+      return focusable.focus();
+    }
+  }
+})
 
 interface Point {
   x: number;

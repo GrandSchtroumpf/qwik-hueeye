@@ -1,0 +1,30 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--size-1);
+  padding: var(--block-padding);
+  margin-bottom: var(--size-2);
+}
+
+.section {
+  background-color: var(--surface);
+  border-radius: var(--size-2);
+  padding: var(--size-1) var(--size-2);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--size-1);
+
+  img {
+    contain: paint;
+    grid-row: 1 / span 4;
+    border-radius: var(--size-0);
+    padding: 2px;
+    box-sizing: border-box;
+  }
+  & > article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1);
+  }
+}
+

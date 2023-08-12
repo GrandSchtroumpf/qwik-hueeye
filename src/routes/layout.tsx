@@ -30,6 +30,7 @@ export default component$(() => {
         <NavLink href="/dialog">Dialog</NavLink>
         <NavLink href="/tooltip">Tooltip</NavLink>
         <NavLink href="/toaster">Toaster</NavLink>
+        <NavLink href="/navgrid">Navigation Grid</NavLink>
       </Navlist>
     </div>
     <header class="page-header">

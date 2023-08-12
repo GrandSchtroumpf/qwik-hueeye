@@ -1,0 +1,23 @@
+.nav-grid {
+  & > ul {
+    list-style: none;
+    margin-block: 0;
+    padding: var(--size-2);
+    display: grid;
+    gap: var(--size-2);
+    grid-template-columns: repeat(auto-fill, minmax(var(--nav-grid-item-width, 250px), 1fr));
+  }
+  & > ul > li {
+    display: contents;
+  }
+  & > ul > li > a {
+    text-decoration: none;
+    color: currentColor;
+    background-color: var(--surface);
+    border-radius: var(--size-1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--size-1) var(--size-2);
+  }
+}
