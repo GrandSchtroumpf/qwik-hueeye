@@ -1,4 +1,4 @@
-import { component$,  Slot, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$ } from "@builder.io/qwik";
+import { component$,  Slot, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$, $ } from "@builder.io/qwik";
 import type { FieldsetAttributes } from "../types";
 import { clsq  } from "../../utils";
 import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider, useControlListProvider } from "../control";
@@ -54,9 +54,14 @@ export const Toggle = component$((props: ToggleProps) => {
     if (multi) return bindValue.value.includes(value);
     else return bindValue.value === value
   });
+  const toggle = $(() => {
+    if (multi) return; // if checkbox let fieldset manage change
+    bindValue.value = checked.value ? '' : value;
+  })
 
   return  <div class="toggle">
-    <input id={id} type={type} name={name} checked={checked.value} value={value}/>
+    {/* Prevent default click to manage toggle behavior */}
+    <input id={id} type={type} name={name} checked={checked.value} value={value} onClick$={toggle} preventdefault:click/>
     <label for={id}>
       <Slot/>
     </label>

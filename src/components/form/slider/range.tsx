@@ -139,7 +139,6 @@ export const ThumbStart = component$((props: ThumbProps) => {
   const { baseName, startInput, min, max, step, resize, focusLeft, move} = useRangeContext();
   const name = baseName + '.start';
   const bindValue = useControlValue<Range>();
-  console.log(bindValue.value);
   return <>
     <input
       type="range" 
