@@ -26,7 +26,6 @@ export const ToggleGroup = component$((props: ToggleGroupProps) => {
 interface MultiToggleGroupProps extends FieldsetAttributes, ControlValueProps<string[]> {}
 export const MultiToggleGroup = component$((props: MultiToggleGroupProps) => {
   useStyles$(styles);
-  console.log('Multi Toggle')
   const id = useId();
   const attr = extractControlProps(props);
   const { rootRef, onValueChange } = useControlListProvider(props);

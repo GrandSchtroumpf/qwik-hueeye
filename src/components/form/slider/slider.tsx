@@ -1,6 +1,6 @@
 import { component$, useStyles$, useSignal, useVisibleTask$, event$ } from "@builder.io/qwik";
 import { clsq } from "../../utils";
-import { ControlValueProps, extractControlProps, useControlValueProvider } from "../control";
+import { ControlValueProps, extractControlProps, useControllerProvider } from "../control";
 import styles from './slider.scss?inline';
 
 interface SliderProps extends ControlValueProps<number> {
@@ -24,7 +24,7 @@ export const Slider = component$((props: SliderProps) => {
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const { bindValue } = useControlValueProvider(props, min);
+  const { bindValue } = useControllerProvider(props, min);
   const attr = extractControlProps(props);
 
   const move = event$(() => {

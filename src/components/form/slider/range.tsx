@@ -3,7 +3,7 @@ import { clsq } from "../../utils";
 import { useNameId } from "../field";
 import type { FieldsetAttributes, InputAttributes } from "../types";
 import styles from './range.scss?inline';
-import { ControlValueProps, extractControlProps, useControlValue, useControlValueProvider } from "../control";
+import { ControlValueProps, extractControlProps, useControlValue, useControllerProvider } from "../control";
 
 interface Range {
   start: number;
@@ -102,7 +102,7 @@ function useRangeProvider(props: RangeProps) {
 export const Range = component$((props: RangeProps) => {
   useStyles$(styles);
   const { baseName, slider, track, setPosition, min, max } = useRangeProvider(props);
-  const { bindValue } = useControlValueProvider(props, { start: min, end: max });
+  const { bindValue } = useControllerProvider(props, { start: min, end: max });
   const attr = extractControlProps(props);
 
   // Update UI on resize
@@ -139,7 +139,7 @@ export const ThumbStart = component$((props: ThumbProps) => {
   const { baseName, startInput, min, max, step, resize, focusLeft, move} = useRangeContext();
   const name = baseName + '.start';
   const bindValue = useControlValue<Range>();
-
+  console.log(bindValue.value);
   return <>
     <input
       type="range" 

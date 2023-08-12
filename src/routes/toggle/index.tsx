@@ -5,7 +5,6 @@ import style from './index.scss?inline';
 
 export default component$(() => {
   useStyles$(style);
-  console.log('Component')
   return <section id="toggle-page" aria-labelledby="toggle-title">
     <h1 id="toggle-title">Toggle</h1>
     <article>

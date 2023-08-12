@@ -1,5 +1,5 @@
 import { QRL, Signal, createContextId, useContext, useContextProvider, useSignal, $, useVisibleTask$, useTask$, untrack } from "@builder.io/qwik";
-import { useForm, useFormValue } from "./form";
+import { useForm } from "./form";
 import { useOnChange } from "qwik-hueeye";
 import { ArrowsKeys, focusNextInput, focusPreviousInput, useKeyboard } from "../utils";
 import { getDeepValue, setDeepValue } from "./utils";
@@ -16,45 +16,6 @@ export const ControlValueContext = createContextId<Signal<any>>('ControlValueCon
 export function useControlValue<T>() {
   return useContext<Signal<T>>(ControlValueContext)
 }
-export function useControlValueProvider<T>(props: ControlValueProps<T>, initial?: T) {
-  const { formRef, bindValue: formBindValue } = useForm();
-  const value = useFormValue<T>(props.name);
-  const initialValue = props.value ?? value ?? initial ?? '' as T;
-  const signalValue = useSignal<T>(initialValue);
-  const bindValue = props["bind:value"] ?? signalValue;
-
-  // Update control on form value changes
-  useTask$(({ track }) => {
-    // TODO: maybe use a store for formBindValue to avoid JSON.stringify comparison
-    const change = track(() => getDeepValue(formBindValue.value, props.name));
-    if (JSON.stringify(change) === JSON.stringify(bindValue.value)) return;
-    bindValue.value = change as any;
-  });
-
-
-  // Update control on form reset
-  useVisibleTask$(() => {
-    const handler = (event: Event) => {
-      event.preventDefault();
-      bindValue.value = initialValue;
-    }
-    formRef.value?.addEventListener('reset', handler);
-    return () => formRef.value?.removeEventListener('reset', handler);
-  });
-
-  // Forward changes
-  useOnChange(bindValue, $((change) => {
-    if (props.name && formRef.value) {
-      const old = structuredClone(formBindValue.value);
-      setDeepValue(old, props.name, change);
-      formBindValue.value = old;
-    }
-    if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);
-  }));
-
-  useContextProvider(ControlValueContext, bindValue);
-  return {bindValue, initialValue};
-}
 
 export const extractControlProps = <T extends ControlValueProps<any>>(props: T) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,12 +24,7 @@ export const extractControlProps = <T extends ControlValueProps<any>>(props: T) 
 }
 
 
-
-
-
 const disabledKeys = [...ArrowsKeys, 'Enter', ' ', 'ctrl+a'];
-
-
 
 export function useControllerProvider<T>(props: ControlValueProps<T>, initial?: T) {
   const { formRef, value, bindValue: formBindValue } = useForm();
