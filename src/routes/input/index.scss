@@ -1,0 +1,22 @@
+#input-page {
+  article, h1, h2 {
+    margin-bottom: var(--size-2);
+  }
+  p {
+    margin-bottom: var(--size-1);
+  }
+  code {
+    padding: var(--size-0) var(--size-1);
+    border-radius: var(--size-0);
+    background-color: var(--surface-lower);
+    border: solid 1px var(--outline);
+    font-size: small;
+  }
+  fieldset {
+    display: flex;
+    gap: var(--size-1);
+    padding: 0;
+    border: none;
+    margin-bottom: var(--size-2)
+  }
+}

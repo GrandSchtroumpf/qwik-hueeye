@@ -17,6 +17,7 @@ export default component$(() => {
       <Navlist aria-label="primary">
         <NavLink href="/">Theme</NavLink>
         <NavLink href="/form">Form</NavLink>
+        <NavLink href="/input">Input</NavLink>
         <NavLink href="/select">Select</NavLink>
         <NavLink href="/checkbox">Checkbox</NavLink>
         <NavLink href="/radio">Radio</NavLink>
