@@ -2,13 +2,16 @@ import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvi
 import { Popover } from "../../dialog/popover";
 import type { Signal } from "@builder.io/qwik";
 import { useNameId } from "../field";
-import type { DisplayProps } from "../types";
-import type { SelectionItemProps } from "../selection-list/types";
+import type { DisplayProps, LiAttributes } from "../types";
 import { FormFieldContext } from "../form-field/form-field";
 import { focusNextInput, focusPreviousInput, useKeyboard } from "../../utils";
 import { ControlValueProps, useControlValue, useControllerProvider } from "../control";
 import styles from './select.scss?inline';
 
+export interface SelectionItemProps extends LiAttributes {
+  value?: string;
+  mode?: 'radio' | 'toggle';
+}
 
 interface SelectProps<T = any> extends ControlValueProps<T>, DisplayProps<T> {
   multi?: boolean;
@@ -145,6 +148,21 @@ export const BaseSelect = component$((props: SelectProps) => {
     </div>
   </>
 });
+
+
+interface OptionGroupProps {
+  label: string;
+  diabled?: boolean;
+}
+export const OptionGroup = component$(({ label }: OptionGroupProps) => {
+  useStyles$(styles);
+  return <li>
+    <ul role="group">
+      <h4>{label}</h4>
+      <Slot/>
+    </ul>
+  </li>
+})
 
 
 const SingleOption = component$((props: SelectionItemProps) => {
