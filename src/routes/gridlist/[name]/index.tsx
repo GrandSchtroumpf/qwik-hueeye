@@ -6,7 +6,6 @@ import styles from './index.module.scss';
 export default component$(() => {
   const { params, prevUrl, url } = useLocation();
   const pokemon = pokemons.find(p => p.name === params.name);
-  const imgUrl = pokemon?.sprites.other["official-artwork"].front_default;
   const back = prevUrl?.toString() === url.toString() ? '..' : prevUrl?.toString();
   return <>
     <nav class={styles.nav} aria-label="breadcrumb">
@@ -18,7 +17,7 @@ export default component$(() => {
       </Link>
     </nav>
     <section class={styles.section} >
-      <img width="150" height="150" src={imgUrl} alt={pokemon?.name}/>
+      <img width="150" height="150" src={pokemon?.img} alt={pokemon?.name}/>
       <article>
         <h1>{pokemon?.name}</h1>
       </article>
