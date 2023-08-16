@@ -63,7 +63,7 @@ export default component$(() => {
 
   const displayMovie = $((v: (Extract<keyof typeof MOVIES, string>)[]) => v.map(id => MOVIES[id]).join(', '))
 
-  return <Form class="form-page" onSubmit$={save} value={initial}>
+  return <Form id="form-page" onSubmit$={save} value={initial}>
     <FormField class="outline">
       <Label>Text here</Label>
       <Input name="title" placeholder="Some Text here" />
