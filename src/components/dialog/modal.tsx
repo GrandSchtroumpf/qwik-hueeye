@@ -44,7 +44,7 @@ export const Modal = component$((props: ModalProps) => {
       ref.value.addEventListener('animationend', () => {
         closing.value = false;
         ref.value?.close();
-      }, { once: true })
+      }, { once: true });
     }
   })
 

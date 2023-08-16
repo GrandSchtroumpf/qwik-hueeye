@@ -216,6 +216,15 @@
       opacity: 1;
     }
   }
+  // Using opacity doesn't work
+  @keyframes backdrop-fade {
+    from {
+      background-color: transparent;
+    }
+    to{
+      background-color: var(--text);
+    }
+  }
   
   html {
     -webkit-text-size-adjust: 100%;
