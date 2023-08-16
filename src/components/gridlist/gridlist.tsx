@@ -10,7 +10,7 @@ export const NavGrid = component$((props: NavAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   useGridKeyboard(rootRef, 'li > a');
   return <nav {...props}>
-    <ul role="list" class={styles['grid-list']} ref={rootRef}>
+    <ul role="list" class={styles.gridList} ref={rootRef}>
       <Slot/>
     </ul>
     <Slot name="grid-end"/>
@@ -21,7 +21,7 @@ export const ActionGrid = component$((props: UlAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   useGridKeyboard(rootRef, 'li > button');
   return <>
-    <ul role="list" {...props} class={clsq(styles['grid-list'], props.class)} ref={rootRef}>
+    <ul role="list" {...props} class={clsq(styles.gridList, props.class)} ref={rootRef}>
       <Slot/>
     </ul>
     <Slot name="grid-end"/>
@@ -30,7 +30,7 @@ export const ActionGrid = component$((props: UlAttributes) => {
 
 export const GridLink = component$((props: LinkProps) => {
   return <li>
-    <Link {...props} class={clsq(styles['grid-item'], props.class)}>
+    <Link {...props} class={clsq(styles.gridItem, props.class)}>
       <Slot/>
     </Link>
   </li>
@@ -39,7 +39,7 @@ export const GridLink = component$((props: LinkProps) => {
 
 export const GridAnchor = component$((props: NavAnchorProps) => {
   return <li>
-    <a {...props} class={clsq(styles['grid-item'], props.class)}>
+    <a {...props} class={clsq(styles.gridItem, props.class)}>
       <Slot/>
     </a>
   </li>
@@ -47,7 +47,7 @@ export const GridAnchor = component$((props: NavAnchorProps) => {
 
 export const GridButton = component$((props: ButtonAttributes) => {
   return <li>
-    <button {...props} class={clsq(styles['grid-item'], props.class)}>
+    <button {...props} class={clsq(styles.gridItem, props.class)}>
       <Slot/>
     </button>
   </li>
