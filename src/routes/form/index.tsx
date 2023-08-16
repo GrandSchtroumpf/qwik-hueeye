@@ -1,4 +1,4 @@
-import { component$, event$, useStyles$ } from "@builder.io/qwik";
+import { $, component$, event$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Form, Input, MultiSelect } from "qwik-hueeye";
 import { Option } from "qwik-hueeye";
@@ -12,72 +12,24 @@ import { SwitchGroup, Switch } from "qwik-hueeye";
 import styles from './index.scss?inline';
 
 
-const MOVIES = [
-  {
-    "id": "tt0499549",
-    "title": "Avatar"
-  },
-  {
-    "id": "tt0480249",
-    "title": "I Am Legend"
-  },
-  {
-    "id": "tt0416449",
-    "title": "300"
-  },
-  {
-    "id": "tt0848228",
-    "title": "The Avengers"
-  },
-  {
-    "id": "tt0993846",
-    "title": "The Wolf of Wall Street"
-  },
-  {
-    "id": "tt0816692",
-    "title": "Interstellar"
-  },
-  {
-    "id": "tt0944947",
-    "title": "Game of Thrones"
-  },
-  {
-    "id": "tt2306299",
-    "title": "Vikings"
-  },
-  {
-    "id": "tt3749900",
-    "title": "Gotham"
-  },
-  {
-    "id": "tt3281796",
-    "title": "Power"
-  },
-  {
-    "id": "tt2707408",
-    "title": "Narcos"
-  },
-  {
-    "id": "tt0903747",
-    "title": "Breaking Bad"
-  },
-  {
-    "id": "tt1211837",
-    "title": "Doctor Strange"
-  },
-  {
-    "id": "tt3748528",
-    "title": "Rogue One: A Star Wars Story"
-  },
-  {
-    "id": "tt2094766",
-    "title": "Assassin's Creed"
-  },
-  {
-    "id": "tt3322314",
-    "title": "Luke Cage"
-  }
-];
+const MOVIES = {
+  "tt0499549": "Avatar",
+  "tt0480249": "I Am Legend",
+  "tt0416449": "300",
+  "tt0848228": "The Avengers",
+  "tt0993846": "The Wolf of Wall Street",
+  "tt0816692": "Interstellar",
+  "tt0944947": "Game of Thrones",
+  "tt2306299": "Vikings",
+  "tt3749900": "Gotham",
+  "tt3281796": "Power",
+  "tt2707408": "Narcos",
+  "tt0903747": "Breaking Bad",
+  "tt1211837": "Doctor Strange",
+  "tt3748528": "Rogue One: A Star Wars Story",
+  "tt2094766": "Assassin's Creed",
+  "tt3322314": "Luke Cage"
+};
 
 export default component$(() => {
   useStyles$(styles);
@@ -95,7 +47,7 @@ export default component$(() => {
     time: new Date(),
     month: new Date(),
     datetime: new Date(),
-    select: [MOVIES[3].id, MOVIES[6].id],
+    select: ['tt0480249', 'tt0903747'],
     switch: {
       a: true,
       b: false,
@@ -108,6 +60,8 @@ export default component$(() => {
     checkbox: ['a', 'c'],
     toggle: 'medium'
   };
+
+  const displayMovie = $((v: (Extract<keyof typeof MOVIES, string>)[]) => v.map(id => MOVIES[id]).join(', '))
 
   return <Form class="form-page" onSubmit$={save} value={initial}>
     <FormField class="outline">
@@ -134,11 +88,11 @@ export default component$(() => {
     </fieldset>
     <FormField class="outline">
       <Label>Select from the list</Label>
-      <MultiSelect name="select" placeholder="Movie">
+      <MultiSelect name="select" placeholder="Movie" display$={displayMovie}>
         <Option>-- Select a movie --</Option>
-        {MOVIES.map(movie => (
-          <Option key={movie.id} value={movie.id}>
-            {movie.title}
+        {Object.entries(MOVIES).map(([id, title]) => (
+          <Option key={id} value={id}>
+            {title}
           </Option>
         ))}
       </MultiSelect>

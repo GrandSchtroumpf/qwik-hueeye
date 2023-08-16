@@ -27,7 +27,7 @@ const SelectContext = createContextId<{
 const disabledKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'ctrl+a'];
 
 
-export const MultiSelect = component$((props: Omit<SelectProps<string[]>, 'multi'>) => {
+export const MultiSelect = component$((props: Omit<SelectProps<any[]>, 'multi'>) => {
   return <BaseSelect multi {...props}>
     <Slot/>
   </BaseSelect>;

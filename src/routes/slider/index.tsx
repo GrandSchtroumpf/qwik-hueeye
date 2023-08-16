@@ -15,6 +15,5 @@ export default component$(() => {
       <h2>Range</h2>
       <Range startName="from" endName="to" value={{ from: 10, to: 90 }} />
     </article>
-
   </section>
 })

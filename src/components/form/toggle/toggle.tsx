@@ -62,7 +62,9 @@ export const Toggle = component$((props: ToggleProps) => {
     else return bindValue.value === value
   });
   const toggle = $(() => {
-    if (multi) return; // if checkbox let fieldset manage change
+    if (multi) return bindValue.value = checked.value
+      ? (bindValue.value as string[]).filter(v => v !== value)
+      : (bindValue.value as string[]).concat(value);
     bindValue.value = checked.value ? '' : value;
   })
 
