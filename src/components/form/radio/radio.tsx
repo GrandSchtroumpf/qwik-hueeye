@@ -26,7 +26,7 @@ export const Radio = component$((props: RadioProps) => {
   const id = useId();
   const name = useGroupName(props);
   const value = props.value as string;
-  const bindValue = useControlValue<string>();
+  const {bindValue} = useControlValue<string>();
   const checked = useComputed$(() => bindValue.value === value);
 
   return <div class="radio-item">

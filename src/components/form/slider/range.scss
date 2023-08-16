@@ -4,9 +4,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  align-items: center;
-  --start: 0;
-  --end: 0;
+
   input {
     @include base.input();
     width: 50%;
@@ -15,18 +13,19 @@
     @include base.track();
     position: absolute;
     width: calc(100% - (2 * var(--fieldset-padding-inline))); // Remove padding
+
     &::before {
       content: "";
       position: absolute;
       width: 100%;
       height: 100%;
-      left: -100%;
+      right: calc((1 - var(--initial-start, 0)) * 100%);
       transition: transform 0.1s;
       background-color: var(--outline);
       transform: translateX(var(--start));
     }
     &::after {
-      right: -100%;
+      left: calc((1 - var(--initial-end, 0)) * 100%);
       transform: translateX(var(--end));
     }
   }
@@ -34,16 +33,14 @@
     @include base.thumb();
     position: absolute;
     &.start {
-      left: var(--fieldset-padding-inline);
+      left: calc(var(--initial-start, 0) * 100%);
       transform: translateX(var(--start));
     }
     &.end {
-      right: var(--fieldset-padding-inline);
+      right: calc(var(--initial-end, 1) * 100%);
       transform: translateX(var(--end));
     }
   }
-  
-
 }
 .sliders {
   display: flex;

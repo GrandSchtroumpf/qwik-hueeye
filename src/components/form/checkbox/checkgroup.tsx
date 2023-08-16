@@ -65,7 +65,7 @@ export const CheckItem = component$((props: CheckItemProps) => {
   const id = useId();
   const name = useGroupName(props);
   const value = props.value;
-  const bindValue = useControlValue<string[]>();
+  const {bindValue} = useControlValue<string[]>();
   const checked = useComputed$(() => !!value && bindValue.value.includes(value));
 
   return <li class="check-item">

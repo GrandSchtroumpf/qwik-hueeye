@@ -24,7 +24,7 @@ export const Switch = component$((props: SwitchProps) => {
   const id = useId();
   const fullName = useRecordName(props);
   const keyName = fullName.split('.').pop()!;
-  const bindValue = useControlValue<Record<string, boolean>>();
+  const {bindValue} = useControlValue<Record<string, boolean>>();
   const checked = useComputed$(() => !!bindValue.value[keyName]);
 
   return <div class="switch">

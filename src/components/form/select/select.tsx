@@ -169,7 +169,7 @@ const SingleOption = component$((props: SelectionItemProps) => {
   const value = props.value ?? '';
   const { opened, name } = useContext(SelectContext);
   const id = useId();
-  const bindValue = useControlValue<string>();
+  const {bindValue} = useControlValue<string>();
   const checked = useComputed$(() => !!value && bindValue.value === value);
   const toggle = $(() => {
     opened.value = false;
@@ -187,7 +187,7 @@ const MultiOption = component$((props: SelectionItemProps) => {
   const value = props.value ?? '';
   const id = useId();
   const { name } = useContext(SelectContext);
-  const bindValue = useControlValue<string[]>();
+  const {bindValue} = useControlValue<string[]>();
   const checked = useComputed$(() => !!value && bindValue.value.includes(value));
   const toggle = $(() => {
     bindValue.value = checked.value

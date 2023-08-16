@@ -13,7 +13,7 @@ export const Checkbox = component$((props: CheckboxProps) => {
   const id = useId();
   const name = useGroupName(props);
   const value = props.value;
-  const bindValue = useControlValue<string[]>();
+  const {bindValue} = useControlValue<string[]>();
   const checked = useComputed$(() => !!value && bindValue.value.includes(value));
 
   return <div class="checkbox">

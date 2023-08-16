@@ -2,7 +2,7 @@ import { component$, event$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Form, Input, MultiSelect } from "qwik-hueeye";
 import { Option } from "qwik-hueeye";
-import { Range, ThumbEnd, ThumbStart } from "qwik-hueeye";
+import { Range } from "qwik-hueeye";
 import { FormField, Label } from "qwik-hueeye";
 import { ToggleGroup, Toggle } from "qwik-hueeye";
 import { useToaster } from "qwik-hueeye";
@@ -144,9 +144,7 @@ export default component$(() => {
       </MultiSelect>
     </FormField>
     <Range name="range" class="outline">
-      <legend>Select a range</legend>
-      <ThumbStart></ThumbStart>
-      <ThumbEnd></ThumbEnd>
+      <legend>Range</legend>
     </Range>
     <SwitchGroup name="switch" class="outline">
       <legend>Switches</legend>

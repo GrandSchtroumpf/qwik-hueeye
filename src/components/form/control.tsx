@@ -12,9 +12,14 @@ export interface ControlValueProps<T> {
   onValueChange$?: QRL<(value: T) => any>;
 }
 
-export const ControlValueContext = createContextId<Signal<any>>('ControlValueContext');
+interface ControlValue<T> {
+  bindValue: Signal<T>;
+  initialValue: T;
+}
+
+export const ControlValueContext = createContextId<ControlValue<any>>('ControlValueContext');
 export function useControlValue<T>() {
-  return useContext<Signal<T>>(ControlValueContext)
+  return useContext<ControlValue<T>>(ControlValueContext)
 }
 
 export const extractControlProps = <T extends ControlValueProps<any>>(props: T) => {
@@ -67,7 +72,7 @@ export function useControllerProvider<T>(props: ControlValueProps<T>, initial?: 
     if (typeof change !== 'undefined' && props.onValueChange$) props.onValueChange$(change);
   }));
 
-  useContextProvider(ControlValueContext, bindValue);
+  useContextProvider(ControlValueContext, { bindValue, initialValue });
   return { bindValue, initialValue };
 }
 
@@ -188,7 +193,6 @@ export function useControlItemProvider<T>(
   const rootRef = useSignal<HTMLElement>();
   const { bindValue, initialValue } = useControllerProvider<T>(props, initial);
   const onValueChange = $(() => {
-    console.log('change')
     if (!rootRef.value) return;
     const radio = rootRef.value.querySelector('input:checked[value]') as HTMLInputElement;
     (bindValue.value as string) = radio?.value;

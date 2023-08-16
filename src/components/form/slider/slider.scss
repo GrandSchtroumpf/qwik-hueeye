@@ -5,7 +5,8 @@
   padding: 0 8px;
   display: grid;
   align-items: center;
-  border-radius: 4px;
+  border-radius: var(--size-0);
+  position: relative;
   --position: 0px;
   &:focus-within {
     outline: solid 1px var(--primary);
@@ -21,6 +22,7 @@
   .track {
     @include base.track();
     &::after {
+      left: calc(var(--initial-position, 0) * 100%);
       transform: translateX(var(--position));
     }
   }
@@ -28,7 +30,9 @@
   .thumb {
     @include base.thumb();
     grid-area: 1 / 1;
+    left: calc(var(--initial-position, 0) * 100%);
     transform: translateX(var(--position, 0));
+    position: absolute;
   }
 }
 

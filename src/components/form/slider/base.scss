@@ -5,8 +5,7 @@
   padding-inline: var(--fieldset-padding-inline);
   border: none;
   height: 48px;
-  display: grid;
-  align-items: center;
+
   &.outline {
     --fieldset-padding-inline: 16px;
     border: 1px solid var(--outline);
@@ -39,6 +38,7 @@
 @mixin input() {
   opacity: 0;
   height: 48px;
+  margin: 0;
   &:hover + .thumb {
     &::before {
       opacity: 1;
@@ -47,13 +47,16 @@
       transform: scale(0.6);
     }
   }
-  &:active + .thumb, &:focus + .thumb {
+  &:active + .thumb::after {
+    transform: scale(0.4);
+  }
+  &:active + .thumb,
+  &:focus + .thumb {
     border: solid 1px var(--on-color, var(--on-primary));
     &::before {
       opacity: 1;
     }
     &::after {
-      transform: scale(0.4);
       background-color: var(--on-color, var(--on-primary));
     }
   }
@@ -62,10 +65,10 @@
 @mixin track() {
   pointer-events: none;
   position: relative;
-  height: 4px;
+  height: var(--slider-track-height, var(--size-1));
   width: 100%;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--slider-track-height, var(--size-1));
   background-color: var(--color, var(--primary));
   &::after {
     content: "";

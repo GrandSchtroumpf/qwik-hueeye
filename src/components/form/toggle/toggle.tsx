@@ -55,7 +55,7 @@ export const Toggle = component$((props: ToggleProps) => {
   const id = useId();
   const { multi, name } = useContext(ToggleGroupContext);
   const value = props.value;
-  const bindValue = useControlValue<string | string[]>();
+  const {bindValue} = useControlValue<string | string[]>();
   const type = multi ? 'checkbox' : 'radio';
   const checked = useComputed$(() => {
     if (multi) return bindValue.value.includes(value);
