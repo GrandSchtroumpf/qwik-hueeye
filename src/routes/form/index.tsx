@@ -89,7 +89,6 @@ export default component$(() => {
     <FormField class="outline">
       <Label>Select from the list</Label>
       <MultiSelect name="select" placeholder="Movie" display$={displayMovie}>
-        <Option>-- Select a movie --</Option>
         {Object.entries(MOVIES).map(([id, title]) => (
           <Option key={id} value={id}>
             {title}
