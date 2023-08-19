@@ -28,7 +28,7 @@ export default component$(() => {
     <h1 id="grid-title">Grid</h1>
     <article>
       <h2>Navigation Grid</h2>
-      <p>Use arrow keys to navigate through the list</p>  
+      <p>Use arrow keys to navigate through the list</p>
       <NavGrid>
         {pokemons.slice(0, 20).map(p => (
           <GridLink key={p.name} href={p.name}>

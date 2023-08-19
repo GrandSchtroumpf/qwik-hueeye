@@ -101,7 +101,7 @@ const previousLine = $((root: HTMLElement, selector: string) => {
   list[nextIndex].focus();
 });
 
-const leaveFocus = $((root: HTMLElement) => {
+export const leaveFocus = $((root: HTMLElement) => {
   const focusableSelector = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
   const focusables = document.querySelectorAll<HTMLElement>(focusableSelector);
   for (const focusable of focusables) {
