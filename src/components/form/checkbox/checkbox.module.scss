@@ -1,5 +1,5 @@
 $size: 24px;
-.check-group {
+.check-list {
   border: none;
   display: flex;
   flex-direction: column;
@@ -20,15 +20,8 @@ $size: 24px;
     border-color: var(--error);
   }
 }
-.check-list {
-  list-style: none;
-  margin-block: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-left: 24px;
-}
-.check-item, .checkbox {
+
+.checkbox {
   position: relative;
   input {
     cursor: pointer;
@@ -37,7 +30,10 @@ $size: 24px;
     height: 1.2rem;
     width: 1.2rem;
     margin: 0;
-    &:checked, &:indeterminate {
+    &.blue {
+      opacity: 1;
+    }
+    &:checked, &:indeterminate, &.indeterminate {
       & + label svg {
         border-color: var(--color, var(--primary));
         background-color: var(--color, var(--primary));
@@ -61,6 +57,7 @@ $size: 24px;
         }
       }
     }
+    &.indeterminate + label path,
     &:indeterminate + label path {
       d: path('M 4 13 L 13 13 L 20 13');
       stroke: var(--on-color, var(--on-primary));

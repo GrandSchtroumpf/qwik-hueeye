@@ -1,4 +1,4 @@
-import { component$, Slot, useComputed$, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
+import { $, component$, Slot, useComputed$, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
 import { FieldGroupContext, useGroupName, useNameId } from '../field';
 import type { FieldsetAttributes, InputAttributes } from "../../types";
 import { clsq } from '../../utils';
@@ -13,8 +13,11 @@ export const RadioGroup = component$((props: RadioGroupProps) => {
   useContextProvider(FieldGroupContext, { name });
   const {rootRef, onValueChange} = useControlItemProvider(props);
   const attr = extractControlProps(props);
+  const change = $((event: any, fieldset: HTMLFieldSetElement) => {
+    onValueChange(fieldset.querySelector<HTMLInputElement>('input:checked')?.value ?? '')
+  })
 
-  return <fieldset {...attr} ref={rootRef} name={name} onChange$={onValueChange} class={clsq("radio-group", props.class)} role="radiogroup">
+  return <fieldset {...attr} ref={rootRef} name={name} onChange$={change} class={clsq("radio-group", props.class)} role="radiogroup">
     <Slot />
   </fieldset>
 });

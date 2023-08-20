@@ -7,7 +7,7 @@ import { FormField, Label } from "qwik-hueeye";
 import { ToggleGroup, Toggle } from "qwik-hueeye";
 import { useToaster } from "qwik-hueeye";
 import { RadioGroup, Radio } from "qwik-hueeye";
-import { CheckAll, CheckGroup, CheckItem, CheckList } from "qwik-hueeye";
+import { CheckAll, CheckList, CheckItem } from "qwik-hueeye";
 import { SwitchGroup, Switch } from "qwik-hueeye";
 import styles from './index.scss?inline';
 
@@ -116,15 +116,13 @@ export default component$(() => {
       <Radio value="b">Radio 2</Radio>
       <Radio value="c">Radio 3</Radio>
     </RadioGroup>
-    <CheckGroup name="checkbox" class="outline">
+    <CheckList name="checkbox" class="outline">
       <legend>Some Checkbox</legend>
       <CheckAll>Check All</CheckAll>
-      <CheckList>
-        <CheckItem value="a">Checkbox 1</CheckItem>
-        <CheckItem value="b">Checkbox 2</CheckItem>
-        <CheckItem value="c">Checkbox 3</CheckItem>
-      </CheckList>
-    </CheckGroup>
+      <CheckItem value="a">Checkbox 1</CheckItem>
+      <CheckItem value="b">Checkbox 2</CheckItem>
+      <CheckItem value="c">Checkbox 3</CheckItem>
+    </CheckList>
     <footer class="form-actions">
       <button class="btn" type="reset">Cancel</button>
       <button class="btn-fill primary" type="submit">Save</button>

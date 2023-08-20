@@ -4,7 +4,6 @@ export * from './form-field/form-field';
 export * from './input/input';
 export * from './select/select';
 export * from './checkbox/checkbox';
-export * from './checkbox/checkgroup';
 export * from './radio/radio';
 export * from './slider/range';
 export * from './slider/slider';

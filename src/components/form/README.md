@@ -24,7 +24,7 @@ The `Form` element will dispatch the value to all it's controls based on the nam
 Each component will know how to handle the value from the `initialValue`.
 
 ## Input
-type: `string` | `number` (`Date` will be supported in the future)
+type: `string` | `number` | `Date` (`File` will be supported in the future)
 ```jsx
 <Form initialValue={{ usename: 'Bob' }}>
   <FormField>
@@ -69,7 +69,7 @@ type: `string[]`
 type: `string[]`
 ```jsx
 <Form initialValue={{ types: ['normal', 'poison'] }}>
-  <CheckGroup name="types">
+  <CheckList name="types">
     <legend>Select the type of your pokemon</legend>
     <CheckAll>All types</CheckAll>
     <CheckList>
@@ -78,7 +78,7 @@ type: `string[]`
       <CheckItem value="psychic">Psychic</CheckItem>
       <CheckItem value="poison">Poison</CheckItem>
     </CheckList>
-  </CheckGroup>
+  </CheckList>
 </Form>
 ```
 
@@ -154,12 +154,9 @@ type: `number`
 
 ## Range
 type: `{ start: number, end: number }`
+
 ```jsx
 <Form initialValue={{ price: { start: 0, end: 200 } }}>
-  <Range name="price" min="0" max="1000">
-    <legend>Select a range of price</legend>
-    <ThumbStart />
-    <ThumbEnd />
-  </Range>
+  <Range name="price" min="0" max="1000"></Range>
 </Form>
 ```

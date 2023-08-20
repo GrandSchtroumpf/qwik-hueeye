@@ -5,4 +5,10 @@
   article {
     margin-bottom: var(--size-2);
   }
+  hr {
+    margin: 0;
+    height: 1px;
+    border: none;
+    background-color: var(--divider);
+  }
 }

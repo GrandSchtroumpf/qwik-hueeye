@@ -192,10 +192,8 @@ export function useControlItemProvider<T>(
 ) {
   const rootRef = useSignal<HTMLElement>();
   const { bindValue, initialValue } = useControllerProvider<T>(props, initial);
-  const onValueChange = $(() => {
-    if (!rootRef.value) return;
-    const radio = rootRef.value.querySelector('input:checked[value]') as HTMLInputElement;
-    (bindValue.value as string) = radio?.value;
+  const onValueChange = $((value: T) => {
+    bindValue.value = value;
   });
 
   const controlItem = {

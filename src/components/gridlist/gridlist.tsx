@@ -3,7 +3,6 @@ import { lastFocus, leaveFocus, nextFocus, previousFocus } from "../utils";
 import { Link, LinkProps } from "@builder.io/qwik-city";
 import { NavAnchorProps } from "../navlist/navlist";
 import type { ButtonAttributes, NavAttributes, UlAttributes } from "../types";
-import { clsq } from "../utils";
 import styles from './gridlist.module.scss';
 import { mergeProps } from "../utils/attributes";
 import { usePreventKeydown } from "../utils/keyboard";
@@ -51,8 +50,9 @@ export const useGridKeyboard = (ref: Signal<HTMLElement | undefined>, selector: 
 export const NavGrid = component$((props: NavAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   const keydown = useGridKeyboard(rootRef, 'li > a');
+  const ulProps = mergeProps<'ul'>({ class: styles.gridList }, keydown);
   return <nav {...props}>
-    <ul {...mergeProps<'ul'>({ role: "list", class: styles.gridList, ref: rootRef }, keydown)}>
+    <ul ref={rootRef} role="list" {...ulProps}>
       <Slot/>
     </ul>
     <Slot name="grid-end"/>
@@ -62,8 +62,9 @@ export const NavGrid = component$((props: NavAttributes) => {
 export const ActionGrid = component$((props: UlAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   const keydown = useGridKeyboard(rootRef, 'li > button');
+  const ulProps = mergeProps<'ul'>({ class: styles.gridList }, keydown, props);
   return <>
-    <ul {...mergeProps<'ul'>({ role: "list", class: styles.gridList, ref: rootRef }, keydown, props)}>
+    <ul ref={rootRef} role="list" {...ulProps}>
       <Slot/>
     </ul>
     <Slot name="grid-end"/>
@@ -72,7 +73,7 @@ export const ActionGrid = component$((props: UlAttributes) => {
 
 export const GridLink = component$((props: LinkProps) => {
   return <li>
-    <Link {...props} class={clsq(styles.gridItem, props.class)}>
+    <Link {...mergeProps({ class: styles.gridItem }, props)}>
       <Slot/>
     </Link>
   </li>
@@ -81,7 +82,7 @@ export const GridLink = component$((props: LinkProps) => {
 
 export const GridAnchor = component$((props: NavAnchorProps) => {
   return <li>
-    <a {...props} class={clsq(styles.gridItem, props.class)}>
+    <a {...mergeProps({ class: styles.gridItem }, props)}>
       <Slot/>
     </a>
   </li>
@@ -89,7 +90,7 @@ export const GridAnchor = component$((props: NavAnchorProps) => {
 
 export const GridButton = component$((props: ButtonAttributes) => {
   return <li>
-    <button {...props} class={clsq(styles.gridItem, props.class)}>
+    <button {...mergeProps({ class: styles.gridItem }, props)}>
       <Slot/>
     </button>
   </li>
