@@ -1,22 +1,34 @@
-import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvider, createContextId, useContext, $, useVisibleTask$, useTask$, useComputed$ } from "@builder.io/qwik";
+import { component$, Slot, useStyles$, useSignal, event$, useId, useContextProvider, createContextId, useContext, $, useTask$, useComputed$ } from "@builder.io/qwik";
+import type { QRL, Signal, FunctionComponent, JSXNode, JSXChildren } from "@builder.io/qwik";
 import { Popover } from "../../dialog/popover";
-import type { Signal } from "@builder.io/qwik";
 import { useNameId } from "../field";
-import type { DisplayProps, LiAttributes } from "../types";
+import type { LiAttributes } from "../types";
 import { FormFieldContext } from "../form-field/form-field";
 import { focusNextInput, focusPreviousInput, useKeyboard } from "../../utils";
 import { ControlValueProps, useControlValue, useControllerProvider } from "../control";
 import styles from './select.scss?inline';
+
+
+
+interface BaseSelectProps<T = any> extends ControlValueProps<T> {
+  multi: boolean;
+  placeholder?: string;
+  /** 
+   * Method used to customize how selected options are displayed
+   */
+  display$: QRL<(value: T) => string | undefined>;
+}
+
+interface SelectProps<T = any> extends Omit<BaseSelectProps<T>, 'multi' | 'display$'> {
+  children: JSXChildren;
+  display$?: QRL<(value: T) => string | undefined>;
+}
 
 export interface SelectionItemProps extends LiAttributes {
   value?: string;
   mode?: 'radio' | 'toggle';
 }
 
-interface SelectProps<T = any> extends ControlValueProps<T>, DisplayProps<T> {
-  multi?: boolean;
-  placeholder?: string;
-}
 
 const SelectContext = createContextId<{
   opened: Signal<boolean>,
@@ -26,25 +38,62 @@ const SelectContext = createContextId<{
 
 const disabledKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'ctrl+a'];
 
+/** Get the textcontent of the option */
+const getNodeText = (node: JSXNode | string | number): string => {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return node.toString();
+  if (node instanceof Array) return node.map(getNodeText).join('');
+  if (typeof node === 'object' && node) return getNodeText(node.props.children);
+  return '';
+}
 
-export const MultiSelect = component$((props: Omit<SelectProps<any[]>, 'multi'>) => {
-  return <BaseSelect multi {...props}>
-    <Slot/>
+/** Extract the options from the children of the select */
+const getOptions = (node: JSXChildren) => {
+  const options: Record<string, string> = {};
+  if (node instanceof Array) {
+    for (const child of node) Object.assign(options, getOptions(child));
+  } else if (typeof node === 'object' && node) {
+    if ('type' in node && node.type === Option && node.props.value) {
+      options[node.props.value] = getNodeText(node);
+    }
+    if ('props' in node && node.props.children === 'object' && node.props.children) {
+      Object.assign(options, getOptions(node.props.children));
+    }
+  }
+  return options;
+}
+
+const displayMultiNodeContent = (children: JSXChildren) => {
+  const options = getOptions(children);
+  return $((values: string[]) => values.map(value => options[value]).join(', '));
+}
+
+export const MultiSelect: FunctionComponent<Omit<SelectProps<string[]>, 'multi'>> = ({children, ...props}) => {
+  const display$ = props.display$ ?? displayMultiNodeContent(children);
+  return <BaseSelect multi {...props} display$={display$}>
+    {children}
   </BaseSelect>;
-})
+}
 
-export const Select = component$((props: Omit<SelectProps<string>, 'multi'>) => {
-  return <BaseSelect {...props}>
-    <Slot/>
+const displaySingleNodeContent = (children: JSXChildren) => {
+  const options = getOptions(children);
+  return $((value: string) => options[value]);
+}
+
+export const Select: FunctionComponent<Omit<SelectProps<string>, 'multi'>> = ({children, ...props}) => {
+  const display$ = props.display$ ?? displaySingleNodeContent(children);
+  return <BaseSelect multi={false} {...props} display$={display$}>
+    {children}
   </BaseSelect>;
-})
+}
 
-export const BaseSelect = component$((props: SelectProps) => {
+
+export const BaseSelect = component$((props: BaseSelectProps) => {
   useStyles$(styles);
   const { id } = useContext(FormFieldContext);
   const origin = useSignal<HTMLElement>();
   const opened = useSignal(false);
-  const multi = props.multi ?? false;
+  const multi = props.multi;
   const displayDefault = useSignal('');
   const name = useNameId(props);
   const popoverId = useId();
@@ -64,24 +113,9 @@ export const BaseSelect = component$((props: SelectProps) => {
   const { bindValue } = useControllerProvider<string | string[]>(props, multi ? [] : '');
   
   // Customer display function
-  const displayText = useComputed$(() => props.display$?.(bindValue.value));
+  const displayText = useComputed$(() => props.display$(bindValue.value));
   const display = useComputed$(() => displayText.value ?? displayDefault.value);
   const displayClass = useComputed$(() => display.value ? 'value' : 'placeholder');
-
-  // Default display only works on the browser
-  useVisibleTask$(({ track }) => {
-    track(() => bindValue.value);
-    if (props.display$) return;
-    const value = [];
-    const inputs = origin.value!.querySelectorAll<HTMLInputElement>(`input:checked[name="${name}"]`);
-    for (const input of inputs) {
-      if (input.checked && input.value && input.value !== 'on') {
-        const text = Array.from(input.labels ?? []).map(label => label.textContent).join(' ');
-        value.push(text);
-      }
-    }
-    displayDefault.value = value.join(', ');
-  });
   
   useTask$(({ track }) => {
     track(() => opened.value);

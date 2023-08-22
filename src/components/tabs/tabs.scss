@@ -1,6 +1,7 @@
 .tab-group {
   display: flex;
   flex-direction: column;
+  
 }
 .tab-list {
   display: flex;
@@ -11,21 +12,7 @@
   position: relative;
   isolation: isolate;
   &:focus-within {
-    border-color: var(--primary);
-  }
-  &::before {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    inset-block: 0;
-    inset-inline: 0;
-    width: var(--active-width, 0);
-    height: var(--active-height, 0);
-    transform-origin: 0 0;
-    border-radius: 4px;
-    transform: translate(var(--active-x), var(--active-y));
-    transition: transform 0.2s var(--ease-out), width 0.2s var(--ease-out);
-    background-color: var(--surface-higher);
+    border-color: var(--color, var(--primary));
   }
 }
 
@@ -37,17 +24,26 @@
   box-sizing: border-box;
   position: relative;
   border: 1px solid transparent;
-  &:focus {
+  &:focus-visible {
     outline: solid 1px var(--outline);
   }
   &:hover {
     background-color: var(--surface-lower);
   }
   &:active {
-    background-color: var(--surface-low);
+    background-color: var(--surface);
   }
   &[aria-selected="true"] {
     background-color: var(--surface-lower);
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      border-radius: 4px;
+      background-color: var(--surface-higher);
+      view-transition-name: var(--tab-transition-name);
+    }
   }
 }
 .tab-panel-container {
@@ -57,7 +53,7 @@
 .tab-panel {
   width: 100%;
   flex-shrink: 0;
-  &:not(.leave).hidden {
-    display: none;
+  &:not([hidden]) {
+    view-transition-name: var(--tab-panel-transition-name);
   }
 }

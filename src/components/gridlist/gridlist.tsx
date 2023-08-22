@@ -7,7 +7,7 @@ import styles from './gridlist.module.scss';
 import { mergeProps } from "../utils/attributes";
 import { usePreventKeydown } from "../utils/keyboard";
 
-export const nextLine = $((root: HTMLElement, selector: string) => {
+const nextLine = $((root: HTMLElement, selector: string, options?: FocusOptions) => {
   const list = root.querySelectorAll<HTMLElement>(selector);
   const focusedEl = document.activeElement as HTMLElement;
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
@@ -15,10 +15,10 @@ export const nextLine = $((root: HTMLElement, selector: string) => {
   const { width: itemWidth } = list[0].getBoundingClientRect();
   const line = Math.floor(rootWidth / itemWidth);
   const nextIndex = (index + line) % list.length;
-  list[nextIndex].focus();
+  list[nextIndex].focus(options);
 });
 
-export const previousLine = $((root: HTMLElement, selector: string) => {
+const previousLine = $((root: HTMLElement, selector: string, options?: FocusOptions) => {
   const list = root.querySelectorAll<HTMLElement>(selector);
   const focusedEl = document.activeElement as HTMLElement;
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
@@ -26,7 +26,7 @@ export const previousLine = $((root: HTMLElement, selector: string) => {
   const { width: itemWidth } = list[0].getBoundingClientRect();
   const line = Math.floor(rootWidth / itemWidth);
   const nextIndex = (index - line + list.length) % list.length;
-  list[nextIndex].focus();
+  list[nextIndex].focus(options);
 });
 
 export const grideys= ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];

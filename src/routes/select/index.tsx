@@ -1,4 +1,4 @@
-import { component$, useStyles$, $ } from "@builder.io/qwik";
+import { component$, useStyles$ } from "@builder.io/qwik";
 import { Select, Label, FormField, Option, MultiSelect } from "qwik-hueeye";
 import style from './index.scss?inline';
 
@@ -11,8 +11,6 @@ const options: Record<string, string> = {
 
 export default component$(() => {
   useStyles$(style);
-  const preview = $((v: (Extract<keyof typeof options, string>)[]) => v?.map(key => options[key]).join(', '));
-
   return <section id="select-page" aria-labelledby="select-title">
     <h1 id="select-title">Select</h1>
     <article>
@@ -31,7 +29,7 @@ export default component$(() => {
       <h2>Multiple options</h2>
       <FormField class="fill">
         <Label>Meal Options</Label> 
-        <MultiSelect placeholder="Options" value={['pickles', 'cheese']} display$={preview}>
+        <MultiSelect placeholder="Options" value={['pickles', 'cheese']}>
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}

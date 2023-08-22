@@ -1,68 +1,91 @@
-import { component$, createContextId, event$, Slot, useComputed$, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import type { JSXNode, QRL, QwikKeyboardEvent} from "@builder.io/qwik";
+import { $, component$, createContextId, event$, Slot, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
+import type { JSXChildren, JSXNode, QRL} from "@builder.io/qwik";
 import type { DivAttributes, ButtonAttributes } from "../types";
-import { nextFocus, previousFocus, relativePosition } from "../utils";
+import { ArrowsKeys, ControlKeys, cssvar, nextFocus, previousFocus } from "../utils";
 import styles from './tabs.scss?inline';
+import { useKeyboard } from "../utils/keyboard";
+import { startViewTransition } from "../utils/transition";
+import { FunctionComponent } from "@builder.io/qwik/jsx-runtime";
 
 export type TabLabel = string | QRL<((id: string, i: number) => JSXNode)>;
 
 interface TabsContextState {
   active: string;
   leaving: string;
+  shouldAnimate: boolean;
+  tabTransitionName: string;
+  tabPanelTransitionName: string;
 }
+
+const animateTab = $((state: TabsContextState, dir: 1 | -1) => {
+  document.documentElement.animate({
+    height: ['100%', '100%']
+  },{
+    duration: 275,
+    pseudoElement: `::view-transition-old(${state.tabTransitionName})`,
+  });
+  document.documentElement.animate({
+    height: ['100%', '100%']
+  },{
+    duration: 275,
+    pseudoElement: `::view-transition-new(${state.tabTransitionName})`,
+  });
+
+
+  document.documentElement.animate({
+    overflow: ['hidden', 'hidden']
+  },{
+    duration: 275,
+    pseudoElement: `::view-transition-group(${state.tabPanelTransitionName})`,
+  });
+  document.documentElement.animate({
+    transform: ['translateX(0)', `translateX(${100 * dir}%)`]
+  },{
+    duration: 275,
+    pseudoElement: `::view-transition-old(${state.tabPanelTransitionName})`,
+  });
+  document.documentElement.animate({
+    transform: [`translateX(${-100 * dir}%)`, 'translateX(0)']
+  },{
+    duration: 275,
+    pseudoElement: `::view-transition-new(${state.tabPanelTransitionName})`,
+  });
+})
 
 const TabsContext = createContextId<TabsContextState>('TabsContext');
 
-export const TabGroup = component$((props: DivAttributes) => {
+interface TabGroupImplProps extends DivAttributes {
+  noAnimation?: boolean
+}
+
+export const TabGroupImpl = component$((props: TabGroupImplProps) => {
   useStyles$(styles);
   const ref = useSignal<HTMLElement>();
-  const state = useStore<TabsContextState>({ active: '', leaving: '' });
+  const baseTransitionName = useId();
+  const tabTransitionName = `tab-${baseTransitionName}`;
+  const tabPanelTransitionName = `panel-${baseTransitionName}`;
+  const state = useStore({
+    active: '',
+    leaving: '',
+    shouldAnimate: !props.noAnimation,
+    tabTransitionName,
+    tabPanelTransitionName
+  });
   useContextProvider(TabsContext, state);
 
-  useVisibleTask$(({ track }) => {
-    track(() => state.leaving);
-    const el = document.getElementById(`panel-${state.leaving}`);
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        state.leaving = '';
-        obs.disconnect();
-      }
-    }, { threshold: 1 });
-    obs.observe(el);
-    el.scrollIntoView();
-  });
-
-  useVisibleTask$(({ track }) => {
-    track(() => state.active);
-
-    const panel = document.getElementById(`panel-${state.active}`);
-    panel?.scrollIntoView({ behavior: 'smooth' });
-
-    function move() {
-      const tab = document.getElementById(state.active);
-      if (!ref.value || !tab) return requestAnimationFrame(move);
-      const target = tab.getBoundingClientRect();
-      const origin = ref.value!.getBoundingClientRect();
-      const { x, y } = relativePosition(origin, target);
-      ref.value.style.setProperty('--active-x', `${x}px`);
-      ref.value.style.setProperty('--active-y', `${y}px`);
-      ref.value.style.setProperty('--active-width', `${target.width}px`);
-      ref.value.style.setProperty('--active-height', `${target.height}px`);
-    }
-    move();
-  });
-
-  return <div class="tab-group" ref={ref} {...props}>
+  const {style} = state.shouldAnimate
+    ? cssvar({tabTransitionName, tabPanelTransitionName})
+    : { style: '' };
+  return <div class="tab-group" ref={ref} style={style} {...props}>
       <Slot/>
   </div>
 });
 
 
 
-export const TabList = component$(() => {
+export const TabListImpl = component$(() => {
   const ref = useSignal<HTMLElement>();
-  const onKeydown$ = event$((event: QwikKeyboardEvent) => {
+  useKeyboard(ref, [...ArrowsKeys, ...ControlKeys], $((event) => {
     const key = event.key;
     if (key === 'ArrowDown' || key === 'ArrowRight') {
       nextFocus(ref.value?.querySelectorAll<HTMLElement>('[role="tab"]'));
@@ -71,9 +94,9 @@ export const TabList = component$(() => {
       previousFocus(ref.value?.querySelectorAll<HTMLElement>('[role="tab"]'));
     }
     if (key === ' ' || key === 'Enter') (document.activeElement as HTMLElement).click();
-  });
+  }));
 
-  return <div ref={ref} class="tab-list" role="tablist" onKeydown$={onKeydown$}>
+  return <div ref={ref} class="tab-list" role="tablist">
     <Slot/>
   </div>
 });
@@ -82,14 +105,34 @@ interface TabProps extends ButtonAttributes {
   id: string;
 }
 
-export const Tab = component$((props: TabProps) => {
+export const TabImpl = component$((props: TabProps) => {
   const state = useContext(TabsContext);
   const { id, ...attr } = props;
+  useTask$(() => {
+    if (!state.active) state.active = id;
+  });
 
   const activate = event$(() => {
     if (id === state.active) return;
-    state.leaving = state.active;
-    state.active = id;
+    if (!state.shouldAnimate) {
+      state.leaving = state.active;
+      state.active = id;
+    } else {
+      const transition = startViewTransition(async () => {
+        state.leaving = state.active;
+        state.active = id;
+        await new Promise((res) => setTimeout(res, 0))
+      });
+      const [oldPanel, newPanel] = [
+        document.getElementById(`panel-${state.active}`)!,
+        document.getElementById(`panel-${id}`)!,
+      ];
+      const dir = oldPanel?.compareDocumentPosition(newPanel) === Node.DOCUMENT_POSITION_FOLLOWING
+        ? -1
+        : 1;
+      if (!transition) return;
+      transition.ready.then(() => animateTab(state, dir));
+    }
   });
 
   return <button id={id} 
@@ -106,7 +149,7 @@ export const Tab = component$((props: TabProps) => {
   </button>
 })
 
-export const TabPanelList = component$(() => {
+export const TabPanelListImpl = component$(() => {
   return <div class="tab-panel-container">
     <Slot/>
   </div>
@@ -116,27 +159,45 @@ interface TabPanelProps extends DivAttributes {
   tabId: string;
 }
 
-export const TabPanel = component$((props: TabPanelProps) => {
+export const TabPanelImpl = component$((props: TabPanelProps) => {
   const state = useContext(TabsContext);
   const { tabId, ...attr } = props;
-  useTask$(() => {
-    if (!state.active) state.active = tabId;
-  });
-
-  const classes = useComputed$(() => {
-    const list = ['tab-panel'];
-    if (state.leaving === tabId) list.push('leave');
-    if (state.active !== tabId) list.push('hidden');
-    return list;
-  });
 
   return <div id={`panel-${tabId}`}
     role="tabpanel"
-    class={classes}
+    class="tab-panel"
     aria-labelledby={tabId}
     tabIndex={state.active === tabId ? 0 : -1}
+    hidden={state.active !== tabId}
     {...attr}
   >
     <Slot/>
   </div>
 });
+
+export const Tab: FunctionComponent<{label: JSXChildren, children: any}> = (props) => {
+  return props.children;
+}
+
+
+export const TabGroup: FunctionComponent<TabGroupImplProps> = ({ children, ...props }) => {
+  const tabIds: string[] = [];
+  const tabs = [];
+  const tabPanels = [];
+  if (children instanceof Array) {
+    for (const tab of children as JSXNode[]) {
+      if (tab.type !== Tab) continue;
+      tabIds.push(tab.key ?? crypto.randomUUID());
+      tabs.push(tab.props.label)
+      tabPanels.push(tab.children);
+    }
+  }
+  return <TabGroupImpl {...props}>
+    <TabListImpl>
+      {tabs.map((tab, i) => <TabImpl id={tabIds[i]} key={tabIds[i]}>{tab}</TabImpl>)}
+    </TabListImpl>
+    <TabPanelListImpl>
+      {tabPanels.map((panel, i) => <TabPanelImpl tabId={tabIds[i]} key={tabIds[i]}>{panel}</TabPanelImpl>)}
+    </TabPanelListImpl>
+  </TabGroupImpl>
+}

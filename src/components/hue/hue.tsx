@@ -1,4 +1,4 @@
-import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$, useTask$ } from "@builder.io/qwik";
 import { SvgGradient } from "../svg-gradient";
 import './hue.scss';
 
@@ -41,9 +41,10 @@ export const HueEyeProvider = component$(({ storage }: HueEyeProps) => {
   const state: HueEyeState = {
     hue: useSignal()
   };
-  useVisibleTask$(({ track }) => {
+  useTask$(({ track }) => {
     const change = track(() => state.hue.value);
     if (typeof change === 'undefined') return;
+    if (typeof document === 'undefined') return;
     document.documentElement.style.setProperty('--hue', change.toString());
   });
   useContextProvider(HueEyeContext, state);

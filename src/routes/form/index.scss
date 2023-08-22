@@ -24,6 +24,7 @@
 }
 @media (max-width: 600px) {
   #form-page {
+    max-width: unset;
     .date-inputs {
       flex-direction: column;
     }

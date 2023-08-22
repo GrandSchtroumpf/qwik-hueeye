@@ -1,4 +1,5 @@
-import { $, component$, createContextId, Slot, useComputed$, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, createContextId, Slot, useComputed$, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
+import { isBrowser } from '@builder.io/qwik/build';
 import { nextFocus, previousFocus, useKeyboard } from "../utils";
 import type { Signal, QRL } from '@builder.io/qwik';
 import type { UlAttributes } from "../types";
@@ -101,9 +102,9 @@ export const Accordion = component$((props: AccordionProps) => {
     opened: [],
     multiple: multiple ?? false,
   });
-  useVisibleTask$(({ track }) => {
+  useTask$(({ track }) => {
     track(() => state.opened);
-    flip(state.opened, ref.value!);
+    if (isBrowser) flip(state.opened, ref.value!);
   });
   useContextProvider(AccordionContext, {
     state,
