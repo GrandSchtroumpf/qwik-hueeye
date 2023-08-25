@@ -12,7 +12,7 @@ export type TabLabel = string | QRL<((id: string, i: number) => JSXNode)>;
 interface TabsContextState {
   active: string;
   leaving: string;
-  shouldAnimate: boolean;
+  noAnimation: boolean;
   tabTransitionName: string;
   tabPanelTransitionName: string;
 }
@@ -67,15 +67,15 @@ export const TabGroupImpl = component$((props: TabGroupImplProps) => {
   const state = useStore({
     active: '',
     leaving: '',
-    shouldAnimate: !props.noAnimation,
+    noAnimation: props.noAnimation,
     tabTransitionName,
     tabPanelTransitionName
   });
   useContextProvider(TabsContext, state);
 
-  const {style} = state.shouldAnimate
-    ? cssvar({tabTransitionName, tabPanelTransitionName})
-    : { style: '' };
+  const {style} = state.noAnimation
+    ? { style: '' }
+    : cssvar({tabTransitionName, tabPanelTransitionName});
   return <div class="tab-group" ref={ref} style={style} {...props}>
       <Slot/>
   </div>
@@ -114,14 +114,13 @@ export const TabImpl = component$((props: TabProps) => {
 
   const activate = event$(() => {
     if (id === state.active) return;
-    if (!state.shouldAnimate) {
+    if (state.noAnimation || !('startViewTransition' in document)) {
       state.leaving = state.active;
       state.active = id;
     } else {
       const transition = startViewTransition(async () => {
         state.leaving = state.active;
         state.active = id;
-        await new Promise((res) => setTimeout(res, 0))
       });
       const [oldPanel, newPanel] = [
         document.getElementById(`panel-${state.active}`)!,
@@ -200,4 +199,5 @@ export const TabGroup: FunctionComponent<TabGroupImplProps> = ({ children, ...pr
       {tabPanels.map((panel, i) => <TabPanelImpl tabId={tabIds[i]} key={tabIds[i]}>{panel}</TabPanelImpl>)}
     </TabPanelListImpl>
   </TabGroupImpl>
+
 }

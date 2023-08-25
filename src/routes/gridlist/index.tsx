@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { NavGrid, GridLink, ActionGrid, GridButton, Modal } from "qwik-hueeye";
+import { NavGrid, LinkItem, ActionGrid, ButtonItem, Modal } from "qwik-hueeye";
 import pokemons from './pokemon.json';
 import styles from './index.scss?inline';
 
@@ -11,10 +11,10 @@ interface Item {
 const ItemButton = component$(({ item }: { item: Item }) => {
   const open = useSignal(false);
   return <>
-    <GridButton onClick$={() => open.value = true}>
+    <ButtonItem onClick$={() => open.value = true}>
       <img width="150" height="150" src={item.img} alt={item.name} />
       <h3>{item.name}</h3>
-    </GridButton>
+    </ButtonItem>
     <Modal open={open}>
       <img width="150" height="150" src={item.img} alt={item.name} />
       <h3>{item.name}</h3>
@@ -31,10 +31,10 @@ export default component$(() => {
       <p>Use arrow keys to navigate through the list</p>
       <NavGrid>
         {pokemons.slice(0, 20).map(p => (
-          <GridLink key={p.name} href={p.name}>
+          <LinkItem key={p.name} href={p.name}>
           <img width="150" height="150" src={p.img} alt={p.name} />
           <h3>{p.name}</h3>
-        </GridLink>
+        </LinkItem>
         ))}
       </NavGrid>
     </article>

@@ -1,6 +1,6 @@
 import { component$, Slot, useSignal, useStyles$ } from '@builder.io/qwik';
 import { Slider, useHueEye } from 'qwik-hueeye';
-import { NavLink, Navlist } from 'qwik-hueeye';
+import { LinkItem, NavList } from 'qwik-hueeye';
 import { SvgGradient } from 'qwik-hueeye';
 import { Toaster, useToasterProvider } from 'qwik-hueeye';
 import { clsq } from 'qwik-hueeye';
@@ -14,24 +14,24 @@ export default component$(() => {
 
   return <>
     <div class={clsq('nav-overlay', open.value ? 'open' : 'close')} onClick$={() => open.value = false}>
-      <Navlist aria-label="primary">
-        <NavLink href="/">Theme</NavLink>
-        <NavLink href="/form">Form</NavLink>
-        <NavLink href="/input">Input</NavLink>
-        <NavLink href="/select">Select</NavLink>
-        <NavLink href="/checkbox">Checkbox</NavLink>
-        <NavLink href="/radio">Radio</NavLink>
-        <NavLink href="/switch">Switch</NavLink>
-        <NavLink href="/toggle">Toggle</NavLink>
-        <NavLink href="/slider">Slider</NavLink>
-        <NavLink href="/accordion">Accordion</NavLink>
-        <NavLink href="/tabs">Tabs</NavLink>
-        <NavLink href="/button">Button</NavLink>
-        <NavLink href="/dialog">Dialog</NavLink>
-        <NavLink href="/tooltip">Tooltip</NavLink>
-        <NavLink href="/toaster">Toaster</NavLink>
-        <NavLink href="/gridlist">Grid List</NavLink>
-      </Navlist>
+      <NavList aria-label="primary">
+        <LinkItem href="/">Theme</LinkItem>
+        <LinkItem href="/form">Form</LinkItem>
+        <LinkItem href="/input">Input</LinkItem>
+        <LinkItem href="/select">Select</LinkItem>
+        <LinkItem href="/checkbox">Checkbox</LinkItem>
+        <LinkItem href="/radio">Radio</LinkItem>
+        <LinkItem href="/switch">Switch</LinkItem>
+        <LinkItem href="/toggle">Toggle</LinkItem>
+        <LinkItem href="/slider">Slider</LinkItem>
+        <LinkItem href="/accordion">Accordion</LinkItem>
+        <LinkItem href="/tabs">Tabs</LinkItem>
+        <LinkItem href="/button">Button</LinkItem>
+        <LinkItem href="/dialog">Dialog</LinkItem>
+        <LinkItem href="/tooltip">Tooltip</LinkItem>
+        <LinkItem href="/toaster">Toaster</LinkItem>
+        <LinkItem href="/gridlist">Grid List</LinkItem>
+      </NavList>
     </div>
     <header class="page-header">
       <button class="btn-icon sidenav-trigger" onClick$={() => open.value = true}>

@@ -58,6 +58,10 @@ export const focusPreviousInput = $((root: HTMLElement, options?: FocusOptions) 
   previousFocus(list, options);
 });
 
+export const firstFocus = $((list?: NodeListOf<HTMLElement>) => {
+  if (!list) return;
+  list.item(0).focus();
+})
 export const lastFocus = $((list?: NodeListOf<HTMLElement>) => {
   if (!list) return;
   list.item(list.length-1).focus();

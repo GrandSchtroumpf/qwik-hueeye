@@ -1,0 +1,14 @@
+.he-grid-list {
+  list-style: none;
+  margin-block: 0;
+  list-style: none;
+  margin-block: 0;
+  padding: var(--size-2);
+  display: grid;
+  gap: var(--size-2);
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-width, 250px), 1fr));
+
+  & > li {
+    display: contents;
+  }
+}

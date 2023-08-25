@@ -1,4 +1,6 @@
-# Navlist
+# List
+
+## Navlist
 
 This is a simple list of link with some a11y bonus:
 - keyboard navigation
@@ -10,17 +12,17 @@ For SPA navigation
 ```jsx
 {/* You should put an aria-label "primary" if this is the primary navigation */}
 <Navlist aria-label="primary">
-  <NavLink href="/">Main page</NavLink>
-  <NavLink href="/products">Products</NavLink>
-  <NavLink href="/pricing">Pricing</NavLink>
+  <LinkItem href="/">Main page</LinkItem>
+  <LinkItem href="/products">Products</LinkItem>
+  <LinkItem href="/pricing">Pricing</LinkItem>
 </Navlist>
 ```
 
 For SSR navigation
 ```jsx
 <Navlist aria-label="primary">
-  <NavAnchor href="/">Main page</NavAnchor>
-  <NavAnchor href="/products">Products</NavAnchor>
-  <NavAnchor href="/pricing">Pricing</NavAnchor>
+  <AnchorItem href="/">Main page</AnchorItem>
+  <AnchorItem href="/products">Products</AnchorItem>
+  <AnchorItem href="/pricing">Pricing</AnchorItem>
 </Navlist>
 ```

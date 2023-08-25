@@ -1,0 +1,12 @@
+.he-anchor-item,
+.he-link-item,
+.he-button-item {
+  padding: var(--size-1) var(--size-1);
+  box-sizing: border-box;
+}
+
+.he-anchor-item,
+.he-link-item {
+  color: currentColor;
+  text-decoration: none;
+}

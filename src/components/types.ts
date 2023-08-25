@@ -10,8 +10,8 @@ export type FieldsetAttributes = QwikIntrinsicElements['fieldset'];
 export type InputAttributes = QwikIntrinsicElements['input'];
 export type DialogAttributes = QwikIntrinsicElements['dialog'];
 export type NavAttributes = QwikIntrinsicElements['nav'];
-export type AnchorAttributes = QwikIntrinsicElements['a'];
 
 // Require interface to avoid TS4023: Exported variable 'X' has or is using name 'Y' from external module 'a/file/path' but cannot be named
 // https://github.com/microsoft/TypeScript/issues/5711
 export interface ButtonAttributes extends HTMLAttributes<'button'> {}
+export interface AnchorAttributes extends HTMLAttributes<'a'> {}

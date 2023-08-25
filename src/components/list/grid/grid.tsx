@@ -1,11 +1,9 @@
 import { $, QwikKeyboardEvent, Signal, Slot, component$, useSignal } from "@builder.io/qwik";
-import { lastFocus, leaveFocus, nextFocus, previousFocus } from "../utils";
-import { Link, LinkProps } from "@builder.io/qwik-city";
-import { NavAnchorProps } from "../navlist/navlist";
-import type { ButtonAttributes, NavAttributes, UlAttributes } from "../types";
-import styles from './gridlist.module.scss';
-import { mergeProps } from "../utils/attributes";
-import { usePreventKeydown } from "../utils/keyboard";
+import { lastFocus, leaveFocus, nextFocus, previousFocus } from "../../utils";
+import type { NavAttributes, UlAttributes } from "../../types";
+import { mergeProps } from "../../utils/attributes";
+import { usePreventKeydown } from "../../utils/keyboard";
+import styles from './grid.module.scss';
 
 const nextLine = $((root: HTMLElement, selector: string, options?: FocusOptions) => {
   const list = root.querySelectorAll<HTMLElement>(selector);
@@ -50,11 +48,9 @@ export const useGridKeyboard = (ref: Signal<HTMLElement | undefined>, selector: 
 export const NavGrid = component$((props: NavAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   const keydown = useGridKeyboard(rootRef, 'li > a');
-  const ulProps = mergeProps<'ul'>({ class: styles.gridList }, keydown);
-  return <nav {...props}>
-    <ul ref={rootRef} role="list" {...ulProps}>
-      <Slot/>
-    </ul>
+  const attr = mergeProps<'ul'>({ class: styles.heGridList }, props, keydown);
+  return <nav ref={rootRef} {...attr}>
+    <Slot/>
     <Slot name="grid-end"/>
   </nav>
 });
@@ -62,36 +58,11 @@ export const NavGrid = component$((props: NavAttributes) => {
 export const ActionGrid = component$((props: UlAttributes) => {
   const rootRef = useSignal<HTMLElement>();
   const keydown = useGridKeyboard(rootRef, 'li > button');
-  const ulProps = mergeProps<'ul'>({ class: styles.gridList }, keydown, props);
+  const ulProps = mergeProps<'ul'>({ class: styles.heGridList }, keydown, props);
   return <>
     <ul ref={rootRef} role="list" {...ulProps}>
       <Slot/>
     </ul>
     <Slot name="grid-end"/>
   </>
-});
-
-export const GridLink = component$((props: LinkProps) => {
-  return <li>
-    <Link {...mergeProps({ class: styles.gridItem }, props)}>
-      <Slot/>
-    </Link>
-  </li>
-});
-
-
-export const GridAnchor = component$((props: NavAnchorProps) => {
-  return <li>
-    <a {...mergeProps({ class: styles.gridItem }, props)}>
-      <Slot/>
-    </a>
-  </li>
-});
-
-export const GridButton = component$((props: ButtonAttributes) => {
-  return <li>
-    <button {...mergeProps({ class: styles.gridItem }, props)}>
-      <Slot/>
-    </button>
-  </li>
 });

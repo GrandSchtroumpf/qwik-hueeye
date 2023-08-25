@@ -8,7 +8,7 @@ export default component$(() => {
   useStyles$(styles);
   return <section id="tab-page" aria-labelledby="tab-title">
     <h1 id="tab-title">Tabs</h1>
-    <TabGroup noAnimation>
+    <TabGroup>
       <Tab label="Form">
         <FormField>
           <Label>Name</Label>
