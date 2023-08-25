@@ -11,15 +11,15 @@
   &:focus-within {
     outline: solid 1px var(--primary);
   }
-  input, .track {
+  & input, .track {
     grid-area: 1/1;
   }
   
-  input {
+  & input {
     @include base.input();
   }
   
-  .track {
+  & .track {
     @include base.track();
     &::after {
       left: calc(var(--initial-position, 0) * 100%);
@@ -27,7 +27,7 @@
     }
   }
   
-  .thumb {
+  & .thumb {
     @include base.thumb();
     grid-area: 1 / 1;
     left: calc(var(--initial-position, 0) * 100%);

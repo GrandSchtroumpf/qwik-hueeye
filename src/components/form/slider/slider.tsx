@@ -1,7 +1,8 @@
 import { component$, useStyles$, useSignal, event$ } from "@builder.io/qwik";
-import { clsq, cssvar } from "../../utils";
+import { cssvar } from "../../utils";
 import { round } from "./utils";
 import { ControlValueProps, extractControlProps, useControllerProvider } from "../control";
+import { mergeProps } from "../../utils/attributes";
 import styles from './slider.scss?inline';
 
 interface SliderProps extends ControlValueProps<number> {
@@ -23,19 +24,26 @@ export const Slider = component$((props: SliderProps) => {
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
   const { bindValue, initialValue } = useControllerProvider(props, min);
-  const attr = extractControlProps(props);
-  const initialPosition = initialValue / (max - min);
 
+  const initialPosition = initialValue / (max - min);
+  
   const move = event$((e: any, input: HTMLInputElement) => {
     const percent = input.valueAsNumber / (max - min) - initialPosition;
     const value = input ? percent * (trackEl.value!.clientWidth - 20) : 0;
     sliderEl.value?.style.setProperty('--position', `${round(value, 1)}px`);
     input.nextElementSibling?.setAttribute('data-value', `${round(input.valueAsNumber, step)}`);
   });
+  
+  const inputAttr = extractControlProps(props);
+  const sliderAttr = mergeProps(
+    { class: 'slider' },
+    { class: props.position },
+    cssvar({ initialPosition }),
+  )
 
-  return <div ref={sliderEl} class={clsq('slider', props.position)} {...cssvar({ initialPosition })}>
+  return <div ref={sliderEl} {...sliderAttr }>
     <div class="track" ref={trackEl}></div>
-    <input {...attr} 
+    <input {...inputAttr} 
       type="range"
       step={step}
       min={min}

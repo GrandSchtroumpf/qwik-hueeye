@@ -6,27 +6,27 @@ interface HueEyeState {
   hue: Signal<number | undefined>;
 }
 
+const initHue = `
+const theme = sessionStorage.getItem('hueeye');
+if (theme) {
+  const state = JSON.parse(theme);
+  if (state.hue) {
+    document.documentElement.style.setProperty('--hue', state.hue);
+  }
+}`;
+
 const HueEyeSession = component$(() => {
   const { hue } = useContext(HueEyeContext);
-  
-  // Add script to head once this is released
-  // https://github.com/BuilderIO/qwik/issues/2593
   useVisibleTask$(() => {
-    if (!history.length) return;
-    const theme = sessionStorage.getItem('hueeye');
-    if (!theme) return;
-    const state = JSON.parse(theme);
-    if (!state.hue) return;
-    hue.value = Number(state.hue);
-    document.documentElement.style.setProperty('--hue', state.hue);
+    const localHue = document.documentElement.style.getPropertyValue('--hue');
+    if (localHue) hue.value = Number(localHue);
   });
-
   useVisibleTask$(({ track }) => {
     const change = track(() => hue.value);
     if (typeof change === 'undefined') return;
     sessionStorage.setItem('hueeye', JSON.stringify({ hue: change }));
   });
-  return <></>
+  return <script dangerouslySetInnerHTML={initHue}></script>
 });
 
 const HueEyeContext = createContextId<HueEyeState>('HueEyeContext');

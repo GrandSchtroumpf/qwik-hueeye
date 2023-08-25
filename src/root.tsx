@@ -43,7 +43,7 @@ export default () => {
         <RouterHead />
       </head>
       <body>
-        <HueEyeProvider>
+        <HueEyeProvider storage>
           <RouterOutlet />
           <ServiceWorkerRegister />
         </HueEyeProvider>
