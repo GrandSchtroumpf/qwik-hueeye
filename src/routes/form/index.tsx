@@ -61,8 +61,6 @@ export default component$(() => {
     toggle: 'medium'
   };
 
-  const displayMovie = $((v: (Extract<keyof typeof MOVIES, string>)[]) => v.map(id => MOVIES[id]).join(', '))
-
   return <Form id="form-page" onSubmit$={save} value={initial}>
     <FormField class="outline">
       <Label>Text here</Label>
@@ -88,7 +86,7 @@ export default component$(() => {
     </fieldset>
     <FormField class="outline">
       <Label>Select from the list</Label>
-      <MultiSelect name="select" placeholder="Movie" display$={displayMovie}>
+      <MultiSelect name="select" placeholder="Movie">
         {Object.entries(MOVIES).map(([id, title]) => (
           <Option key={id} value={id}>
             {title}

@@ -1,6 +1,24 @@
 #grid-page {
+  margin-bottom: 200px;
   article, h1, h2 {
     margin-bottom: var(--size-2);
+  }
+  /* Ideally you would split this into separate media query, but I think it looks fine */
+  nav > a:nth-of-type(4n + 1),
+  ul > li:nth-of-type(4n + 1) > button {
+    --card-position: 25%;
+  }
+  nav > a:nth-of-type(4n + 2),
+  ul > li:nth-of-type(4n + 2) > button {
+    --card-position: 50%;
+  }
+  nav > a:nth-of-type(4n + 3),
+  ul > li:nth-of-type(4n + 3) > button {
+    --card-position: 75%;
+  }
+  nav > a:nth-of-type(4n + 4),
+  ul > li:nth-of-type(4n + 4) > button {
+    --card-position: 100%;
   }
   nav > a,
   ul > li > button {
@@ -13,5 +31,19 @@
     align-items: center;
     padding: var(--size-1) var(--size-2);
     border: none;
+
+    @media (prefers-reduced-motion: no-preference) {
+      view-timeline-name: --card;
+      animation: slide-fade-in both;
+      animation-timeline: --card;
+      animation-range: cover 0% contain var(--card-position);
+    }
+  }
+}
+
+@keyframes slide-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10vh);
   }
 }
