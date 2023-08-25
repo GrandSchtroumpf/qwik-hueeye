@@ -1,5 +1,5 @@
 import { $, QwikKeyboardEvent, Signal, Slot, component$, useSignal } from "@builder.io/qwik";
-import { lastFocus, leaveFocus, nextFocus, previousFocus } from "../../utils";
+import { firstFocus, lastFocus, leaveFocus, nextFocus, previousFocus } from "../../utils";
 import type { NavAttributes, UlAttributes } from "../../types";
 import { mergeProps } from "../../utils/attributes";
 import { usePreventKeydown } from "../../utils/keyboard";
@@ -28,7 +28,7 @@ const previousLine = $((root: HTMLElement, selector: string, options?: FocusOpti
 });
 
 export const grideys= ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
-export const gridKeyboard = (selector: string = 'li > a') => ({
+export const gridKeyboard = (selector: string = 'a') => ({
   onKeyDown$: $((event: QwikKeyboardEvent, el: HTMLElement) => {
     const key = event.key;
     if (key === 'ArrowRight') nextFocus(el.querySelectorAll<HTMLElement>(selector));
@@ -36,18 +36,19 @@ export const gridKeyboard = (selector: string = 'li > a') => ({
     if (key === 'ArrowDown') nextLine(el, selector);
     if (key === 'ArrowUp') previousLine(el, selector);
     if (key === 'End') lastFocus(el.querySelectorAll<HTMLElement>(selector));
+    if (key === 'Home') firstFocus(el.querySelectorAll<HTMLElement>(selector));
     if (key === 'Escape') leaveFocus(el);
   })
 });
 
-export const useGridKeyboard = (ref: Signal<HTMLElement | undefined>, selector: string = 'li > a') => {
-  usePreventKeydown(ref, ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
+export const useGridKeyboard = (ref: Signal<HTMLElement | undefined>, selector: string = 'a') => {
+  usePreventKeydown(ref, ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home']);
   return gridKeyboard(selector);
 }
 
 export const NavGrid = component$((props: NavAttributes) => {
   const rootRef = useSignal<HTMLElement>();
-  const keydown = useGridKeyboard(rootRef, 'li > a');
+  const keydown = useGridKeyboard(rootRef, 'a');
   const attr = mergeProps<'ul'>({ class: styles.heGridList }, props, keydown);
   return <nav ref={rootRef} {...attr}>
     <Slot/>

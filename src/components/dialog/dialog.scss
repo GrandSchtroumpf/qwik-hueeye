@@ -38,7 +38,7 @@ dialog {
   }
   &.sidenav {
     margin-left: 0;
-    max-height: 100%; // Firefox set max-height: calc(100% - 6px -2em)
+    max-height: 100%; /* Firefox set max-height: calc(100% - 6px -2em) */
     height: auto;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -55,10 +55,10 @@ dialog {
       opacity: 0;
     }
   }
-  .dialog-content {
+  & .dialog-content {
     padding: var(--size-1) var(--size-2);
   }
-  .dialog-actions {
+  & .dialog-actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;

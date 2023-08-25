@@ -3,7 +3,7 @@ import { Link, LinkProps, useLocation } from "@builder.io/qwik-city";
 import { isSamePathname } from "../utils";
 import { mergeProps } from "../../utils/attributes";
 import { AnchorAttributes, ButtonAttributes } from "../../types";
-import style from './item.css?inline';
+import style from './item.scss?inline';
 
 export const LinkItem = component$((props: LinkProps) => {
   useStyles$(style);

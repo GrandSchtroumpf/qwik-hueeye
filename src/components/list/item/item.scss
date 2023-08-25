@@ -3,10 +3,19 @@
 .he-button-item {
   padding: var(--size-1) var(--size-1);
   box-sizing: border-box;
+  &:hover {
+    background-color: var(--surface);
+  }
+  &:active {
+    background-color: var(--surface-higher);
+  }
 }
 
 .he-anchor-item,
 .he-link-item {
   color: currentColor;
   text-decoration: none;
+  &[aria-current="page"] {
+    color: var(--color, var(--primary));
+  }
 }
