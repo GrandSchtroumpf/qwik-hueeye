@@ -24,26 +24,31 @@
   box-sizing: border-box;
   position: relative;
   border: 1px solid transparent;
+  &[aria-selected="true"] {
+    @supports not (view-transition-name: test) {
+      background-color: var(--surface-lower);
+    }
+    @supports (view-transition-name: test) {
+      &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        border-radius: 4px;
+        background-color: var(--color, var(--text));
+        opacity: 0.12;
+        view-transition-name: var(--tab-transition-name);
+      }
+    }
+  }
   &:focus-visible {
     outline: solid 1px var(--outline);
   }
   &:hover {
-    background-color: var(--surface-lower);
+    background-color: var(--surface-low);
   }
   &:active {
     background-color: var(--surface);
-  }
-  &[aria-selected="true"] {
-    background-color: var(--surface-lower);
-    &::before {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      inset: 0;
-      border-radius: 4px;
-      background-color: var(--surface-higher);
-      view-transition-name: var(--tab-transition-name);
-    }
   }
 }
 .tab-panel-container {
