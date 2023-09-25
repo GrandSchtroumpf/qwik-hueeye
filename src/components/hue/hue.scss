@@ -89,10 +89,10 @@
       --text: oklch(100% var(--chroma) var(--hue));
       --background: oklch(20% var(--chroma) var(--hue));
   
-      --primary: oklch(80% 0.2 var(--primary-hue));
+      --primary: oklch(80% 0.27 var(--primary-hue));
       --on-primary: oklch(20% 0.15 var(--primary-hue));
   
-      --secondary: oklch(80% 0.2 var(--secondary-hue));
+      --secondary: oklch(80% 0.27 var(--secondary-hue));
       --on-secondary: oklch(20% 0.15 var(--secondary-hue));
   
       --divider: oklch(70% var(--chroma) var(--hue));

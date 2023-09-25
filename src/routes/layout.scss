@@ -2,13 +2,18 @@ body {
   margin: 0;
   padding: 0;
   line-height: inherit;
-  min-height: 100dvh;
+  height: 100dvh;
   position: relative;
   display: grid;
   grid-template-areas: "nav header"
   "nav main";
-  grid-template-rows: 80px auto;
-  grid-template-columns: 200px auto;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 200px 1fr;
+  background-image: linear-gradient(
+    160deg,
+    oklch(0.24 0.02 var(--hue)),
+    oklch(0.12 0.03 calc(var(--hue) + 30))
+  );
 }
 
 @media (max-width: 899px) {
@@ -22,31 +27,33 @@ body {
   position: sticky;
   top: 0;
   height: 100dvh;
-  padding: var(--size-2);
   box-sizing: border-box;
   nav {
     display: flex;
     flex-direction: column;
     border-radius: var(--size-0);
-    background-color: var(--surface);
     margin-block: 0;
     padding-left: 0;
     list-style: none;
     height: 100%;
     overflow: auto;
+    padding: var(--size-1);
+    box-sizing: border-box;
+    & > a {
+      padding: var(--size-1) var(--size-2);
+      border-radius: var(--size-1);
+    }
   }
 }
 
 .page-header {
   grid-area: header;
-  margin: var(--size-2);
   border-radius: var(--size-0);
   box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
   display: flex;
   gap: var(--size-1);
+  padding-inline: var(--size-2);
   align-items: center;
-  background-color: var(--surface-lower);
   h1 {
     margin-right: auto;
     font-size: 1.3rem;
@@ -60,8 +67,12 @@ body {
 
 main {
   grid-area: main;
-  padding: 16px;
+  padding: var(--size-2);
+  margin: var(--size-1);
   box-sizing: border-box;
+  border-radius: var(--size-2);
+  background-color: oklch(0.2 0.01 var(--hue));
+  overflow: auto;
 }
 
 @media (max-width: 899px) {
