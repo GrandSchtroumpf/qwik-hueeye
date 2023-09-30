@@ -1,6 +1,6 @@
-import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$, useTask$ } from "@builder.io/qwik";
+import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$, useTask$, useStyles$ } from "@builder.io/qwik";
 import { SvgGradient } from "../svg-gradient";
-import './hue.scss';
+import style from './hue.scss?inline';
 
 interface HueEyeState {
   hue: Signal<number | undefined>;
@@ -38,6 +38,7 @@ interface HueEyeProps {
 }
 
 export const HueEyeProvider = component$(({ storage }: HueEyeProps) => {
+  useStyles$(style);
   const state: HueEyeState = {
     hue: useSignal()
   };

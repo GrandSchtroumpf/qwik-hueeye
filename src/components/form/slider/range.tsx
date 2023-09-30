@@ -6,8 +6,8 @@ import type { FieldsetAttributes } from "../types";
 import { ControlValueProps, extractControlProps, useControllerProvider } from "../control";
 import styles from './range.scss?inline';
 
-type Range = Record<string, number>;
-interface RangeProps extends FieldsetAttributes, ControlValueProps<Range> {
+type RangeType = Record<string, number>;
+interface RangeProps extends FieldsetAttributes, ControlValueProps<RangeType> {
   min?: number | string;
   max?: number | string;
   step?: number | string;
