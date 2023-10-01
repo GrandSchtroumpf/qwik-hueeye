@@ -283,6 +283,7 @@
   .btn, .btn-fill, .btn-icon, .btn-outline, .btn-expand {
     font-size: 0.9rem;
     border-radius: var(--btn-radius, var(--size-1));
+    box-sizing: border-box;
     &.flat {
       --btn-radius: 0;
     }

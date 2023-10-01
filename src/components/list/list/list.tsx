@@ -1,4 +1,4 @@
-import { AriaAttributes, Slot, component$, useSignal, useStyles$ } from "@builder.io/qwik";
+import { Slot, component$, useSignal, useStyles$ } from "@builder.io/qwik";
 import { NavAttributes, UlAttributes } from "../../types";
 import { mergeProps } from "../../utils/attributes";
 import { listNavigation, usePreventListKeyboard } from "../utils";
@@ -25,19 +25,14 @@ import styles from './list.scss?inline';
 //   }
 // }
 
-interface ListProps {
-  horizontal?: boolean;
-}
+interface ListProps {}
 
 interface ActionListProps extends UlAttributes, ListProps {}
 export const ActionList = component$((props: ActionListProps) => {
   useStyles$(styles);
   const ref = useSignal<HTMLElement>();
   usePreventListKeyboard(ref);
-  const aria: AriaAttributes = {
-    'aria-orientation': props.horizontal ? 'horizontal' : 'vertical'
-  }
-  const attributes = mergeProps({ class: 'he-action-list', onKeyDown$: listNavigation, ...aria }, props);
+  const attributes = mergeProps({ class: 'he-action-list', onKeyDown$: listNavigation }, props);
   return <ul ref={ref} role="list" {...attributes}>
     <Slot/>
   </ul>
@@ -48,10 +43,7 @@ export const NavList = component$((props: NavListProps) => {
   useStyles$(styles);
   const ref = useSignal<HTMLElement>();
   usePreventListKeyboard(ref);
-  const aria: AriaAttributes = {
-    'aria-orientation': props.horizontal ? 'horizontal' : 'vertical'
-  }
-  const attributes = mergeProps({ class: 'he-nav-list', onKeyDown$: listNavigation, ...aria }, props)
+  const attributes = mergeProps({ class: 'he-nav-list', onKeyDown$: listNavigation }, props)
   return <nav ref={ref} {...attributes}>
     <Slot/>
   </nav>
