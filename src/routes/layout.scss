@@ -10,9 +10,9 @@ body {
   grid-template-rows: auto 1fr;
   grid-template-columns: 200px 1fr;
   background-image: linear-gradient(
-    160deg,
-    oklch(0.24 0.02 var(--hue)),
-    oklch(0.12 0.03 calc(var(--hue) + 30))
+    170deg,
+    var(--background),
+    var(--background-dim) 30vw
   );
 }
 
@@ -71,7 +71,7 @@ main {
   margin: var(--size-1);
   box-sizing: border-box;
   border-radius: var(--size-2);
-  background-color: oklch(0.2 0.01 var(--hue));
+  background-color: var(--background);
   overflow: auto;
 }
 

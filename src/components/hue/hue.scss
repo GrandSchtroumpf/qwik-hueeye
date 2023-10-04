@@ -6,9 +6,6 @@
     --size-2: 16px;
     --size-3: 24px;
     --size-4: 32px;
-    --alpha-hover: 8%;
-    --alpha-focus: 12%;
-    --alpha-drag: 24%;
     
     --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
     --ease-out: cubic-bezier(0, 0.55, 0.45, 1);
@@ -26,6 +23,9 @@
   :root, ::backdrop {
     color-scheme: dark light;
     --chroma: 0.01;
+    --alpha-hover: 12%;
+    --alpha-focus: 24%;
+    --alpha-drag: 32%;
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
     }
@@ -40,14 +40,16 @@
     --secondary-hue: calc(var(--hue) + 90);
   
     --text: oklch(10% var(--chroma) var(--hue));
-    --background: oklch(90% var(--chroma) var(--hue));
+    --background-dim: oklch(90% var(--chroma) var(--hue));
+    --background: oklch(92% var(--chroma) var(--hue));
+    --background-bright: oklch(98% var(--chroma) var(--hue));
     --background-blur: none;
     
     --primary: oklch(65% 0.3 var(--primary-hue));
-    --on-primary: oklch(100% 0.05 var(--primary-hue));
+    --on-primary: oklch(100% 0 var(--primary-hue));
   
     --secondary: oklch(65% 0.3 var(--secondary-hue));
-    --on-secondary: oklch(100% 0.05 var(--secondary-hue));
+    --on-secondary: oklch(100% 0 var(--secondary-hue));
   
     --warn: oklch(65% 0.21 30);
     --on-warn: oklch(100% 0 30);
@@ -58,7 +60,7 @@
     --base-surface: 100% var(--chroma) var(--hue);
     --surface-higher: oklch(var(--base-surface) / 1);
     --surface-high: oklch(var(--base-surface) / 0.82);
-    --surface: oklch(var(--base-surface) / 0.75);
+    --surface: oklch(96% var(--chroma) var(--hue));
     --surface-low: oklch(var(--base-surface) / 0.50);
     --surface-lower: oklch(var(--base-surface) / 0.32);
   
@@ -87,13 +89,18 @@
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --text: oklch(100% var(--chroma) var(--hue));
-      --background: oklch(20% var(--chroma) var(--hue));
+      --background-dim: oklch(10% var(--chroma) var(--hue));
+      --background: oklch(15% var(--chroma) var(--hue));
+      --background-bright: oklch(20% var(--chroma) var(--hue));
   
       --primary: oklch(80% 0.27 var(--primary-hue));
       --on-primary: oklch(20% 0.15 var(--primary-hue));
   
       --secondary: oklch(80% 0.27 var(--secondary-hue));
       --on-secondary: oklch(20% 0.15 var(--secondary-hue));
+
+      --warn: oklch(80% 0.27 30);
+      --on-warn: oklch(20% 0.15 30);
   
       --divider: oklch(70% var(--chroma) var(--hue));
           
@@ -102,7 +109,7 @@
       --base-surface: 90% var(--chroma) var(--hue);
       --surface-higher: oklch(var(--base-surface) / 0.32);
       --surface-high: oklch(var(--base-surface) / 0.24);
-      --surface: oklch(var(--base-surface) / 0.16);
+      --surface: oklch(24% var(--chroma) var(--hue));
       --surface-low: oklch(var(--base-surface) / 0.12);
       --surface-lower: oklch(var(--base-surface) / 0.08);
   
@@ -135,23 +142,6 @@
       var(--gradient-start),
       var(--gradient-end)
     );
-    &.btn, &.btn-fill, &.btn-outline {
-      background-image: var(--background-image);
-      &:hover {
-        background-image: linear-gradient(
-          var(--gradient-direction),
-          color-mix(in oklch, var(--on-gradient) var(--alpha-hover), var(--gradient-start)),
-          color-mix(in oklch, var(--on-gradient) var(--alpha-hover), var(--gradient-end))
-        );
-      }
-      &:active {
-        background-image: linear-gradient(
-          var(--gradient-direction),
-          color-mix(in oklch, var(--on-gradient) var(--alpha-focus), var(--gradient-start)),
-          color-mix(in oklch, var(--on-gradient) var(--alpha-focus), var(--gradient-end))
-        );
-      }
-    }
   }
   #svg-gradient {
     --gradient-start: var(--primary);
@@ -235,7 +225,7 @@
     font-size: 1rem;
     color-scheme: dark light;
     
-    background-image: var(--background-image);
+    background-image: var(--background);
     color: var(--text);
   }
   
@@ -296,22 +286,46 @@
       cursor: default;
       pointer-events: none;
     }
+    & svg {
+      fill: currentColor;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+  }
+
+  // transparent background
+  .btn, .btn-outline, .btn-icon, .btn-expand:not(.fill) {
+    background-color: transparent;
+    &:hover {
+      // Use on-color with transparency to create a nice effect
+      background-color: color-mix(
+        in oklch,
+        var(--color, currentColor) var(--alpha-hover),
+        var(--on-color, transparent) var(--alpha-hover)
+      );
+    }
+    &:active {
+      background-color: color-mix(
+        in oklch,
+        var(--color, currentColor) var(--alpha-focus),
+        var(--on-color, transparent) var(--alpha-focus)
+      );
+    }
   }
   
   
   .btn {
     border: none;
     padding: 8px 16px;
-    background-color: transparent;
     border: none;
     color: var(--color, var(--text));
-    &:hover {
-      background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
-    }
-    &:active {
-      background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-focus), transparent);
-    }
     &.gradient {
+      background-image: linear-gradient(
+        var(--gradient-direction),
+        var(--gradient-start) 30%,
+        var(--gradient-end) 80%
+      );
       position: relative;
       isolation: isolate;
       -webkit-background-clip: text;  // webkit required for android
@@ -325,53 +339,23 @@
         z-index: -1;
       }
       &:hover::before {
-        background-color: color-mix(in oklch, var(--text) var(--alpha-hover), transparent);
+        background-color: var(--gradient-start, var(--surface));
+        opacity: var(--alpha-hover);
       }
       &:active::before {
-        background-color: color-mix(in oklch, var(--text) var(--alpha-focus), transparent);
+        background-color: var(--gradient-start, var(--surface));
+        opacity: var(--alpha-focus);
       }
-    }
-  }
-  
-  .btn-fill {
-    border: none;
-    background-color: var(--color, var(--background));
-    color: var(--on-color, var(--text));
-    padding: 8px 16px;
-    &:hover {
-      background-color: color-mix(
-        in oklch,
-        var(--on-color, var(--text)) var(--alpha-hover),
-        var(--color, var(--background))
-      );
-    }
-    &:active {
-      background-color: color-mix(
-        in oklch,
-        var(--on-color, var(--text)) var(--alpha-focus),
-        var(--color, var(--background))
-      );
-    }
-    &:focus-visible {
-      outline-offset: 2px;
-    }
-    &.gradient {
-      color: var(--on-gradient);
     }
   }
   
   .btn-outline {
     transition: background-color 0.1s ease-in-out;
-    background-color: transparent;
     border: var(--border-width, 1px) solid var(--color, var(--outline));
     padding: 8px 16px;
-    &:hover {
-      background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
-    }
-    &:active {
-      background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-focus), transparent);
-    }
     &.gradient {
+      --color: var(--background);
+      background-image: var(--background-image);
       position: relative;
       isolation: isolate;
       border: none;
@@ -395,21 +379,13 @@
   
   .btn-icon {
     border: none;
-    background-color: transparent;
     height: 40px;
     width: 40px;
     padding: 8px;
-    color: var(--color, var(--text));
-    &:hover {
-      background-color: var(--surface);
-    }
-    &:active {
-      background-color: var(--surface-higher);
-    }
     svg {
       height: 24px;
       width: 24px;
-      fill: currentColor;
+      fill: var(--color, currentColor);
     }
     &.gradient {
       svg {
@@ -417,7 +393,6 @@
       }
     } 
   }
-  
   
   .btn svg, .btn-fill svg, .btn-outline svg, .btn-expand svg {
     fill: currentColor;
@@ -473,6 +448,49 @@
       }
       &:active::before {
         background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--background));
+      }
+    }
+  }
+
+    
+  .btn-fill {
+    border: none;
+    padding: 8px 16px;
+    background-color: var(--color, var(--surface));
+    color: var(--on-color, var(--text));
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+    &:hover {
+      background-color: color-mix(
+        in oklch,
+        var(--on-color, var(--text)) var(--alpha-hover),
+        var(--color, var(--surface))
+      );
+    }
+    &:active {
+      background-color: color-mix(
+        in oklch,
+        var(--on-color, var(--text)) var(--alpha-focus),
+        var(--color, var(--surface))
+      );
+    }
+    &.gradient {
+      background-image: var(--background-image);
+      color: var(--on-gradient);
+      &:hover {
+        background-image: linear-gradient(
+          var(--gradient-direction),
+          color-mix(in oklch, var(--on-gradient) var(--alpha-hover), var(--gradient-start)),
+          color-mix(in oklch, var(--on-gradient) var(--alpha-hover), var(--gradient-end))
+        );
+      }
+      &:active {
+        background-image: linear-gradient(
+          var(--gradient-direction),
+          color-mix(in oklch, var(--on-gradient) var(--alpha-focus), var(--gradient-start)),
+          color-mix(in oklch, var(--on-gradient) var(--alpha-focus), var(--gradient-end))
+        );
       }
     }
   }
