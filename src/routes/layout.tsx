@@ -25,6 +25,7 @@ export default component$(() => {
         <LinkItem href="/toggle">Toggle</LinkItem>
         <LinkItem href="/slider">Slider</LinkItem>
         <LinkItem href="/accordion">Accordion</LinkItem>
+        <LinkItem href="/menu">Menu</LinkItem>
         <LinkItem href="/tabs">Tabs</LinkItem>
         <LinkItem href="/button">Button</LinkItem>
         <LinkItem href="/dialog">Dialog</LinkItem>

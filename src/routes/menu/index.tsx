@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { MenuRoot, MenuItem, Menu, MenuTrigger, MenuItemTrigger, MenuRadio, MenuGroup } from "qwik-hueeye";
+import { MenuRoot, MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger, MenuRadio, MenuGroup } from "qwik-hueeye";
 import styles from './index.scss?inline';
 
 export default component$(() => {
@@ -9,8 +9,8 @@ export default component$(() => {
       <MenuTrigger class="btn-fill primary">
         Open a menu
         <Menu q:slot="menu">
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 2</MenuItem>
+          <MenuItemBtn>Item 1</MenuItemBtn>
+          <MenuItemBtn>Item 2</MenuItemBtn>
           <MenuItemTrigger>
             Menu Radio
             <Menu q:slot="menu">

@@ -1,9 +1,11 @@
-import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $, useStore } from "@builder.io/qwik";
+import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $ } from "@builder.io/qwik";
 import type { Signal } from "@builder.io/qwik";
 import { Popover } from "../dialog/popover";
 import type { ButtonAttributes, DivAttributes, InputAttributes, MenuAttributes } from "../types";
 import { useKeyboard, nextFocus, previousFocus, clsq } from "../utils";
 import styles from './menu.scss?inline';
+import { mergeProps } from "../utils/attributes";
+import { Link, LinkProps } from "@builder.io/qwik-city";
 
 interface MenuContext {
   menuId: string;
@@ -14,7 +16,6 @@ interface MenuContext {
 
 interface MenuRootContext  {
   root: Signal<HTMLElement | undefined>;
-  openMenu: Record<string, Signal<boolean>>
 } 
 
 const MenuRootContext = createContextId<MenuRootContext>('MenuRootContext');
@@ -23,8 +24,7 @@ const MenuContext = createContextId<MenuContext>('MenuContext');
 export const MenuRoot = component$((props: DivAttributes) => {
   useStyles$(styles);
   const root = useSignal<HTMLElement>();
-  const openMenu = useStore<Record<string, Signal<boolean>>>({});
-  useContextProvider(MenuRootContext, { root, openMenu });
+  useContextProvider(MenuRootContext, { root });
   return <div {...props} ref={root} class={clsq('menu-root', props.class)}>
     <Slot/>
   </div>
@@ -33,12 +33,10 @@ export const MenuRoot = component$((props: DivAttributes) => {
 
 interface MenuTriggerProps extends Omit<ButtonAttributes, 'ref' | 'onClick$'> {}
 export const MenuTrigger = component$((props: MenuTriggerProps) => {
-  const {openMenu} = useContext(MenuRootContext);
   const ref = useSignal<HTMLElement>();
   const triggerId = useId();
   const menuId = useId();
   const open = useSignal(false);
-  openMenu[menuId] = open;
   useContextProvider(MenuContext, {
     menuId: menuId,
     triggerId: triggerId,
@@ -96,35 +94,52 @@ export const Menu = component$((props: MenuProps) => {
   </Popover>
 });
 
-interface MenuItemProps extends ButtonAttributes {}
 
-export const MenuItem = component$((props: MenuItemProps) => {
-  const {openMenu} = useContext(MenuRootContext);
-  const closeAll = $(() => {
-    for (const open of Object.values(openMenu)) open.value = false;
-  })
-  return <li role="presentation">
-    <button type="button" role="menuitem" {...props} onClick$={closeAll}>
+export const MenuItemBtn = component$((props: ButtonAttributes) => {
+  const closeAll = $(() => document.documentElement.click());
+  const attrs = mergeProps({ onClick$: closeAll, props });
+  return <li role="none">
+    <button type="button" role="menuitem" {...attrs}>
       <Slot/>
     </button>
   </li>
 });
 
+export const MenuItemLink = component$((props: LinkProps) => {
+  const closeAll = $(() => document.documentElement.click());
+  const attrs = mergeProps({ onClick$: closeAll, props });
+  return <li role="none">
+    <Link role="menuitem" {...attrs}>
+      <Slot/>
+    </Link>
+  </li>
+});
+
+export const MenuItemAnchor = component$((props: LinkProps) => {
+  const closeAll = $(() => document.documentElement.click());
+  const attrs = mergeProps({ onClick$: closeAll, props });
+  return <li role="none">
+    <a role="menuitem" {...attrs}>
+      <Slot/>
+    </a>
+  </li>
+});
+
+
+
 // We need to duplicate the code from MenuTrigger because Slot cannot be forwarded
 export const MenuItemTrigger = component$((props: MenuTriggerProps) => {
-  const {openMenu} = useContext(MenuRootContext);
   const ref = useSignal<HTMLElement>();
   const triggerId = useId();
   const menuId = useId();
   const open = useSignal(false);
-  openMenu[menuId] = open;
   useContextProvider(MenuContext, {
     menuId: menuId,
     triggerId: triggerId,
     open,
     origin: ref
   });
-  return <li role="presentation">
+  return <li role="none">
     <button {...props} 
       ref={ref}
       id={triggerId}
