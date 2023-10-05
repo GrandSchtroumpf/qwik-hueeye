@@ -104,7 +104,7 @@
   
       --divider: oklch(70% var(--chroma) var(--hue));
           
-      --overlay: oklch(35% var(--chroma) var(--hue));
+      --overlay: oklch(25% var(--chroma) var(--hue));
       
       --base-surface: 90% var(--chroma) var(--hue);
       --surface-higher: oklch(var(--base-surface) / 0.32);
@@ -212,7 +212,7 @@
       background-color: transparent;
     }
     to{
-      background-color: var(--text);
+      background-color: var(--backdrop-color, black);
     }
   }
   
@@ -502,7 +502,7 @@
   [class*="tooltip"] {
     position: relative;
     &::after {
-      content: attr(aria-label);
+      content: attr(aria-description);
       pointer-events: none;
       padding: var(--size-0) var(--size-1);
       position: absolute;
