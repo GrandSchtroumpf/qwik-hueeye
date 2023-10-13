@@ -57,12 +57,11 @@
     --overlay: oklch(98% var(--chroma) var(--hue));
     --overlay-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     
-    --base-surface: 100% var(--chroma) var(--hue);
-    --surface-higher: oklch(var(--base-surface) / 1);
-    --surface-high: oklch(var(--base-surface) / 0.82);
-    --surface: oklch(96% var(--chroma) var(--hue));
-    --surface-low: oklch(var(--base-surface) / 0.50);
-    --surface-lower: oklch(var(--base-surface) / 0.32);
+    --surface-higher: oklch(90% var(--chroma) var(--hue));
+    --surface-high: oklch(92% var(--chroma) var(--hue));
+    --surface: oklch(94% var(--chroma) var(--hue));
+    --surface-low: oklch(96% var(--chroma) var(--hue));
+    --surface-lower: oklch(100% var(--chroma) var(--hue));
   
     --disabled: oklch(50% 0 var(--hue));
     --outline: oklch(30% var(--chroma) var(--hue));
@@ -106,12 +105,11 @@
           
       --overlay: oklch(25% var(--chroma) var(--hue));
       
-      --base-surface: 90% var(--chroma) var(--hue);
-      --surface-higher: oklch(var(--base-surface) / 0.32);
-      --surface-high: oklch(var(--base-surface) / 0.24);
+      --surface-higher: oklch(32% var(--chroma) var(--hue));
+      --surface-high: oklch(28% var(--chroma) var(--hue));
       --surface: oklch(24% var(--chroma) var(--hue));
-      --surface-low: oklch(var(--base-surface) / 0.12);
-      --surface-lower: oklch(var(--base-surface) / 0.08);
+      --surface-low: oklch(18% var(--chroma) var(--hue));
+      --surface-lower: oklch(12% var(--chroma) var(--hue));
   
       --gradient-start: oklch(30% var(--chroma) var(--hue));
       --gradient-end: oklch(15% var(--chroma) var(--hue));    
@@ -252,6 +250,11 @@
     font-family: inherit;
     white-space: break-spaces;
   }
+
+  input, textarea {
+    font-family: var(--font-family);
+    font-size: 1rem;
+  }
   
   
   //////////////
@@ -261,6 +264,7 @@
   
   a[class*="btn"] {
     text-decoration: none;
+    color: inherit;
   }
   
   .btn, .btn-fill, .btn-outline, .btn-expand {
