@@ -12,4 +12,5 @@ export * from './hue/hue';
 export * from './utils/clsq';
 export * from './utils/cssvar';
 export * from './utils/hooks';
+export * from './utils/attributes';
 export * from './if';
