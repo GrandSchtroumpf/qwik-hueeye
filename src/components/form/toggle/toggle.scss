@@ -6,16 +6,22 @@
   gap: var(--toggle-group-gap, var(--size-1));
   border-radius: var(--size-0);
   overflow: hidden;
-  border: solid 1px var(--outline);
+  border: var(--toggle-group-border);
+  &.outline {
+    --toggle-group-border: solid 1px var(--outline);
+  }
   &.round {
-    border-radius: 24px;
+    border-radius: 40px;
+    & label {
+      border-radius: 40px;
+    }
   }
   &.fill {
-    background-color: var(--local-background);
+    background-color: var(--surface);
     &input:checked + label {
       --toggle-background: var(--color, var(--surface-high));
       --on-toggle-background: var(--on-color, var(--text));
-      background-color: var(--local-backgroud);
+      background-color: var(--toggle-backgroud);
       color: var(--on-color, var(--text));
       &:hover {
         background-color: color-mix(in oklch, var(--on-toggle-background) var(--alpha-hover), var(--toggle-background));
@@ -54,8 +60,8 @@
     &:checked + label {
       --toggle-background: var(--color, var(--surface));
       --on-toggle-background: var(--on-color, var(--text));
-      background-color: var(--toggle-background);
       color: var(--on-toggle-background);
+      background-color: var(--toggle-background);
       &:hover {
         background-color: color-mix(in oklch, var(--on-toggle-background) var(--alpha-hover), var(--toggle-background));
       }
@@ -68,7 +74,6 @@
     text-align: center;
     position: relative;
     border-radius: var(--size-0);
-
     &:hover {
       background-color: color-mix(in oklch, var(--on-color, var(--text)) var(--alpha-hover), transparent);
     }

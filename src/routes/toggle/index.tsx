@@ -9,7 +9,7 @@ export default component$(() => {
     <h1 id="toggle-title">Toggle</h1>
     <article>
       <h2>Select one option</h2>
-      <ToggleGroup>
+      <ToggleGroup class="round">
         <legend>Meal Options</legend>
         <Toggle value="pickles">Pickles</Toggle>
         <Toggle value="tomatoes">Tomatoes</Toggle>
@@ -19,7 +19,7 @@ export default component$(() => {
     </article>
     <article>
       <h2>Vertical options</h2>
-      <ToggleGroup class="vertical">
+      <ToggleGroup class="outline vertical">
         <legend>Meal Options</legend>
         <Toggle value="pickles">Pickles</Toggle>
         <Toggle value="tomatoes">Tomatoes</Toggle>
