@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconExpandAll = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M480-80 240-320l57-57 183 183 183-183 57 57L480-80ZM298-584l-58-56 240-240 240 240-58 56-182-182-182 182Z"/></svg>);

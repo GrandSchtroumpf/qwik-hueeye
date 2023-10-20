@@ -45,25 +45,38 @@ async function fetchSymbolText(icon: Icon) {
   return res.text();
 }
 
+const cmptName = (name: string) => `Icon${toPascalCase(name)}`;
+
 function svgSymbolComponent(name: string, text: string) {
   const svg = text
     .replace('width="24"', 'width="24" aria-hidden="true" fill="currentColor" {...props}');
   return `import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const Icon${toPascalCase(name)} = component$<IntrinsicSVGElements['svg']>((props) => ${svg});
+export const ${cmptName(name)} = component$<IntrinsicSVGElements['svg']>((props) => ${svg});
 `;
 }
 
 async function writeOneSymbol(icon: Icon, folder: string) {
   try {
     const text = await fetchSymbolText(icon);
-    const filename = toKebabCase(icon.name);
     const component = svgSymbolComponent(icon.name, text);
-    const file = join(folder, `${filename}.tsx`);
+    const file = join(folder, `${icon.name}.tsx`);
     await writeFile(file, component);
-    return filename;
+    return icon.name;
   } catch(err) {
     throw new Error(`[SVG - ${icon.name}] ${err}`);
   }
+}
+
+async function writeSymbolRecord(names: string[], folder: string) {
+  const imports = names.map(name => `import { ${cmptName(name)} } from './${name}';`).join('\n');
+  const record = names.map(name => `'${name}': $(${cmptName(name)})`).join('\n');
+  const file = `import { $ } from '@builder.io/qwik';
+${imports}
+export default {
+  ${record}
+};`;
+  const filename = join(folder, 'icon-record.tsx');
+  return writeFile(filename, file);
 }
 
 /** Create one file per icon */
@@ -73,31 +86,41 @@ export async function writeAllIcons(folder: string) {
   const icons = await getSymbols();
   const promises = icons.map(icon => writeOneSymbol(icon, folder));
   const operations = await Promise.allSettled(promises);
-  const filenames: string[] = [];
+  const names: string[] = [];
   for (const operation of operations) {
     if (operation.status === 'rejected') console.error(operation.reason);
-    else filenames.push(operation.value);
+    else names.push(operation.value);
   }
   const index = join(folder, 'index.ts');
-  await writeFile(index, filenames.map(name => `export * from './${name}';`).join('\n'));
+  
+  await Promise.all([
+    writeSymbolRecord(names, folder),
+    writeFile(index, names.map(name => `export * from './${name}';`).join('\n')),
+  ])
 }
 
 
 
 /** Create one file with all the icon path */
 export async function writeIconPath(folder: string) {
+  if (!existsSync(folder)) await mkdir(folder, { recursive: true });
   const icons = await getSymbols();
-  const record: Record<string, string> = {};
   const promises = icons.map(async (icon) => {
-    const text = await fetchSymbolText(icon);
-    const svg = await parse(text);
-    const [path] = svg.children;
-    record[icon.name] = path.attributes.d;
+    try {
+      const text = await fetchSymbolText(icon);
+      const svg = await parse(text);
+      const [path] = svg.children;
+      const filename = join(folder, `${icon.name}.ts`);
+      const file = `export default "${path.attributes.d}";`;
+      return writeFile(filename, file);
+    } catch (err) {
+      console.error(`[Icon ${icon.name}] ${err}`)
+    }
   });
   await Promise.all(promises);
-  const filename = join(folder, 'material.ts');
-  const file = `export default ${JSON.stringify(record)};`;
-  await writeFile(filename, file);
+  const index = join(folder, 'index.ts');
+  const imports = icons.map(i => `'${i.name}': import('./${i.name}'),`).join('\n');
+  await writeFile(index, `export default {\n${imports}\n};`)
 }
 
 
@@ -110,6 +133,7 @@ export interface IconMetadata {
 }
 /** Create a file with all the icons metadata */
 export async function writeIconList(folder: string) {
+  if (!existsSync(folder)) await mkdir(folder, { recursive: true });
   const symbols = await getSymbols();
   const result: IconMetadata[] = [];
   for (const icon of symbols) {
@@ -117,7 +141,6 @@ export async function writeIconList(folder: string) {
     const categories = icon.categories.map(c => c.split('&')).flat();
     result.push({ name, version, categories, tags, filename: toKebabCase(name) });
   }
-  if (!existsSync(folder)) await mkdir(folder, { recursive: true });
   const filename = join(folder, 'icons.json');
   await writeFile(filename, JSON.stringify(result));
 }

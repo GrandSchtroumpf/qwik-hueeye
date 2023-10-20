@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconLanguageFrench = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M160-280v-400h280v80H240v80h160v80H240v160h-80Zm360 0v-400h200q33 0 56.5 23.5T800-600v80q0 32-22 54.5T726-440l74 160h-84l-75-160h-41v160h-80Zm80-240h120v-80H600v80Z"/></svg>);

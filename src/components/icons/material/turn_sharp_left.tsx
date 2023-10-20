@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconTurnSharpLeft = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M640-120v-240H320q-33 0-56.5-23.5T240-440v-248l-64 64-56-56 160-160 160 160-56 56-64-64v248h320q33 0 56.5 23.5T720-360v240h-80Z"/></svg>);
