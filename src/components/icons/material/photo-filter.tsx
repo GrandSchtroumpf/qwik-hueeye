@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconPhotoFilter = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360v80H200v560h560v-360h80v360q0 33-23.5 56.5T760-120H200Zm280-200-50-110-110-50 110-50 50-110 50 110 110 50-110 50-50 110Zm200-240-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Z"/></svg>);
