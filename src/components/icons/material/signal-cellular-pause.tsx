@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconSignalCellularPause = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="m80-80 800-800v440h-80v-247L273-160h247v80H80Zm520 0v-280h80v280h-80Zm160 0v-280h80v280h-80ZM537-424Z"/></svg>);

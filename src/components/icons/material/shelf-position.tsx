@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconShelfPosition = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h600q33 0 56.5 23.5T880-760v560q0 33-23.5 56.5T800-120H200Zm0-200v120h600v-120H200Zm480-80h120v-360H680v360Zm-480 0h120v-360H200v360Zm200 0h200v-360H400v360Z"/></svg>);

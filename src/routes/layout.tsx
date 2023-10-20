@@ -5,12 +5,23 @@ import { SvgGradient } from 'qwik-hueeye';
 import { Toaster, useToasterProvider } from 'qwik-hueeye';
 import { clsq } from 'qwik-hueeye';
 import styles from './layout.scss?inline';
+import { getAllIcons } from '../utils/material-icons';
+import { server$ } from '@builder.io/qwik-city';
+import { join } from 'path';
+import { cwd } from 'process';
+
+const query = server$(async function() {
+  const folder = join(cwd(), 'src/components/icons/material');
+  await getAllIcons(folder);
+
+})
 
 export default component$(() => {
   useStyles$(styles);
   useToasterProvider();
   const { hue } = useHueEye();
   const open = useSignal(false);
+  query();
 
   return <>
     <div class={clsq('nav-overlay', open.value ? 'open' : 'close')} onClick$={() => open.value = false}>

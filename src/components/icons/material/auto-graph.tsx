@@ -1,0 +1,2 @@
+import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
+export const IconAutoGraph = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="m340-600-44-96-96-44 96-44 44-96 44 96 96 44-96 44-44 96Zm260 120-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Zm-440 80-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Zm20 260-60-60 300-300 160 160 284-319 56 56-340 383-160-160-240 240Z"/></svg>);
