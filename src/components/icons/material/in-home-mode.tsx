@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconInHomeMode = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M480-529ZM160-160v-400H40l440-360 440 360H800v40h-80v-101L480-817 240-621v381h80v80H160Zm408 80L400-248l56-56 112 112 236-236 56 56L568-80Z"/></svg>);

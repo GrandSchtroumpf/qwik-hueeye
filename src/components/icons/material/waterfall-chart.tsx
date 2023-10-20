@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconWaterfallChart = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M120-160v-280h120v280H120Zm160-240v-160h120v160H280Zm120-200v-160h120v160H400Zm160-80v-120h120v120H560Zm160 520v-640h120v640H720Z"/></svg>);

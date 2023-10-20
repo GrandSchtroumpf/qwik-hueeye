@@ -61,6 +61,7 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "@builder.io/qwik-worker": "^0.0.1"
+    "@builder.io/qwik-worker": "^0.0.1",
+    "svgson": "^5.3.1"
   }
 }

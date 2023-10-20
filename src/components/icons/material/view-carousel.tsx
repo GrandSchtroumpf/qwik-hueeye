@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconViewCarousel = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M80-680h160v400H80v-400Zm200-80h400v560H280v-560Zm80 80v400-400Zm360 0h160v400H720v-400Zm-360 0v400h240v-400H360Z"/></svg>);

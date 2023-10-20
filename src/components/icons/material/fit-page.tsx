@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconFitPage = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M120-120v-720h80v720h-80Zm320 0v-80h80v80h-80Zm0-160v-80h80v80h-80ZM280-440v-80h80v80h-80Zm160 0v-80h80v80h-80Zm160 0v-80h80v80h-80ZM440-600v-80h80v80h-80Zm0-160v-80h80v80h-80Zm320 640v-720h80v720h-80Z"/></svg>);
