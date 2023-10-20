@@ -1,3 +1,17 @@
 .icon-list {
-  --grid-item-width: 50px;
+  --grid-item-width: 125px;
+  --icon-size: 48px;
+  color: var(--text-variant);
+  .btn {
+    overflow: hidden;
+  }
+  .btn:hover {
+    color: var(--text);
+  }
+  p {
+    font-size: small;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }

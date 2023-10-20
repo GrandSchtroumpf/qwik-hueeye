@@ -40,6 +40,7 @@
     --secondary-hue: calc(var(--hue) + 90);
   
     --text: oklch(10% var(--chroma) var(--hue));
+    --text-variant: oklch(40% var(--chroma) var(--hue));
     --background-dim: oklch(90% var(--chroma) var(--hue));
     --background: oklch(92% var(--chroma) var(--hue));
     --background-bright: oklch(98% var(--chroma) var(--hue));
@@ -88,6 +89,7 @@
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --text: oklch(100% var(--chroma) var(--hue));
+      --text-variant: oklch(85% var(--chroma) var(--hue));
       --background-dim: oklch(10% var(--chroma) var(--hue));
       --background: oklch(15% var(--chroma) var(--hue));
       --background-bright: oklch(20% var(--chroma) var(--hue));
@@ -275,9 +277,14 @@
   }
   
   .btn, .btn-fill, .btn-icon, .btn-outline, .btn-expand {
+    display: flex;
+    gap: var(--size-1);
     font-size: 0.9rem;
     border-radius: var(--btn-radius, var(--size-1));
     box-sizing: border-box;
+    &.vertical {
+      flex-direction: column;
+    }
     &.flat {
       --btn-radius: 0;
     }
@@ -323,7 +330,7 @@
     border: none;
     padding: 8px 16px;
     border: none;
-    color: var(--color, var(--text));
+    color: var(--color, currentColor);
     &.gradient {
       background-image: linear-gradient(
         var(--gradient-direction),
@@ -349,6 +356,9 @@
       &:active::before {
         background-color: var(--gradient-start, var(--surface));
         opacity: var(--alpha-focus);
+      }
+      svg {
+        fill: url(#svg-gradient);
       }
     }
   }
@@ -383,14 +393,8 @@
   
   .btn-icon {
     border: none;
-    height: 40px;
-    width: 40px;
+    line-height: 0;
     padding: 8px;
-    svg {
-      height: 24px;
-      width: 24px;
-      fill: var(--color, currentColor);
-    }
     &.gradient {
       svg {
         fill: url(#svg-gradient);
@@ -398,13 +402,23 @@
     } 
   }
   
-  .btn svg, .btn-fill svg, .btn-outline svg, .btn-expand svg {
-    fill: currentColor;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
+  .btn, .btn-icon, .btn-outline, .btn-fill, .btn-expand {
+    svg {
+      height: var(--icon-size, 24px);
+      width: var(--icon-size, 24px);
+      flex-shrink: 0;
+    }
   }
-  
+  .btn, .btn-icon, .btn-outline, .btn-expand:not(.fill) {
+    svg {
+      fill: var(--color, currentColor);
+    }
+  }
+  .btn-fill, .btn-expand.fill {
+    svg {
+      fill: var(--on-color, currentColor);
+    }
+  }
   
   
   .btn-expand {

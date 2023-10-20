@@ -21,10 +21,12 @@ export default component$(() => {
   return (
     <section id="icon-page" aria-labelledby="icon-title">
       <h1 id="icon-title">Icons</h1>
+      <p>Currently HueEye only support material icons</p>
       <ActionGrid class="icon-list">
         {icons.value.map(icon => (
-        <ButtonItem key={icon.name} class="btn-icon" onClick$={() => copy({ name: 'arrow_back' })}>
+        <ButtonItem key={icon.name} class="btn vertical" onClick$={() => copy({ name: 'arrow_back' })}>
           <MatIcon name={icon.name as any} width="48" height="48" />
+          <p>{icon.name}</p>
         </ButtonItem>
         ))}
       </ActionGrid>
