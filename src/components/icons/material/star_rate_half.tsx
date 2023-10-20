@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconStarRateHalf = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M480-604v236l96 74-36-122 90-64H518l-38-124ZM233-80l93-304L80-560h304l96-320 96 320h304L634-384l93 304-247-188L233-80Z"/></svg>);

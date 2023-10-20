@@ -15,3 +15,4 @@ export * from './utils/hooks';
 export * from './utils/attributes';
 export * from './if';
 export * from './icons/icon';
+export * from './icons/all-icons';
