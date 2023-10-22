@@ -18,6 +18,14 @@
       --ease-back-in-out: ease-in-out;
     }
   }
+
+  .compact {
+    --size-0: 2px;
+    --size-1: 4px;
+    --size-2: 8px;
+    --size-3: 16px;
+    --size-4: 24px;
+  }
   
   
   :root, ::backdrop {

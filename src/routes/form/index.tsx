@@ -8,7 +8,7 @@ import { ToggleGroup, Toggle } from "qwik-hueeye";
 import { useToaster } from "qwik-hueeye";
 import { RadioGroup, Radio } from "qwik-hueeye";
 import { CheckAll, CheckList, CheckItem } from "qwik-hueeye";
-import { SwitchGroup, Switch } from "qwik-hueeye";
+import { SwitchGroup, SwitchItem } from "qwik-hueeye";
 import styles from './index.scss?inline';
 
 
@@ -101,8 +101,8 @@ export default component$(() => {
     </Range>
     <SwitchGroup name="switch" class="outline">
       <legend>Switches</legend>
-      <Switch name="a">Switch A</Switch>
-      <Switch name="b">Switch B</Switch>
+      <SwitchItem name="a">Switch A</SwitchItem>
+      <SwitchItem name="b">Switch B</SwitchItem>
     </SwitchGroup>
     <ToggleGroup name="toggle" class="outline primary">
       <legend>Toggle Group</legend>

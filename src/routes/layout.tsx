@@ -6,6 +6,7 @@ import { Toaster, useToasterProvider } from 'qwik-hueeye';
 import { clsq } from 'qwik-hueeye';
 import styles from './layout.scss?inline';
 
+
 export default component$(() => {
   useStyles$(styles);
   useToasterProvider();

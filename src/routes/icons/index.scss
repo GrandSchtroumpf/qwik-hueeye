@@ -1,17 +1,35 @@
-.icon-list {
-  --grid-item-width: 125px;
-  --icon-size: 48px;
-  color: var(--text-variant);
-  .btn {
-    overflow: hidden;
+#icon-page {
+  .search {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2);
+    position: sticky;
+    top: calc(-1 * var(--size-2));
+    padding: var(--size-1) var(--size-2);
+    background-color: var(--surface-low);
+    border-radius: var(--size-1);
   }
-  .btn:hover {
-    color: var(--text);
+  .icon-list {
+    --grid-item-width: 125px;
+    --icon-size: 48px;
+    color: var(--text-variant);
+    .btn {
+      overflow: hidden;
+    }
+    .btn:hover {
+      color: var(--text);
+    }
+    p {
+      font-size: small;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
-  p {
-    font-size: small;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .paginator {
+    display: grid;
+    place-items: center;
+    padding: var(--size-2);
+    color: var(--text-variant);
   }
 }

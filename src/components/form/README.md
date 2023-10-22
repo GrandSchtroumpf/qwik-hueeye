@@ -98,8 +98,8 @@ type: `Record<string, boolean>`
 <Form initialValue={{ notifications: { email: true, phone: false } }}>
   <SwitchGroup name="notifications">
     <legend>Notifications</legend>
-    <Switch name="email">Email</Switch>
-    <Switch name="phone">Phone</Switch>
+    <SwitchItem name="email">Email</SwitchItem>
+    <SwitchItem name="phone">Phone</SwitchItem>
   </SwitchGroup>
 </Form>
 ```

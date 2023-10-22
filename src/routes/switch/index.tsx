@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { SwitchGroup, Switch } from "qwik-hueeye";
+import { SwitchGroup, SwitchItem } from "qwik-hueeye";
 import style from './index.scss?inline';
 
 
@@ -11,10 +11,10 @@ export default component$(() => {
       <h2>Select one option</h2>
       <SwitchGroup>
         <legend>Meal Options</legend>
-        <Switch value="pickles">Pickles</Switch>
-        <Switch value="tomatoes">Tomatoes</Switch>
-        <Switch value="lettuce">Lettuce</Switch>
-        <Switch value="cheese">Cheese</Switch>
+        <SwitchItem value="pickles">Pickles</SwitchItem>
+        <SwitchItem value="tomatoes">Tomatoes</SwitchItem>
+        <SwitchItem value="lettuce">Lettuce</SwitchItem>
+        <SwitchItem value="cheese">Cheese</SwitchItem>
       </SwitchGroup>
     </article>
   </section>
