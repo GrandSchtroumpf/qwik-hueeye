@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconHouseSiding = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M200-160v-320H80l400-360 400 360H760v320h-80v-80H280v80h-80Zm178-480h204l-102-92-102 92Zm-98 160h400v-72l-9-8H289l-9 8v72Zm0 160h400v-80H280v80Z"/></svg>);

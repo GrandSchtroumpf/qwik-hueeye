@@ -1,5 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
+import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
 
 import './root.scss';
@@ -35,6 +36,10 @@ export const RouterHead = component$(() => {
 });
 
 export default () => {
+  const iconConfig: IconConfig = {
+    baseUrl: '/lib/icons/material',
+    defaultParams: { fill: false, weight: 100 },
+  }
 
   return (
     <QwikCityProvider>
@@ -43,7 +48,7 @@ export default () => {
         <RouterHead />
       </head>
       <body>
-        <HueEyeProvider storage>
+        <HueEyeProvider storage icon={iconConfig}>
           <RouterOutlet />
           <ServiceWorkerRegister />
         </HueEyeProvider>

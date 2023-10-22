@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconRoundaboutLeft = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M600-120v-244q0-29 19-51t48-27q58-9 95.5-54T800-600q0-66-47-113t-113-47q-59 0-104 37.5T482-627q-5 29-27 48t-51 19H233l64 64-57 56L80-600l160-160 56 56-63 64h170q14-88 81.5-144T640-840q100 0 170 70t70 170q0 88-56 155.5T680-363v243h-80Z"/></svg>);

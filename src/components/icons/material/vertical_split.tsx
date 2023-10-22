@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconVerticalSplit = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M120-440v80h320v-80H120Zm0 160v80h320v-80H120Zm0-320v80h320v-80H120Zm0-160v80h320v-80H120Zm480 80v400-400Zm-80-80h320v560H520v-560Zm80 80v400h160v-400H600Z"/></svg>);

@@ -1,6 +1,7 @@
 import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$, useTask$, useStyles$ } from "@builder.io/qwik";
 import { SvgGradient } from "../svg-gradient";
 import style from './hue.scss?inline';
+import { IconConfig, useIconProvider } from "../icons/useIcon";
 
 interface HueEyeState {
   hue: Signal<number | undefined>;
@@ -35,9 +36,10 @@ export const useHueEye = () => useContext(HueEyeContext);
 
 interface HueEyeProps {
   storage?: boolean;
+  icon?: IconConfig;
 }
 
-export const HueEyeProvider = component$(({ storage }: HueEyeProps) => {
+export const HueEyeProvider = component$(({ storage, icon }: HueEyeProps) => {
   useStyles$(style);
   const state: HueEyeState = {
     hue: useSignal()
@@ -49,6 +51,7 @@ export const HueEyeProvider = component$(({ storage }: HueEyeProps) => {
     document.documentElement.style.setProperty('--hue', change.toString());
   });
   useContextProvider(HueEyeContext, state);
+  useIconProvider(icon);
   return <>
     {storage && <HueEyeSession/> }
     <Slot/>

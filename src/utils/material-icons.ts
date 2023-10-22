@@ -2,6 +2,7 @@ import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { join } from "path";
 import { parse } from 'svgson';
+import { cwd } from "process";
 
 interface Metadata {
   host: string;
@@ -20,11 +21,29 @@ interface Icon {
   sizes_px: number[];
 }
 
+interface SymbolParams {
+  fill?: boolean;
+  weight?: 100 | 200 | 300 | 400 | 500;
+}
+
+const folder = join(cwd(), 'public/lib/icons/material');
+
 const toPascalCase = (name: string) => {
   return name.split('_').map(x => x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()).join('');
 }
 const toKebabCase = (name: string) => name.split('_').join('-');
-const symbolUrl = (icon: Icon) => `https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/${icon.name}/default/24px.svg`
+
+const symbolMode = (params: SymbolParams) => {
+  const defaultWeight = !params.weight || params.weight === 400;
+  if (!params.fill && defaultWeight) return 'default';
+  const weight = defaultWeight ? '' : `wght${params.weight}`;
+  const fill = params.fill ? 'fill1' : '';
+  return weight+fill;
+}
+const symbolUrl = (icon: Icon, params: SymbolParams) => {
+  const mode = symbolMode(params);
+  return `https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/${icon.name}/${mode}/24px.svg`;
+}
 // const iconUrl = (icon: Icon) => `https://fonts.gstatic.com/s/i/materialiconsoutlined/${icon.name}/v${icon.version}/24px.svg`
 
 
@@ -39,8 +58,8 @@ async function getSymbols() {
   return metadata.icons.filter(icon => !icon.unsupported_families.includes('Material Symbols Outlined'));
 }
 
-async function fetchSymbolText(icon: Icon) {
-  const url = symbolUrl(icon);
+async function fetchSymbolText(icon: Icon, params: SymbolParams) {
+  const url = symbolUrl(icon, params);
   const res = await fetch(url);
   return res.text();
 }
@@ -55,9 +74,9 @@ export const ${cmptName(name)} = component$<IntrinsicSVGElements['svg']>((props)
 `;
 }
 
-async function writeOneSymbol(icon: Icon, folder: string) {
+async function writeOneSymbolComponent(icon: Icon) {
   try {
-    const text = await fetchSymbolText(icon);
+    const text = await fetchSymbolText(icon, {});
     const component = svgSymbolComponent(icon.name, text);
     const file = join(folder, `${icon.name}.tsx`);
     await writeFile(file, component);
@@ -67,7 +86,7 @@ async function writeOneSymbol(icon: Icon, folder: string) {
   }
 }
 
-async function writeSymbolRecord(names: string[], folder: string) {
+async function writeSymbolRecord(names: string[]) {
   const imports = names.map(name => `import { ${cmptName(name)} } from './${name}';`).join('\n');
   const record = names.map(name => `'${name}': $(${cmptName(name)})`).join('\n');
   const file = `import { $ } from '@builder.io/qwik';
@@ -80,11 +99,11 @@ export default {
 }
 
 /** Create one file per icon */
-export async function writeAllIcons(folder: string) {
+export async function writeAllIcons() {
   if (!existsSync(folder)) await mkdir(folder, { recursive: true });
   // Get only material symbols, not icons
   const icons = await getSymbols();
-  const promises = icons.map(icon => writeOneSymbol(icon, folder));
+  const promises = icons.map(icon => writeOneSymbolComponent(icon));
   const operations = await Promise.allSettled(promises);
   const names: string[] = [];
   for (const operation of operations) {
@@ -94,33 +113,67 @@ export async function writeAllIcons(folder: string) {
   const index = join(folder, 'index.ts');
   
   await Promise.all([
-    writeSymbolRecord(names, folder),
+    writeSymbolRecord(names),
     writeFile(index, names.map(name => `export * from './${name}';`).join('\n')),
   ])
 }
 
 
+const allParams: SymbolParams[] = [
+  {},
+  { weight: 100 },
+  { weight: 200 },
+  { weight: 300 },
+  { weight: 500 },
+  { fill: true },
+  { fill: true, weight: 100 },
+  { fill: true, weight: 200 },
+  { fill: true, weight: 300 },
+  { fill: true, weight: 500 },
+];
 
-/** Create one file with all the icon path */
-export async function writeIconPath(folder: string) {
-  if (!existsSync(folder)) await mkdir(folder, { recursive: true });
-  const icons = await getSymbols();
-  const promises = icons.map(async (icon) => {
-    try {
-      const text = await fetchSymbolText(icon);
+export async function writeOneSymbolJson(icon: Icon, paramsList: SymbolParams[]) {
+  if (paramsList.length === 1) {
+    const text = await fetchSymbolText(icon, paramsList[0]);
+    const svg = await parse(text);
+    const [path] = svg.children;
+    const filename = join(folder, `${icon.name}.txt`);
+    return writeFile(filename, path.attributes.d);
+  } else {
+    const record: Record<string, string> = {};
+    const promises = paramsList.map(async params => {
+      const text = await fetchSymbolText(icon, params);
       const svg = await parse(text);
       const [path] = svg.children;
-      const filename = join(folder, `${icon.name}.ts`);
-      const file = `export default "${path.attributes.d}";`;
-      return writeFile(filename, file);
-    } catch (err) {
-      console.error(`[Icon ${icon.name}] ${err}`)
-    }
-  });
-  await Promise.all(promises);
-  const index = join(folder, 'index.ts');
-  const imports = icons.map(i => `'${i.name}': import('./${i.name}'),`).join('\n');
-  await writeFile(index, `export default {\n${imports}\n};`)
+      const mode = symbolMode(params);
+      record[mode] = path.attributes.d;
+    });
+    await Promise.all(promises);
+    const filename = join(folder, `${icon.name}.json`);
+    return writeFile(filename, JSON.stringify(record));
+  }
+}
+
+/** Create one file with all the icon path */
+export async function writeIconPath(paramsList: SymbolParams[] = allParams) {
+  if (!existsSync(folder)) await mkdir(folder, { recursive: true });
+  const icons = await getSymbols();
+  let cursor = 0;
+  for (let i = 200; i < icons.length + 200; i += 200) {
+    console.log(`Fetching ${cursor}-${i} icons with params ${JSON.stringify(paramsList)}`);
+    const promises = icons.slice(cursor, i).map(async (icon) => {
+      try {
+        return writeOneSymbolJson(icon, paramsList)
+      } catch (err) {
+        console.error(`[Icon ${icon.name}] ${err}`)
+      }
+    });
+    cursor = i;
+    await Promise.all(promises);
+  }
+
+  // const types= icons.map(i => `"${i.name}"`).join(' | ');
+  // console.log(`export type MatIconNames = ${types}`);
 }
 
 
@@ -132,7 +185,7 @@ export interface IconMetadata {
   tags: string[];
 }
 /** Create a file with all the icons metadata */
-export async function writeIconList(folder: string) {
+export async function writeIconList() {
   if (!existsSync(folder)) await mkdir(folder, { recursive: true });
   const symbols = await getSymbols();
   const result: IconMetadata[] = [];

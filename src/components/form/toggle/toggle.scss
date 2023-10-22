@@ -16,21 +16,6 @@
       border-radius: 40px;
     }
   }
-  &.fill {
-    background-color: var(--surface);
-    &input:checked + label {
-      --toggle-background: var(--color, var(--surface-high));
-      --on-toggle-background: var(--on-color, var(--text));
-      background-color: var(--toggle-backgroud);
-      color: var(--on-color, var(--text));
-      &:hover {
-        background-color: color-mix(in oklch, var(--on-toggle-background) var(--alpha-hover), var(--toggle-background));
-      }
-    }
-    & label:hover {
-      background-color: color-mix(in oklch, var(--on-color, var(--text)) var(--alpha-hover), var(--surface));
-    }
-  }
   &.vertical,
   &[aria-orientation="vertical"] {
     flex-direction: column;
@@ -76,6 +61,21 @@
     border-radius: var(--size-0);
     &:hover {
       background-color: color-mix(in oklch, var(--on-color, var(--text)) var(--alpha-hover), transparent);
+    }
+  }
+  &.fill {
+    background-color: var(--surface);
+    &input:checked + label {
+      --toggle-background: var(--color, var(--surface-high));
+      --on-toggle-background: var(--on-color, var(--text));
+      background-color: var(--toggle-backgroud);
+      color: var(--on-color, var(--text));
+      &:hover {
+        background-color: color-mix(in oklch, var(--on-toggle-background) var(--alpha-hover), var(--toggle-background));
+      }
+    }
+    & label:hover {
+      background-color: color-mix(in oklch, var(--on-color, var(--text)) var(--alpha-hover), var(--surface));
     }
   }
 }

@@ -1,2 +1,0 @@
-import { component$, IntrinsicSVGElements } from '@builder.io/qwik';
-export const IconGMobiledata = component$<IntrinsicSVGElements['svg']>((props) => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" aria-hidden="true" fill="currentColor" {...props}><path d="M360-280q-33 0-56.5-23.5T280-360v-240q0-33 23.5-56.5T360-680h200q33 0 56.5 23.5T640-600H360v240h200v-80h-80v-80h160v160q0 33-23.5 56.5T560-280H360Z"/></svg>);

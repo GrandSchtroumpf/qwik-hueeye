@@ -10,6 +10,7 @@ export default extendConfig(baseConfig, () => {
       outDir: './lib-types',
       rollupTypes: true
     })],
+    publicDir: 'public/lib',
     build: {
       target: 'es2020',
       lib: {
