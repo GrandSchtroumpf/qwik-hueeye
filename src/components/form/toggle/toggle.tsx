@@ -1,8 +1,9 @@
 import { component$,  Slot, useStyles$, useContextProvider, useId, useContext, createContextId, useComputed$, $ } from "@builder.io/qwik";
-import type { FieldsetAttributes } from "../types";
+import type { DivAttributes, FieldsetAttributes } from "../types";
 import { clsq, useKeyboard  } from "../../utils";
 import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider, useControlListProvider } from "../control";
 import styles from './toggle.scss?inline';
+import { mergeProps } from "../../utils/attributes";
 
 const ToggleGroupContext = createContextId<{ name: string, multi: boolean }>('ToggleGroupContext');
 
@@ -52,13 +53,12 @@ export const MultiToggleGroup = component$((props: MultiToggleGroupProps) => {
 
 
 
-interface ToggleProps {
+interface ToggleProps extends DivAttributes {
   value: string;
 }
-export const Toggle = component$((props: ToggleProps) => {
+export const Toggle = component$(({ value, ...props}: ToggleProps) => {
   const id = useId();
   const { multi, name } = useContext(ToggleGroupContext);
-  const value = props.value;
   const {bindValue} = useControlValue<string | string[]>();
   const type = multi ? 'checkbox' : 'radio';
   const checked = useComputed$(() => {
@@ -72,7 +72,9 @@ export const Toggle = component$((props: ToggleProps) => {
     bindValue.value = checked.value ? '' : value;
   })
 
-  return  <div class="toggle">
+  const merged = mergeProps(props, { class: 'toggle '});
+
+  return  <div {...merged}>
     {/* Prevent default click to manage toggle behavior */}
     <input id={id} type={type} name={name} checked={checked.value} value={value} onClick$={toggle} preventdefault:click/>
     <label for={id}>

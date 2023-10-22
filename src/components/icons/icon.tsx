@@ -44,7 +44,7 @@ export const MatIcon = component$<MatIconProps>(({ name, filled, weight, eager, 
     return ctx.icons[name]?.[mode] ?? ''
   })
 
-  return <svg id={id} xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960"  {...props}>
+  return <svg id={id} xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960" fill="currentColor" {...props}>
     <path d={d.value} />
   </svg>
 });

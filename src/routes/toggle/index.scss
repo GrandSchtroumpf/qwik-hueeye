@@ -1,5 +1,10 @@
 #toggle-page {
-  article, h1, h2 {
+  & article, h1, h2 {
     margin-bottom: var(--size-2);
+  }
+  & .example-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

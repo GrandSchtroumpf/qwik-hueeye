@@ -1,11 +1,10 @@
 .toggle-group {
   position: relative;
-  padding: var(--toggle-group-padding, var(--size-1) var(--size-2));
+  padding: var(--toggle-group-padding, var(--size-1));
   box-sizing: border-box;
   display: flex;
   gap: var(--toggle-group-gap, var(--size-1));
   border-radius: var(--size-0);
-  overflow: hidden;
   border: var(--toggle-group-border);
   &.outline {
     --toggle-group-border: solid 1px var(--outline);
