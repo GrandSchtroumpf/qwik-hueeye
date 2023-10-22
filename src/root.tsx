@@ -38,7 +38,7 @@ export const RouterHead = component$(() => {
 export default () => {
   const iconConfig: IconConfig = {
     baseUrl: '/lib/icons/material',
-    defaultParams: { fill: true, weight: 100 },
+    defaultParams: { fill: false, weight: 100 },
   }
 
   return (

@@ -67,7 +67,7 @@ export const symbolMode = (params: SymbolParams) => {
 export const useIconProvider = (config: IconConfig = {}) => {
   // TODO: get the absolute path to NPM
   const {
-    baseUrl = '',
+    baseUrl = 'https://raw.githubusercontent.com/GrandSchtroumpf/qwik-hueeye/icon/public/lib/icons/material',
     defaultParams = { fill: false, weight: 400 }
   } = config;
   const location = useLocation();
