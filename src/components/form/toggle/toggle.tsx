@@ -26,11 +26,7 @@ export const ToggleGroup = component$((props: ToggleGroupProps) => {
     name: props.name ?? id
   });
 
-  const change = $((event: any, fieldset: HTMLFieldSetElement) => {
-    onValueChange(fieldset.querySelector<HTMLInputElement>('input:checked[value]')?.value ?? '')
-  })
-  
-  return <fieldset {...attr} ref={rootRef} onChange$={change} class={clsq('toggle-group', props.class)}>
+  return <fieldset {...attr} ref={rootRef} class={clsq('toggle-group', props.class)}>
     <Slot />
   </fieldset>
 });

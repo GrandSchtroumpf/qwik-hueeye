@@ -44,6 +44,10 @@ export const focusNextInput = $((root: HTMLElement, options?: FocusOptions) => {
   const list = root.querySelectorAll('input');
   nextFocus(list, options);
 });
+export const focusNextOption = $((root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>('[role="option"]');
+  nextFocus(list, options);
+});
 
 export const previousFocus = $((list?: NodeListOf<HTMLElement>, options?: FocusOptions) => {
   if (!list) return;
@@ -55,6 +59,10 @@ export const previousFocus = $((list?: NodeListOf<HTMLElement>, options?: FocusO
 });
 export const focusPreviousInput = $((root: HTMLElement, options?: FocusOptions) => {
   const list = root.querySelectorAll('input');
+  previousFocus(list, options);
+});
+export const focusPreviousOption = $((root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>('[role="option"]');
   previousFocus(list, options);
 });
 

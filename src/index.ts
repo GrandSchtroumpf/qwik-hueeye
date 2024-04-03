@@ -1,4 +1,4 @@
-export * from './components/form';
+export * from './components/base-form';
 export * from './components/list';
 export * from './components/dialog/modal';
 export * from './components/dialog/popover';

@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   line-height: inherit;
-  height: 100dvh;
+  min-height: 100dvh;
   position: relative;
   display: grid;
   grid-template-areas: "nav header"

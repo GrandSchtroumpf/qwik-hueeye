@@ -211,7 +211,7 @@ const SingleOption = component$((props: SelectionItemProps) => {
   });
   return <div class="option">
     <input id={id} type="radio" name={name} checked={checked.value} value={value} onClick$={toggle}/>
-    <label for={id}>
+    <label for={id} class={props.class}>
       <Slot/>
     </label>
   </div>
@@ -230,7 +230,7 @@ const MultiOption = component$((props: SelectionItemProps) => {
   });
   return <div class="option">
     <input id={id} type="checkbox" name={name} checked={checked.value} value={value} onClick$={toggle}/>
-    <label for={id}>
+    <label for={id} class={props.class}>
       <Slot/>
     </label>
   </div>

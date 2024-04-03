@@ -1,14 +1,13 @@
-import { component$, event$, useStyles$ } from "@builder.io/qwik";
+import { component$, event$, useStore, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { Form, Input, MultiSelect } from "qwik-hueeye";
-import { Option } from "qwik-hueeye";
+import { Form, Input, Option, RangeEnd, RangeStart, Select } from "qwik-hueeye";
 import { Range, Slider } from "qwik-hueeye";
 import { FormField, Label } from "qwik-hueeye";
 import { ToggleGroup, Toggle } from "qwik-hueeye";
 import { useToaster } from "qwik-hueeye";
 import { RadioGroup, Radio } from "qwik-hueeye";
 import { CheckAll, CheckList, CheckItem } from "qwik-hueeye";
-import { SwitchGroup, SwitchItem } from "qwik-hueeye";
+import { SwitchGroup, Switch } from "qwik-hueeye";
 import styles from './index.scss?inline';
 
 
@@ -35,19 +34,18 @@ export default component$(() => {
   useStyles$(styles);
   const toaster = useToaster();
 
-  const save = event$((value: any, form: HTMLFormElement) => {
+  const save = event$((value: any) => {
     toaster.add('Thank you 😊');
     console.log(value);
-    form.reset();
   });
 
-  const initial = {
+  const initial = useStore({
     title: 'Hello World',
     date: new Date(),
     time: new Date(),
     month: new Date(),
     datetime: new Date(),
-    select: ['tt0480249', 'tt0903747'],
+    selectMulti: ['tt0480249', 'tt0848228'],
     switch: {
       a: true,
       b: false,
@@ -60,64 +58,71 @@ export default component$(() => {
     radio: 'c',
     checkbox: ['a', 'c'],
     toggle: 'medium'
-  };
+  });
 
-  return <Form id="form-page" onSubmit$={save} value={initial}>
-    <FormField class="outline">
-      <Label>Text here</Label>
-      <Input name="title" placeholder="Some Text here" />
+  return <Form id="form-page" bind:value={initial} onFormSubmit$={save}>
+    <FormField class="overlay">
+      <Label>Some Text here</Label>
+      <Input name="title" placeholder="Some Text here" class="outline"/>
     </FormField>
     <fieldset class="date-inputs">
-      <FormField class="outline">
+      <FormField>
         <Label>Date</Label>
-        <Input type="date" name="date" placeholder="Today's date" />
+        <Input type="date" name="date" placeholder="Today's date" class="outline"/>
       </FormField>
-      <FormField class="outline">
+      <FormField>
         <Label>Time</Label>
-        <Input type="time" name="time" placeholder="Today's date" />
+        <Input type="time" name="time" placeholder="Today's date" class="outline"/>
       </FormField>
-      <FormField class="outline">
+      <FormField>
         <Label>Month</Label>
-        <Input type="month" name="month" placeholder="Today's date" />
+        <Input type="month" name="month" placeholder="Today's date" class="outline"/>
       </FormField>
-      <FormField class="outline">
+      <FormField>
         <Label>Datetime</Label>
-        <Input type="datetime-local" name="datetime" placeholder="Today's date" />
+        <Input type="datetime-local" name="datetime" placeholder="Today's date" class="outline"/>
       </FormField>
     </fieldset>
-    <FormField class="outline">
+    <FormField>
       <Label>Select from the list</Label>
-      <MultiSelect name="select" placeholder="Movie">
+      <Select multi name="selectMulti" placeholder="Movie" class="round outline">
         {Object.entries(MOVIES).map(([id, title]) => (
           <Option key={id} value={id}>
             {title}
           </Option>
         ))}
-      </MultiSelect>
+      </Select>
     </FormField>
+    <Select name="radio" class="outline">
+      <Option value="a">Option 1</Option>
+      <Option value="b">Option 2</Option>
+      <Option value="c">Option 3</Option>
+    </Select>
     <Slider name="slider" class="outline" aria-label="Sample slider"></Slider>
+    <h3>Range</h3>
     <Range name="range" class="outline">
-      <legend>Range</legend>
+      <RangeStart />
+      <RangeEnd />
     </Range>
+    <h3>Switches</h3>
     <SwitchGroup name="switch" class="outline">
-      <legend>Switches</legend>
-      <SwitchItem name="a">Switch A</SwitchItem>
-      <SwitchItem name="b">Switch B</SwitchItem>
+      <Switch name="a">Switch A</Switch>
+      <Switch name="b">Switch B</Switch>
     </SwitchGroup>
+    <h3>Toggle Group</h3>
     <ToggleGroup name="toggle" class="outline primary">
-      <legend>Toggle Group</legend>
       <Toggle value="low">low</Toggle>
       <Toggle value="medium">medium</Toggle>
       <Toggle value="high">high</Toggle>
     </ToggleGroup>
+    <h3>Radio Group</h3>
     <RadioGroup name="radio" class="outline">
-      <legend>Radio Group</legend>
       <Radio value="a">Radio 1</Radio>
       <Radio value="b">Radio 2</Radio>
       <Radio value="c">Radio 3</Radio>
     </RadioGroup>
+    <h3>Some Checkbox</h3>
     <CheckList name="checkbox" class="outline">
-      <legend>Some Checkbox</legend>
       <CheckAll>Check All</CheckAll>
       <CheckItem value="a">Checkbox 1</CheckItem>
       <CheckItem value="b">Checkbox 2</CheckItem>

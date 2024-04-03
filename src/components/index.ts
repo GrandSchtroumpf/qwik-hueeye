@@ -1,4 +1,4 @@
-export * from './form';
+export * from './base-form';
 export * from './list';
 export * from './dialog/modal';
 export * from './dialog/popover';

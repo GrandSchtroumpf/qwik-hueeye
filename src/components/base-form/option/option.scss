@@ -1,0 +1,27 @@
+[role="option"] {
+  cursor: pointer;
+  display: flex;
+  padding: var(--size-1) var(--size-2);
+  &:hover {
+    background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
+  }
+  &:focus-visible {
+    outline: none;
+    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--overlay));
+  }
+  &[aria-checked="true"], &[aria-selected="true"] {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      left: var(--size-0);
+      top: var(--size-1);
+      bottom: var(--size-1);
+      width: var(--size-0);
+      border-radius: var(--size-0);
+      color: var(--on-color, var(--on-primary));
+      background-color: var(--color, var(--primary));
+      animation: fade 0.2s ease-out;
+    }
+  }
+}

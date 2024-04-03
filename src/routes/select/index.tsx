@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { Select, Label, FormField, Option, MultiSelect } from "qwik-hueeye";
+import { Select, Label, FormField, Option } from "qwik-hueeye";
 import style from './index.scss?inline';
 
 const options: Record<string, string> = {
@@ -18,7 +18,7 @@ export default component$(() => {
       <FormField>
         <Label>Meal Options</Label> 
         <Select placeholder="Options" value="pickles">
-          <Option>-- Select an Option --</Option>
+          <Option value="">-- Select an Option --</Option>
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}
@@ -29,11 +29,11 @@ export default component$(() => {
       <h2>Multiple options</h2>
       <FormField class="fill">
         <Label>Meal Options</Label> 
-        <MultiSelect placeholder="Options" value={['pickles', 'cheese']}>
+        <Select multi placeholder="Options" value={['pickles', 'cheese']}>
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}
-        </MultiSelect>
+        </Select>
       </FormField>
     </article>
 

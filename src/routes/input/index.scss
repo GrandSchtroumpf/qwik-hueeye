@@ -17,6 +17,22 @@
     gap: var(--size-1);
     padding: 0;
     border: none;
-    margin-bottom: var(--size-2)
+    margin-bottom: var(--size-2);
+    box-sizing: border-box;
+  }
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .he-form-field {
+    max-width: 250px;
+  }
+  output {
+    opacity: 0.6;
+    padding: var(--size-1) var(--size-2);
+  }
+  input {
+    flex: 1;
   }
 }

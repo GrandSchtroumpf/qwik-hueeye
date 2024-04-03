@@ -1,0 +1,49 @@
+@use "./base";
+.range {
+  @include base.fieldset();
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  input {
+    @include base.input();
+    width: 50%;
+  }
+  .track {
+    @include base.track();
+    position: absolute;
+    width: calc(100% - (2 * var(--fieldset-padding-inline))); // Remove padding
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      right: calc((1 - var(--initial-start, 0)) * 100%);
+      transition: transform 0.1s;
+      background-color: var(--outline);
+      transform: translateX(var(--start));
+    }
+    &::after {
+      left: calc((1 - var(--initial-end, 0)) * 100%);
+      transform: translateX(var(--end));
+    }
+  }
+  .thumb {
+    @include base.thumb();
+    position: absolute;
+    &.start {
+      left: calc(var(--initial-start, 0) * 100%);
+      transform: translateX(var(--start));
+    }
+    &.end {
+      right: calc(var(--initial-end, 1) * 100%);
+      transform: translateX(var(--end));
+    }
+  }
+}
+.sliders {
+  display: flex;
+  grid-area: 1/1;
+ 
+}

@@ -1,0 +1,49 @@
+.field {
+  box-sizing: border-box;
+  padding: var(--size-1) var(--size-2);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: none;
+  background-color: transparent;
+  display: inline-flex;
+  border: none;
+  
+  &.round {
+    border-radius: var(--size-4);
+    &:not(.outline) {
+      border: none;
+    }
+  }
+  &.outline {
+    border: solid 1px var(--outline);
+    &:not(.round) {
+      border-radius: var(--size-0);
+    }
+    &:hover {
+      background-color: var(--surface);
+    }
+    &:focus-visible {
+      outline: none;
+      border-color: var(--primary);
+      background-color: var(--surface-higher);
+    }
+  }
+  &.fill {
+    background-color: var(--surface);
+    &:hover {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--surface));
+    }
+    &:focus-visible {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--surface));
+    }
+  }
+  &.underline {
+    outline: none;
+    border-bottom: solid 2px var(--outline);
+    &:focus-within {
+      border-bottom-color: var(--primary);
+    }
+  }
+
+}
+
