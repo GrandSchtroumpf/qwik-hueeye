@@ -40,7 +40,7 @@ export function useFormProvider<T extends ControlGroup>(props: FormControlProps<
     }
   });
   useContextProvider(GroupContext, { control: form, onChange });
-  return form;
+  return { form, onChange };
 }
 
 export interface ControlProps<T> {
@@ -91,6 +91,8 @@ export function useGroupControlProvider<T extends ControlGroup>(
   const store = useStore(copyStore(initial));
   const control = bindValue ?? fromParentStore<T>(parent, name) ?? store;
 
+  if (parent && name) parent[name] ||= initial;
+
   const onChange = $((value: Partial<T>) => {
     const group = bindValue ?? fromParentStore<ControlGroup>(parent, name) ?? store;
     if (!group) return;
@@ -123,6 +125,8 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   const initial = untrack(() => fromParent<T[]>(parent, name) ?? value ?? [] as T[]);
   const store = useStore(copyStore(initial));
   const list = useComputed$(() => bindValue ?? fromParentStore<T[]>(parent, name) ?? store);
+
+  if (parent && name) parent[name] ||= initial;
 
   const set = $((value: T[]) => {
     if (bindValue) bindValue.splice(0, bindValue.length, ...value);
@@ -172,6 +176,8 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
   const { control: parent } = useGroupControl<T | undefined>();
   const initial = untrack(() => fromParent<T>(parent, name) ?? value);
   const signal = useSignal<T | undefined>(initial);
+
+  if (parent && name) parent[name] ||= initial;
 
   // Input
   const control: Readonly<Signal<T | undefined>> = useComputed$(() => {
