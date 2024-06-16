@@ -1,12 +1,15 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
-import { Link, StaticGenerateHandler, useLocation } from '@builder.io/qwik-city';
 import pokemons from '../pokemon.json';
-import styles from './index?inline';
+import { component$ } from '@builder.io/qwik';
+import { Link, StaticGenerateHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
+
+export const usePokemon = routeLoader$((req) => {
+  return pokemons.find(p => p.name === req.params.name)
+});
 
 export default component$(() => {
-  useStylesScoped$(styles);
-  const { params, prevUrl, url } = useLocation();
-  const pokemon = pokemons.find(p => p.name === params.name);
+  // useStylesScoped$(styles);
+  const { prevUrl, url } = useLocation();
+  const pokemon = usePokemon();
   const back = prevUrl?.toString() === url.toString() ? '..' : prevUrl?.toString();
   return <>
     <nav aria-label="breadcrumb">
@@ -18,9 +21,9 @@ export default component$(() => {
       </Link>
     </nav>
     <section>
-      <img width="150" height="150" src={pokemon?.img} alt={pokemon?.name}/>
+      <img width="150" height="150" src={pokemon.value?.img} alt={pokemon.value?.name}/>
       <article>
-        <h1>{pokemon?.name}</h1>
+        <h1>{pokemon.value?.name}</h1>
       </article>
     </section>
   </>

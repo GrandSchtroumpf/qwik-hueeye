@@ -35,7 +35,7 @@ export const useToasterProvider = () => {
       params.duration ||= 1500;
       params.position ||= 'center';
       params.role ||= 'status';
-      flip(toaster.value);
+      toastFlip(toaster.value);
       toasts.value = toasts.value.concat({ content, ...params } as ToastProps);
     }),
     remove: $((id: string) => {
@@ -48,7 +48,7 @@ export const useToasterProvider = () => {
   return service;
 }
 
-function flip(toaster?: HTMLElement) {
+function toastFlip(toaster?: HTMLElement) {
   if (!toaster) return;
   const previous: Record<string, number> = {};
   const list = toaster.querySelectorAll('li');
@@ -96,7 +96,7 @@ export const Toast = component$((props: ToastProps) => {
     const leave = () => {
       leaving.value = true;
       ref.value?.addEventListener('animationend', () => {
-        flip(toaster.value);
+        toastFlip(toaster.value);
         toasts.value = toasts.value.filter(t => t.id !== props.id);
       }, { once: true });
     };

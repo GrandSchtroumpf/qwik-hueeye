@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@builder.io/qwik-worker": "^0.0.1",
-    "svgson": "^5.3.1"
+    "svgson": "^5.3.1",
+    "vite-bundle-visualizer": "^1.2.1"
   }
 }

@@ -25,7 +25,7 @@ interface DetailsService {
   opened: Signal<boolean>;
 }
 
-const flip = $((ids: string[], root: HTMLUListElement) => {
+const accordionFlip = $((ids: string[], root: HTMLUListElement) => {
   const state = new Map<string, DOMRect>();
   const list = root.querySelectorAll<HTMLElement>('li.details');
   const openingPanels: HTMLElement[] = [];
@@ -104,7 +104,7 @@ export const Accordion = component$((props: AccordionProps) => {
   });
   useTask$(({ track }) => {
     track(() => state.opened);
-    if (isBrowser) flip(state.opened, ref.value!);
+    if (isBrowser) accordionFlip(state.opened, ref.value!);
   });
   useContextProvider(AccordionContext, {
     state,

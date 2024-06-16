@@ -1,8 +1,11 @@
 import { component$, $, useStyles$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { ActionGrid, ButtonItem, Form, MatIcon, Toggle, ToggleGroup, useToaster, Switch } from "../../components";
 import { IconWeight } from "../../components/icons/useIcon";
-import icons from './material-icons.json';
+import matIcons from './material-icons.json';
 import styles from './index.scss?inline';
+import { routeLoader$ } from "@builder.io/qwik-city";
+
+export const useIcons = routeLoader$(() =>  matIcons);
 
 export default component$(() => {
   useStyles$(styles);
@@ -15,13 +18,14 @@ export default component$(() => {
     navigator.clipboard.writeText(icon.name);
     toaster.add('Icon name copied to clipboard');
   });
+  const icons = useIcons();
 
   useVisibleTask$(() => {
     if (!paginator.value) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
-      limit.value = Math.min(icons.length, limit.value + 200);
-      if (limit.value === icons.length) observer.disconnect();
+      limit.value = Math.min(icons.value.length, limit.value + 200);
+      if (limit.value === icons.value.length) observer.disconnect();
     }, { rootMargin: '300px' });
     observer.observe(paginator.value);
     return () => observer.disconnect();
@@ -42,14 +46,14 @@ export default component$(() => {
         <Switch bind:value={filled}>Filled</Switch>
       </Form>
       <ActionGrid class="icon-list">
-        {icons.slice(0, limit.value).map(icon => (
+        {icons.value.slice(0, limit.value).map(icon => (
         <ButtonItem key={icon.name} class="btn vertical" onClick$={() => copy({ name: icon.name })}>
           <MatIcon name={icon.name as any} width="48" height="48" weight={weight.value} filled={filled.value} />
           <p>{icon.name}</p>
         </ButtonItem>
         ))}
       </ActionGrid>
-      {limit.value < icons.length && (
+      {limit.value < icons.value.length && (
         <footer class="paginator" ref={paginator}>Loading more Icons</footer>
       )}
     </section>
