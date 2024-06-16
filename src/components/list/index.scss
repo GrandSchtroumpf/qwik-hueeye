@@ -55,6 +55,7 @@
     }
   }
 }
+
 @mixin item-selectable {
   @supports (anchor-name: --myanchor) {
     &:focus-visible {
@@ -101,5 +102,25 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+}
+
+@mixin item-multi-selectable {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    border-radius: var(--size-1);
+    background-color: var(--color, var(--primary));
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
+  }
+}
+
+@mixin item-multi-selected {
+  &::before {
+    transform: scale(1);
+    opacity: 1;
   }
 }

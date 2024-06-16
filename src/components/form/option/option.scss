@@ -11,9 +11,19 @@
     outline: none;
     background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--overlay));
   }
-  @include list.item-selectable;
+
   @include list.item-horizontal-selectable;
-  &[aria-checked="true"], &[aria-selected="true"] {
+
+  &[aria-checked="true"], &[aria-checked="false"] {
+    @include list.item-multi-selectable;
+  }
+  &[aria-checked="true"] {
+    @include list.item-multi-selected;
+  }
+  &[aria-selected="true"], &[aria-selected="false"] {
+    @include list.item-multi-selectable;
+  }
+  &[aria-selected="true"] {
     @include list.item-selected;
   }
 }

@@ -3,7 +3,7 @@ import { SvgGradient } from "../svg-gradient";
 import style from './hue.scss?inline';
 import { IconConfig, useIconProvider } from "../icons/useIcon";
 
-interface HueEyeState {
+export type HueEyeState = {
   hue?: number;
 }
 

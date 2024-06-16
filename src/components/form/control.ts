@@ -174,7 +174,9 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
   const signal = useSignal<T | undefined>(initial);
 
   // Input
-  const control = useComputed$(() => bindValue?.value ?? fromParentStore<T>(parent, name) ?? signal.value);
+  const control: Readonly<Signal<T | undefined>> = useComputed$(() => {
+    return bindValue?.value ?? fromParentStore<T>(parent, name) ?? signal.value;
+  });
 
   // Output
   const onChange = $((value: T | undefined) => {

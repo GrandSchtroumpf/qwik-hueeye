@@ -1,4 +1,4 @@
-import { $, ButtonHTMLAttributes, Slot, component$ } from "@builder.io/qwik";
+import { $, PropsOf, Slot, component$ } from "@builder.io/qwik";
 import { ControlListProps, useListControl, useListControlProvider } from "./control";
 import type { Serializable } from './types';
 import { mergeProps } from "../utils/attributes";
@@ -27,7 +27,7 @@ export const ListController = component$(function <T extends Serializable>(props
 });
 
 
-interface AddControlProps<T extends Serializable> extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface AddControlProps<T extends Serializable> extends PropsOf<'button'> {
   item: T
 }
 export const AddControl = component$(function <T extends Serializable>(props: AddControlProps<T>) {
@@ -40,7 +40,7 @@ export const AddControl = component$(function <T extends Serializable>(props: Ad
     <Slot />
   </button>
 });
-interface RemoveControlProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface RemoveControlProps extends PropsOf<'button'> {
   index: number;
 }
 export const RemoveControl = component$(function(props: RemoveControlProps) {

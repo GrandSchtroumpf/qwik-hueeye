@@ -19,4 +19,4 @@ export const Form = component$(function <T extends ControlGroup>(props: FormProp
   >
     <Slot />
   </form>
-})
+});

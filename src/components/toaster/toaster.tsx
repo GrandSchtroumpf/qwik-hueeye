@@ -1,5 +1,5 @@
 import { $, component$, createContextId, useContext, useContextProvider, useId, useSignal, useStyles$, useTask$ } from "@builder.io/qwik";
-import type { JSXNode , QRL} from "@builder.io/qwik";
+import type {  JSXOutput, QRL} from "@builder.io/qwik";
 import type { UlAttributes } from "../types";
 import { clsq, cssvar }  from '../utils';
 import styles from './toaster.scss?inline';
@@ -8,7 +8,7 @@ export interface ToastProps {
   id: string;
   duration: number;
   position: 'start' | 'center' | 'end';
-  content: string | QRL<(props: ToastProps) => JSXNode>;
+  content: string | QRL<(props: ToastProps) => JSXOutput>;
   /**
    * Aria role: default 'status'.
    * @description The toast uses the html element output, which has implicit role 'status'
@@ -18,7 +18,7 @@ export interface ToastProps {
   class?: string;
 }
 export type ToastParams = Partial<Omit<ToastProps, 'content'>>;
-export type ToastNode = QRL<(props: ToastProps) => JSXNode>;
+export type ToastNode = QRL<(props: ToastProps) => JSXOutput>;
 
 export const ToasterContext = createContextId<ToasterService>('ToasterContext');
 

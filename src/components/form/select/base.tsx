@@ -4,7 +4,7 @@ import { Popover, PopoverRoot, PopoverTrigger } from "../../dialog/popover";
 import { useFormFieldId } from "../form-field/form-field";
 import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
-import { focusInOptionList, focusOutOptionList } from "../option/option";
+import { focusInOptionList } from "../option/option";
 import { focusList } from "../../list/utils";
 import { useControl, useListControl } from "../control";
 import { ListBox } from "../listbox/listbox";
@@ -23,7 +23,7 @@ const preventKeyDown = sync$((e: KeyboardEvent) => {
 export interface BaseSelectProps<T extends Serializable = Serializable> extends PropsOf<'div'> {
   multi: boolean;
   placeholder?: string;
-  display$: QRL<(value: T) => string>;
+  display$: QRL<(value?: T) => string>;
 }
 export const BaseSelect = component$(function<T extends Serializable>(props: BaseSelectProps<T>) {
   useStyles$(styles);
@@ -47,7 +47,12 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
       const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'Home', 'End'];
       if (keys.includes(e.key)) open.value = true;
     } else {
-      focusList('[role="option"]', e, el);
+      if (e.key === 'Tab') {
+        open.value = false;
+        focusInOptionList(e, el);
+      } else {
+        focusList('[role="option"]', e, el);
+      }
       if (!multi) {
         if (e.key === 'Enter' || e.key === ' ') open.value = false;
       } else {
@@ -76,13 +81,6 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
     }),
     onKeyDown$: [preventKeyDown, onKeyDown],
     onFocusIn$: focusInOptionList,
-    onFocusOut$: $((e, el) => {
-      const active = document.activeElement;
-      if (!el.contains(active as HTMLElement)) {
-        open.value = false;
-        focusOutOptionList(e, el);
-      }
-    }),
     "aria-label": hasFormField ? undefined : (divProps['aria-label'] || placeholder),
   });
 
@@ -108,21 +106,21 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
 
 interface BaseTrigger<T extends Serializable = Serializable> extends PropsOf<'button'> {
   placeholder?: string;
-  display$: QRL<(value: T) => string>;
+  display$: QRL<(value?: T) => string>;
 }
-export const SingleTrigger = component$<BaseTrigger>((props) => {
+export const SingleTrigger = component$(function <T extends Serializable>(props: BaseTrigger<T>) {
   const { display$, placeholder, ...attr } = props;
-  const { control } = useControl();
+  const { control } = useControl<T>();
   const text = useComputed$(() => display$(control.value));
   return <PopoverTrigger {...attr}>
     {text.value ? <span>{text.value}</span> : <span class="placeholder">{placeholder}</span>}
   </PopoverTrigger>
 });
 
-export const MultiTrigger = component$<BaseTrigger>((props) => {
+export const MultiTrigger = component$(function <T extends Serializable>(props: BaseTrigger<T>) {
   const { display$, placeholder, ...attr } = props;
-  const { list } = useListControl();
-  const text = useComputed$(() => display$(list.value));
+  const { list } = useListControl<T>();
+  const text = useComputed$(() => display$(list.value as any));
   return <PopoverTrigger {...attr}>
     {text.value ? <span>{text.value}</span> : <span class="placeholder">{placeholder}</span>}
   </PopoverTrigger>

@@ -1,10 +1,10 @@
 import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $, sync$ } from "@builder.io/qwik";
-import type { Signal } from "@builder.io/qwik";
+import type { PropsOf, Signal } from "@builder.io/qwik";
 import { Popover, PopoverRoot } from "../dialog/popover";
-import type { ButtonAttributes, DivAttributes, InputAttributes, MenuAttributes } from "../types";
+import type { DivAttributes, MenuAttributes } from "../types";
 import { nextFocus, previousFocus, clsq } from "../utils";
 import { mergeProps } from "../utils/attributes";
-import { Link, LinkProps } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 import styles from './menu.scss?inline';
 
 interface MenuContext {
@@ -31,7 +31,7 @@ export const MenuRoot = component$((props: DivAttributes) => {
 });
 
 
-interface MenuTriggerProps extends Omit<ButtonAttributes, 'ref' | 'onClick$'> {}
+interface MenuTriggerProps extends Omit<PropsOf<'button'>, 'ref' | 'onClick$'> {}
 export const MenuTrigger = component$((props: MenuTriggerProps) => {
   const ref = useSignal<HTMLElement>();
   const triggerId = useId();
@@ -60,7 +60,7 @@ export const MenuTrigger = component$((props: MenuTriggerProps) => {
 });
 
 // TODO: create ContextMenu element
-// type ContextMenuTriggerProps = Omit<ButtonAttributes, 'ref' | 'onContextMenu$'>
+// type ContextMenuTriggerProps = Omit<PropsOf<'button'>, 'ref' | 'onContextMenu$'>
 // export const ContextMenuTrigger = component$((props: ContextMenuTriggerProps) => {
 //   const { menuId, triggerId, origin, open } = useContext(MenuContext);
 //   return <button {...props}
@@ -110,9 +110,9 @@ export const Menu = component$((props: MenuProps) => {
 });
 
 
-export const MenuItemBtn = component$((props: ButtonAttributes) => {
+export const MenuItemBtn = component$((props: PropsOf<'button'>) => {
   const closeAll = $(() => document.documentElement.click());
-  const attrs = mergeProps({ onClick$: closeAll, props });
+  const attrs = mergeProps<'button'>(props, { onClick$: closeAll });
   return <li role="none">
     <button type="button" role="menuitem" {...attrs}>
       <Slot/>
@@ -120,9 +120,9 @@ export const MenuItemBtn = component$((props: ButtonAttributes) => {
   </li>
 });
 
-export const MenuItemLink = component$((props: LinkProps) => {
+export const MenuItemLink = component$((props: PropsOf<'a'>) => {
   const closeAll = $(() => document.documentElement.click());
-  const attrs = mergeProps({ onClick$: closeAll, props });
+  const attrs = mergeProps<'a'>(props, { onClick$: closeAll });
   return <li role="none">
     <Link role="menuitem" {...attrs}>
       <Slot/>
@@ -130,9 +130,9 @@ export const MenuItemLink = component$((props: LinkProps) => {
   </li>
 });
 
-export const MenuItemAnchor = component$((props: LinkProps) => {
+export const MenuItemAnchor = component$((props: PropsOf<'a'>) => {
   const closeAll = $(() => document.documentElement.click());
-  const attrs = mergeProps({ onClick$: closeAll, props });
+  const attrs = mergeProps<'a'>(props, { onClick$: closeAll });
   return <li role="none">
     <a role="menuitem" {...attrs}>
       <Slot/>
@@ -182,11 +182,15 @@ export const MenuGroup = component$(() => {
   </fieldset>
 })
 
-type RadioProps = Omit<InputAttributes, 'type' | 'children'>;
-export const MenuRadio = component$((props: RadioProps) => {
+export const MenuRadio = component$((props: Omit<PropsOf<'input'>, 'children'>) => {
   const id = useId();
+  const attr = mergeProps<'input'>(props as any, {
+    id,
+    type: 'radio',
+    role: 'menuitemradio',
+  })
   return <li class="menu-radio">
-    <input id={id} role="menuitemradio" type="radio" {...props} value={props.value} />
+    <input {...attr} />
     <label for={id}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <circle r="8" cx="12" cy="12"/>
