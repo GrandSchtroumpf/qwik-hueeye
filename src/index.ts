@@ -12,6 +12,3 @@ export * from './components/hue/hue';
 export * from './components/utils/clsq';
 export * from './components/utils/cssvar';
 export * from './components/if';
-
-
-export * from './components/old-form/useOnChange';

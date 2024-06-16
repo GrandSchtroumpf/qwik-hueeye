@@ -1,5 +1,5 @@
-import { component$, useTask$, Slot, useSignal, $, useComputed$, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
-import type { QwikMouseEvent , Signal, QRL } from "@builder.io/qwik";
+import { component$, useTask$, Slot, useSignal, $, useComputed$, useStyles$, sync$ } from "@builder.io/qwik";
+import type { Signal, QRL } from "@builder.io/qwik";
 import type { DialogAttributes } from "../types";
 import { clsq } from "../utils";
 import styles from './dialog.scss?inline';
@@ -21,15 +21,12 @@ export const Modal = component$((props: ModalProps) => {
   const { onOpen$, onClose$ }  = props;
 
   // prevent default closing to keep state in sync
-  useVisibleTask$(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        opened.value = false;
-      }
-    }
-    ref.value?.addEventListener("keydown", handler);
-    return (() => ref.value?.removeEventListener("keydown", handler));
+  const preventEsc = sync$((e: KeyboardEvent) => {
+    if (e.key === 'Escape') e.preventDefault();
+  });
+
+  const onKeyDown$ = $((e: KeyboardEvent) => {
+    if (e.key === 'Escape') opened.value = false;
   });
 
   useTask$(({ track }) => {
@@ -55,11 +52,11 @@ export const Modal = component$((props: ModalProps) => {
     opened.value ? 'opened' : 'closed',
   ));
 
-  const onClick = $((event: QwikMouseEvent<HTMLDialogElement, MouseEvent>, element: HTMLDialogElement) => {
+  const onClick = $((event: MouseEvent, element: HTMLDialogElement) => {
     if (event.target === element) opened.value = false;
   });
 
-  return <dialog class={classes} ref={ref} onClick$={onClick}>
+  return <dialog class={classes} ref={ref} onClick$={onClick} onKeyDown$={[preventEsc, onKeyDown$]}>
     <Slot />
   </dialog>
 })

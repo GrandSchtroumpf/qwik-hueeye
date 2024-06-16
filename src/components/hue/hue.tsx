@@ -18,10 +18,12 @@ if (theme) {
 
 const HueEyeSession = component$(() => {
   const state = useContext(HueEyeContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const localHue = document.documentElement.style.getPropertyValue('--hue');
     if (localHue) state.hue = Number(localHue);
   });
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     const change = track(() => state.hue);
     if (typeof change === 'undefined') return;
@@ -35,6 +37,7 @@ const HueEyeContext = createContextId<HueEyeState>('HueEyeContext');
 export const useHueEye = () => useContext(HueEyeContext);
 
 interface HueEyeProps {
+  /** IMPORTANT: setting storage to true will download Qwik core at load time */
   storage?: boolean;
   icon?: IconConfig;
 }

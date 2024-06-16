@@ -87,10 +87,10 @@ export const Popover = component$((props: PopoverProps) => {
 
 interface PopoverRootProps {
   popoverId?: string;
-  open?: Signal<boolean>;
+  open: Signal<boolean>;
 }
 export const PopoverContext = createContextId<PopoverRootProps>('PopoverContext');
-export const PopoverRoot = component$<PopoverRootProps>((props) => {
+export const PopoverRoot = component$<Partial<PopoverRootProps>>((props) => {
   const popoverId = useId();
   const open = useSignal(false);
   useContextProvider(PopoverContext, {

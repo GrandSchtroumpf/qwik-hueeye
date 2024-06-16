@@ -1,11 +1,11 @@
-import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $ } from "@builder.io/qwik";
+import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $, sync$ } from "@builder.io/qwik";
 import type { Signal } from "@builder.io/qwik";
-import { Popover } from "../dialog/popover";
+import { Popover, PopoverRoot } from "../dialog/popover";
 import type { ButtonAttributes, DivAttributes, InputAttributes, MenuAttributes } from "../types";
-import { useKeyboard, nextFocus, previousFocus, clsq } from "../utils";
-import styles from './menu.scss?inline';
+import { nextFocus, previousFocus, clsq } from "../utils";
 import { mergeProps } from "../utils/attributes";
 import { Link, LinkProps } from "@builder.io/qwik-city";
+import styles from './menu.scss?inline';
 
 interface MenuContext {
   menuId: string;
@@ -77,21 +77,36 @@ export const MenuTrigger = component$((props: MenuTriggerProps) => {
 interface MenuProps extends Omit<MenuAttributes, 'id'> {}
 export const Menu = component$((props: MenuProps) => {
   const {root} = useContext(MenuRootContext);
-  const list = useSignal<HTMLElement>();
   const { menuId, triggerId, origin, open } = useContext(MenuContext);
-  useKeyboard(list, ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'], $((event, el) => {
+
+  const preventDefault = sync$((event: KeyboardEvent) => {
+    const keys = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
+    if (keys.includes(event.key)) event.preventDefault();
+  })
+  const onKeyDown$ = $((event: KeyboardEvent, el: HTMLElement) => {
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
       nextFocus(el.querySelectorAll<HTMLElement>('button, input'))
     }
     if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
       previousFocus(el.querySelectorAll<HTMLElement>('button, input'))
     }
-  }));
-  return <Popover origin={origin} open={open} layer={root} position="inline" class="menu-overlay">
-    <menu {...props} id={menuId} ref={list} role="menu" class="menu-list" aria-labelledby={triggerId}>
-      <Slot />
-    </menu>
-  </Popover>
+  });
+
+  const attr = mergeProps<'menu'>(props, {
+    id: menuId,
+    onKeyDown$: [preventDefault, onKeyDown$],
+    class: "menu-list",
+    role: "menu",
+    'aria-labelledby': triggerId
+  });
+
+  return <PopoverRoot open={open}>
+    <Popover origin={origin}  layer={root} position="inline" class="menu-overlay">
+      <menu {...attr} id={menuId}>
+        <Slot />
+      </menu>
+    </Popover>
+  </PopoverRoot>
 });
 
 

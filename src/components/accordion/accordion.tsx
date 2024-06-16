@@ -1,6 +1,6 @@
-import { $, component$, createContextId, Slot, useComputed$, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
+import { $, component$, createContextId, Slot, sync$, useComputed$, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
 import { isBrowser } from '@builder.io/qwik/build';
-import { nextFocus, previousFocus, useKeyboard } from "../utils";
+import { nextFocus, previousFocus } from "../utils";
 import type { Signal, QRL } from '@builder.io/qwik';
 import type { UlAttributes } from "../types";
 import styles from './accordion.scss?inline';
@@ -114,7 +114,7 @@ export const Accordion = component$((props: AccordionProps) => {
       const list = ref.value!.querySelectorAll('li.details')!;
       state.opened = Array.from(list).map(item => item.id);
     }),
-    closeAll: $(() => state.opened = []),
+    closeAll: $(() => {state.opened = []}),
     toggle: $((id: string) => {
       const isOpen = state.opened.includes(id);
       if (state.multiple) {
@@ -146,23 +146,29 @@ export const Details = component$(() => {
   </li>
 });
 
-const preventKeys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '];
-
 export const Summary = component$(() => {
   const { next, previous, toggle } = useContext(AccordionContext);
   const { id, opened } = useContext(DetailsContext);
   const ref = useSignal<HTMLElement>();
   const panelId = `panel-${id}`;
-  useKeyboard(ref, preventKeys, $((event) => {
+
+  const preventDefault = sync$((event: KeyboardEvent) => {
+    const keys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Enter', ' '];
+    if (keys.includes(event.key)) event.preventDefault();
+  })
+
+  const onKeyDown$ = $((event: KeyboardEvent) => {
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next();
     if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') previous();
     if (event.key === 'Enter' || event.key === ' ') toggle(id);
-  }));
+  });
+
   return <button ref={ref} type="button"
     class="details-controller"
     aria-expanded={opened.value}
     aria-controls={panelId}
     onClick$={() => toggle(id)}
+    onKeyDown$={[preventDefault, onKeyDown$]}
   >
     <Slot/>
   </button>
