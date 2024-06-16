@@ -1,3 +1,4 @@
+@use '../index' as list;
 .he-action-list {
   list-style: none;
   padding-left: 0;
@@ -10,7 +11,17 @@
 .he-action-list,
 .he-nav-list {
   display: flex;
+  padding: var(--list-padding, var(--size-1));
   &[aria-orientation="vertical"] {
     flex-direction: column;
+  }
+}
+
+.he-nav-list {
+  &[aria-orientation="vertical"] {
+    @include list.list-vertical-selectable;
+  }
+  &[aria-orientation="horizontal"] {
+    @include list.list-vertical-selectable;
   }
 }

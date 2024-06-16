@@ -1,10 +1,10 @@
-import { component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$, useTask$, useStyles$ } from "@builder.io/qwik";
+import { component$, createContextId, Slot, useContext, useContextProvider, useVisibleTask$, useTask$, useStyles$, useStore } from "@builder.io/qwik";
 import { SvgGradient } from "../svg-gradient";
 import style from './hue.scss?inline';
 import { IconConfig, useIconProvider } from "../icons/useIcon";
 
 interface HueEyeState {
-  hue: Signal<number | undefined>;
+  hue?: number;
 }
 
 const initHue = `
@@ -17,13 +17,13 @@ if (theme) {
 }`;
 
 const HueEyeSession = component$(() => {
-  const { hue } = useContext(HueEyeContext);
+  const state = useContext(HueEyeContext);
   useVisibleTask$(() => {
     const localHue = document.documentElement.style.getPropertyValue('--hue');
-    if (localHue) hue.value = Number(localHue);
+    if (localHue) state.hue = Number(localHue);
   });
   useVisibleTask$(({ track }) => {
-    const change = track(() => hue.value);
+    const change = track(() => state.hue);
     if (typeof change === 'undefined') return;
     sessionStorage.setItem('hueeye', JSON.stringify({ hue: change }));
   });
@@ -41,11 +41,11 @@ interface HueEyeProps {
 
 export const HueEyeProvider = component$(({ storage, icon }: HueEyeProps) => {
   useStyles$(style);
-  const state: HueEyeState = {
-    hue: useSignal()
-  };
+  const state = useStore({
+    hue: 0
+  });
   useTask$(({ track }) => {
-    const change = track(() => state.hue.value);
+    const change = track(() => state.hue);
     if (typeof change === 'undefined') return;
     if (typeof document === 'undefined') return;
     document.documentElement.style.setProperty('--hue', change.toString());

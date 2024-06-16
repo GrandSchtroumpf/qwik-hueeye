@@ -1,10 +1,10 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { CheckItem, CheckList, Input, Radio, RadioGroup } from "../../components/base-form";
+import { CheckItem, CheckList, Input, Radio, RadioGroup } from "../../components/form";
+import { SearchForm } from "../../components/form/search-form";
+import { useSearchParamsProvider } from "../../components/hooks/useSearchParams";
+import { Select } from "../../components/form/select/select";
+import { Option } from "../../components/form/option/option";
 import styles from './index.scss?inline';
-import { SearchForm } from "../../components/base-form/search-form";
-import { useSearchParamsProvider } from "../../components/utils/useSearchParams";
-import { Select } from "../../components/base-form/select/select";
-import { Option } from "../../components/base-form/option/option";
 
 export default component$(() => {
   useStyles$(styles)
@@ -13,7 +13,7 @@ export default component$(() => {
     <section class="control-section">
       <h2>Search Params</h2>
       <SearchForm updateOn="input">
-        <Select class="round outline" placeholder="Select multiple movies" name="movies" multi>
+        <Select placeholder="Select multiple movies" name="movies" multi>
           <Option value="lotr">Lord of the Ring</Option>
           <Option value="matrix">Matrix</Option>
           <Option value="star-wars">Star Wars</Option>
@@ -23,7 +23,7 @@ export default component$(() => {
           <Option value="center">Center</Option>
           <Option value="top">Top</Option>
         </Select>
-        <Input name="search" class="outline"/>
+        <Input name="search"/>
         <RadioGroup name="justify" aria-labelledby="radio-group">
           <Radio value="bottom">Bottom</Radio>
           <Radio value="center">Center</Radio>

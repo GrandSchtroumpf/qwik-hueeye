@@ -1,0 +1,18 @@
+.field {
+  & input {
+    flex: 1;
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    color: currentColor;
+    font-family: var(--font-family);
+    padding: 0;
+    &::placeholder {
+      color: var(--text);
+      opacity: 0.5;
+    }
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}

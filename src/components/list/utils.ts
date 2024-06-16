@@ -1,5 +1,5 @@
-import { QwikKeyboardEvent, Signal, useVisibleTask$, $ } from "@builder.io/qwik";
-import { firstFocus, lastFocus, nextFocus, previousFocus } from "../utils";
+import { $ } from "@builder.io/qwik";
+import { nextFocus, previousFocus } from "../utils";
 
 export const isSamePathname = (pathname: string, href?: string) => {
   if (href === undefined) return;
@@ -8,36 +8,44 @@ export const isSamePathname = (pathname: string, href?: string) => {
   return false;
 }
 
-export const listNavigation = $((event: QwikKeyboardEvent, el: HTMLElement) => {
-  const key = event.key;
-  const orientation = el.getAttribute('aria-orientation');
-  const getList = () => el.querySelectorAll<HTMLElement>('a');
-  if (!orientation || orientation === 'vertical') {
-    if (key === 'ArrowUp') previousFocus(getList());
-    if (key === 'ArrowDown') nextFocus(getList());
-  }
-  if (!orientation || orientation === 'horizontal') {
-    if (key === 'ArrowLeft') previousFocus(getList());
-    if (key === 'ArrowRight') nextFocus(getList());
-  }
-  if (key === 'Home') firstFocus(getList());
-  if (key === 'End') lastFocus(getList());
-})
 
-export function usePreventListKeyboard(ref: Signal<HTMLElement | undefined>) {
-  useVisibleTask$(() => {
-    const handler = (event: KeyboardEvent) => {
-      const key = event.key;
-      const orientation = ref.value?.getAttribute('aria-orientation');
-      if (!orientation || orientation === 'vertical') {
-        if (key === 'ArrowDown' || key === 'ArrowUp') event.preventDefault();
-      }
-      if (!orientation || orientation === 'horizontal') {
-        if (key === 'ArrowLeft' || key === 'ArrowRight') event.preventDefault();
-      }
-      if (key === 'Home' || key === 'End') event.preventDefault();
-    }
-    ref.value?.addEventListener('keydown', handler);
-    return () => ref.value?.removeEventListener('keydown', handler);
-  }, { strategy: 'intersection-observer' });
-}
+export const focusList = $((selector: string, e: KeyboardEvent, root: HTMLElement, options?: FocusOptions) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') focusNext(selector, root, options);
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') focusPrevious(selector, root, options);
+  if (e.key === 'Home') focusFirst(selector, root, options);
+  if (e.key === 'End') focusLast(selector, root, options);
+  if (e.key === 'Enter' || e.key === ' ') (e.target as HTMLElement).click();
+});
+
+export const focusFirst = $((selector: string, root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  list[0].focus(options);
+  return list[0];
+});
+export const focusLast = $((selector: string, root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  list[list.length - 1].focus(options);
+  return list[list.length - 1];
+});
+export const focusNext = $((selector: string, root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  return nextFocus(list, options);
+});
+export const focusPrevious = $((selector: string, root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>(selector);
+  return previousFocus(list, options);
+});
+
+
+
+export const disableTab = $((root: HTMLElement, itemSelector: string) => {
+  const active = document.activeElement;
+  const item = root.querySelectorAll(itemSelector);
+  for (let i = 0; i < item.length; i++) {
+    if (active !== item[i]) item[i].setAttribute('tabindex', '-1');
+  }
+});
+export const enableTab = $((root: HTMLElement, itemSelector: string, selectedSelector: string) => {
+  const item = root.querySelector(selectedSelector) ?? root.querySelector(itemSelector);
+  item?.setAttribute('tabindex', '0');
+});

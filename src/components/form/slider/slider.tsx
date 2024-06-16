@@ -1,11 +1,12 @@
-import { component$, useStyles$, useSignal, event$ } from "@builder.io/qwik";
+import { component$, useStyles$, useSignal, event$, PropsOf, untrack } from "@builder.io/qwik";
 import { cssvar } from "../../utils";
 import { round } from "./utils";
-import { ControlValueProps, extractControlProps, useControllerProvider } from "../control";
 import { mergeProps } from "../../utils/attributes";
+import { WithControl, extractControls, useControlProvider } from "../control";
+import { useWithId } from "../../hooks/useWithId";
 import styles from './slider.scss?inline';
 
-interface SliderProps extends ControlValueProps<number> {
+interface SliderProps extends PropsOf<'div'> {
   position?: 'start' | 'end';
   min?: string | number;
   max?: string | number;
@@ -15,17 +16,18 @@ interface SliderProps extends ControlValueProps<number> {
 }
 
 
-
-export const Slider = component$((props: SliderProps) => {
+export const Slider = component$<WithControl<number, SliderProps>>((props) => {
   useStyles$(styles);
+  const id = useWithId(props.id);
+  const { attr, controls } = extractControls(props);
+  const { control, onChange, name } = useControlProvider(controls);
   const sliderEl = useSignal<HTMLElement>();
   const trackEl = useSignal<HTMLElement>();
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const { bindValue, initialValue } = useControllerProvider(props, min);
 
-  const initialPosition = initialValue / (max - min);
+  const initialPosition = untrack(() => (control.value ?? 0) / (max - min));
   
   const move = event$((e: any, input: HTMLInputElement) => {
     const percent = input.valueAsNumber / (max - min) - initialPosition;
@@ -34,8 +36,8 @@ export const Slider = component$((props: SliderProps) => {
     input.nextElementSibling?.setAttribute('data-value', `${round(input.valueAsNumber, step)}`);
   });
   
-  const inputAttr = extractControlProps(props);
-  const sliderAttr = mergeProps(
+  const sliderAttr = mergeProps<'div'>(
+    attr,
     { class: 'slider' },
     { class: props.position },
     cssvar({ initialPosition }),
@@ -43,15 +45,17 @@ export const Slider = component$((props: SliderProps) => {
 
   return <div ref={sliderEl} {...sliderAttr }>
     <div class="track" ref={trackEl}></div>
-    <input {...inputAttr} 
+    <input
+      id={id}
+      name={name?.toString()}
       type="range"
       step={step}
       min={min}
       max={max}
-      value={initialValue}
+      value={control.value ?? 0}
       onInput$={move}
-      onChange$={(e, i) => bindValue.value = i.valueAsNumber}
+      onChange$={(e, i) => onChange(i.valueAsNumber)}
     />
-    <div class="thumb" data-value={initialValue}></div>
+    <div class="thumb" data-value={control.value ?? 0}></div>
   </div>
 });

@@ -20,7 +20,7 @@ export default component$(() => {
     </article>
     <article>
       <h2>Vertical options</h2>
-      <RadioGroup class="vertical" bind:value={meal}>
+      <RadioGroup aria-orientation="vertical" bind:value={meal}>
         <legend>Meal Options</legend>
         <Radio value="pickles">Pickles</Radio>
         <Radio value="tomatoes">Tomatoes</Radio>

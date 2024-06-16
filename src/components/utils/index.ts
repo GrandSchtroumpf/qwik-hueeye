@@ -32,23 +32,15 @@ export const ArrowsKeys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'];
 export const ControlKeys = ['Enter', ' '];
 
 
-export const nextFocus = $((list?: NodeListOf<HTMLElement>, options?: FocusOptions) => {
+export const nextFocus = (list?: NodeListOf<HTMLElement>, options?: FocusOptions) => {
   if (!list) return;
   const focusedEl = document.activeElement as HTMLElement;
   if (!focusedEl) return list[0]?.focus();
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl))
   const nextIndex = (index + 1) % list.length;
   list[nextIndex].focus(options);
-});
-export const focusNextInput = $((root: HTMLElement, options?: FocusOptions) => {
-  const list = root.querySelectorAll('input');
-  nextFocus(list, options);
-});
-export const focusNextOption = $((root: HTMLElement, options?: FocusOptions) => {
-  const list = root.querySelectorAll<HTMLElement>('[role="option"]');
-  nextFocus(list, options);
-});
-
+  return list[nextIndex];
+};
 export const previousFocus = $((list?: NodeListOf<HTMLElement>, options?: FocusOptions) => {
   if (!list) return;
   const focusedEl = document.activeElement as HTMLElement;
@@ -56,15 +48,21 @@ export const previousFocus = $((list?: NodeListOf<HTMLElement>, options?: FocusO
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl))
   const nextIndex = (index - 1 + list.length) % list.length;
   list[nextIndex].focus(options);
+  return list[nextIndex];
 });
-export const focusPreviousInput = $((root: HTMLElement, options?: FocusOptions) => {
-  const list = root.querySelectorAll('input');
-  previousFocus(list, options);
+
+
+// TODO: Remove code related to options
+export const focusNextOption = $((root: HTMLElement, options?: FocusOptions) => {
+  const list = root.querySelectorAll<HTMLElement>('[role="option"]');
+  nextFocus(list, options);
 });
 export const focusPreviousOption = $((root: HTMLElement, options?: FocusOptions) => {
   const list = root.querySelectorAll<HTMLElement>('[role="option"]');
   previousFocus(list, options);
 });
+
+
 
 export const firstFocus = $((list?: NodeListOf<HTMLElement>) => {
   if (!list) return;

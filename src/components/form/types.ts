@@ -1,25 +1,18 @@
-import type { QRL, QwikFocusEvent, QwikSubmitEvent } from "@builder.io/qwik";
+import type { PropsOf, QwikIntrinsicElements } from '@builder.io/qwik';
 
-export type FormFieldControl = string | number | Date | boolean | undefined;
-export type FormFieldArray = FormFieldControl[];
-export type FormFieldRecord = Record<string, FormFieldControl | FormFieldArray>;
-export type FormField = FormFieldControl | FormFieldArray | FormFieldRecord;
+export type GroupKeys = string | number;
+export type Primitive = string | number | boolean | Date | null | undefined;
+export type Serializable =
+  | Primitive
+  | { [key: GroupKeys]: Serializable }
+  | Array<Serializable>
+  | Map<GroupKeys, Serializable>
+  | Set<Serializable>
+  | undefined;
 
-export type ValidateFn<T> = QRL<(value: T) => null | Record<string, any>>;
-export type Validators<T> = ValidateFn<T> | ValidateFn<T>[];
+export type ControlGroup<T extends Serializable = Serializable> = { [key: GroupKeys]: T };
 
-
-export type SubmitHandler<T extends FormFieldRecord> = QRL<(values: T, event: QwikSubmitEvent<HTMLFormElement>) => unknown>;
-
-export type EventHandler = QRL<(event: QwikFocusEvent<HTMLInputElement>, element: HTMLInputElement) => any>;
-
-
-
-export interface DisplayProps<T = any> {
-  /** 
-   * Method used to customize how selected options are displayed
-   */
-  display$?: QRL<(value: T) => string | undefined>;
-}
-
-export * from '../types';
+export type OmitControlsAttributes = 'name' | 'children' | 'value' | 'bind:value' | 'bind:checked';
+export type InputAttributes = Omit<PropsOf<'input'>, OmitControlsAttributes>;
+export type FieldsetAttributes = Omit<QwikIntrinsicElements['fieldset'], 'name'>;
+export type DivAttributes = QwikIntrinsicElements['div'];

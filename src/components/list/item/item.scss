@@ -1,6 +1,8 @@
-.he-anchor-item,
-.he-link-item,
-.he-button-item {
+@use '../index' as list;
+
+.he-item-anchor,
+.he-item-link,
+.he-item-button {
   box-sizing: border-box;
   &:hover {
     background-color: var(--surface);
@@ -10,11 +12,15 @@
   }
 }
 
-.he-anchor-item,
-.he-link-item {
+.he-item-anchor,
+.he-item-link {
+  padding: var(--size-1) var(--size-2);
+  border-radius: var(--border-radius);
   color: currentColor;
   text-decoration: none;
+  @include list.item-selectable;
+  @include list.item-horizontal-selectable;
   &[aria-current="page"] {
-    color: var(--color, var(--primary));
+    @include list.item-selected;
   }
 }

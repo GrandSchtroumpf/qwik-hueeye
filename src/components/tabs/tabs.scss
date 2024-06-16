@@ -1,16 +1,39 @@
+@use '../hue/hue';
+@use '../list';
+
 .tab-group {
   display: flex;
-  flex-direction: column;
-  
+  &.vertical {
+    flex-direction: row;
+    .tab-list {
+      flex-direction: column;
+      border-inline-end: 1px solid var(--divider);
+      padding-inline: var(--size-1);
+      @include list.list-vertical-selectable;
+    }
+    .tab {
+      @include list.item-vertical-selectable;
+    }
+  }
+  &:not(.vertical) {
+    flex-direction: column;
+    .tab-list {
+      flex-direction: row;
+      border-block-end: 1px solid var(--divider);
+      padding-block: var(--size-1);
+      @include list.list-horizontal-selectable;
+    }
+    .tab {
+      @include list.item-horizontal-selectable;
+    }
+  }
 }
 .tab-list {
   display: flex;
   gap: var(--size-1);
-  border-bottom: 1px solid var(--divider);
-  padding: var(--size-1) 0;
   box-sizing: border-box;
   position: relative;
-  isolation: isolate;
+  flex-shrink: 0;
   &:focus-within {
     border-color: var(--color, var(--primary));
   }
@@ -22,33 +45,20 @@
   border-radius: 4px;
   padding: var(--size-1) var(--size-2);
   box-sizing: border-box;
-  position: relative;
   border: 1px solid transparent;
-  &[aria-selected="true"] {
-    @supports not (view-transition-name: test) {
-      background-color: var(--surface-lower);
-    }
-    @supports (view-transition-name: test) {
-      &::before {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        inset: 0;
-        border-radius: 4px;
-        background-color: var(--color, var(--text));
-        opacity: 0.12;
-        view-transition-name: var(--tab-transition-name);
-      }
-    }
-  }
   &:focus-visible {
-    outline: solid 1px var(--outline);
+    outline: solid 1px var(--divider);
   }
   &:hover {
-    background-color: var(--surface-low);
+    @include hue.hover(transparent, var(--on-color, var(--text)));
   }
   &:active {
-    background-color: var(--surface);
+    @include hue.focus(transparent, var(--on-color, var(--text)));
+  }
+  @include list.item-selectable;
+  @include list.item-vertical-selectable;
+  &[aria-selected="true"] {
+    @include list.item-selected;
   }
 }
 .tab-panel-container {
@@ -58,7 +68,4 @@
 .tab-panel {
   width: 100%;
   flex-shrink: 0;
-  &:not([hidden]) {
-    view-transition-name: var(--tab-panel-transition-name);
-  }
 }

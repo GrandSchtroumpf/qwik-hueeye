@@ -1,44 +1,27 @@
-import { $, component$, Slot, useComputed$, useContextProvider, useId, useStyles$ } from "@builder.io/qwik";
-import { FieldGroupContext, useGroupName, useNameId } from '../field';
-import type { FieldsetAttributes, InputAttributes } from "../../types";
-import { clsq } from '../../utils';
-import { ControlValueProps, extractControlProps, useControlValue, useControlItemProvider } from "../control";
+import { Slot, component$, useStyles$ } from "@builder.io/qwik";
+import { BaseRadio, BaseRadioGroup, BaseRadioGroupProps, BaseRadioProps } from "./base";
+import { mergeProps } from "../../utils/attributes";
+import { WithControl } from "../control";
+import { Primitive } from "../types";
 import styles from './radio.scss?inline';
 
-export interface RadioGroupProps extends Omit<FieldsetAttributes, 'role'>, ControlValueProps<string | string[]> {}
-
-// TODO: Don't use control provider for radio group has it override the Arrow behavior
-export const RadioGroup = component$((props: RadioGroupProps) => {
-  const name = useNameId(props);
-  useContextProvider(FieldGroupContext, { name });
-  const {rootRef, onValueChange} = useControlItemProvider(props);
-  const attr = extractControlProps(props);
-  const change = $((event: any, fieldset: HTMLFieldSetElement) => {
-    onValueChange(fieldset.querySelector<HTMLInputElement>('input:checked')?.value ?? '')
-  })
-
-  return <fieldset {...attr} ref={rootRef} name={name} onChange$={change} class={clsq("radio-group", props.class)} role="radiogroup">
+export const RadioGroup = component$<WithControl<Primitive, BaseRadioGroupProps>>((props) => {
+  useStyles$(styles);
+  const merged = mergeProps<'div'>(props, { class: 'he-radio-group' });
+  return <BaseRadioGroup {...merged}>
     <Slot />
-  </fieldset>
+  </BaseRadioGroup>
 });
 
 
-type RadioProps = Omit<InputAttributes, 'id' | 'type' | 'children'>;
-export const Radio = component$((props: RadioProps) => {
+export const Radio = component$((props: BaseRadioProps) => {
   useStyles$(styles);
-  const id = useId();
-  const name = useGroupName(props);
-  const value = props.value as string;
-  const {bindValue} = useControlValue<string>();
-  const checked = useComputed$(() => bindValue.value === value);
-
-  return <div class="radio-item">
-    <input id={id} type="radio" {...props} name={name} value={value} checked={checked.value}/>
-    <label for={id}>
+  return <div class="he-radio">
+    <BaseRadio {...props}>
       <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
         <circle r="8" cx="12" cy="12"/>
       </svg>
       <Slot/>
-    </label>
+    </BaseRadio>
   </div>
 });

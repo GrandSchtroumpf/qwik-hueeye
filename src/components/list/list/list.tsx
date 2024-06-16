@@ -1,50 +1,44 @@
-import { Slot, component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { NavAttributes, UlAttributes } from "../../types";
+import { $, PropsOf, Slot, component$, sync$, useStyles$ } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
-import { listNavigation, usePreventListKeyboard } from "../utils";
+import { focusList } from "../utils";
 import styles from './list.scss?inline';
 
-// const ListContext = createContextId('ListContext');
-// function useListProvider<T, Filter>(inital: T[] = []) {
-//   const state = useSignal<T[]>([]);
-//   const filters = useSignal<Filter>({});
-//   const add = $((item: T, index: number) => {
-//     const copy = structuredClone(state.value);
-//     copy.splice(index, 0, item);
-//     state.value = copy;
-//   });
-//   const remove = $((index: number) => {
-//     const copy = structuredClone(state.value);
-//     copy.splice(index, 0);
-//     state.value = copy;
-//   });
+const preventKeyDown = sync$((e: KeyboardEvent) => {
+  const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Home', 'End'];
+  if (keys.includes(e.key)) e.preventDefault();
+})
 
-//   return {
-//     add,
-//     remove,
-//   }
-// }
-
-interface ListProps {}
-
-interface ActionListProps extends UlAttributes, ListProps {}
-export const ActionList = component$((props: ActionListProps) => {
+export const ActionList = component$((props: PropsOf<'ul'>) => {
   useStyles$(styles);
-  const ref = useSignal<HTMLElement>();
-  usePreventListKeyboard(ref);
-  const attributes = mergeProps({ class: 'he-action-list', onKeyDown$: listNavigation }, props);
-  return <ul ref={ref} role="list" {...attributes}>
+  const merged = mergeProps<'ul'>(props, {
+    role: 'list',
+    class: 'he-action-list',
+    onKeyDown$: [
+      preventKeyDown,
+      $((e, el) => focusList('button', e, el))
+    ],
+  });
+  return <ul {...merged}>
     <Slot/>
   </ul>
 })
 
-interface NavListProps extends NavAttributes, ListProps {}
+interface NavListProps extends PropsOf<'nav'> {
+  vertical?: boolean;
+}
+
 export const NavList = component$((props: NavListProps) => {
   useStyles$(styles);
-  const ref = useSignal<HTMLElement>();
-  usePreventListKeyboard(ref);
-  const attributes = mergeProps({ class: 'he-nav-list', onKeyDown$: listNavigation }, props)
-  return <nav ref={ref} {...attributes}>
+  const merged = mergeProps<'nav'>(props, {
+    role: 'list',
+    class: 'he-nav-list',
+    onKeyDown$: [
+      preventKeyDown,
+      $((e, el) => focusList('a', e, el))
+    ],
+    'aria-orientation': props.vertical ? 'vertical' : 'horizontal'
+  })
+  return <nav {...merged}>
     <Slot/>
   </nav>
 })

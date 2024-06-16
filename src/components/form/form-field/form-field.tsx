@@ -1,6 +1,7 @@
-import { component$, useId, Slot, createContextId, useContextProvider, useContext, useStyles$ } from "@builder.io/qwik";
-import type { DivAttributes } from "../types";
-import { clsq } from "../../utils";
+import { component$, Slot, createContextId, useContextProvider, useContext, useStyles$, PropsOf } from "@builder.io/qwik";
+import { mergeProps } from "../../utils/attributes";
+import { useWithId } from "../../hooks/useWithId";
+import { Input, InputProps } from "../input/input";
 import styles from './form-field.scss?inline';
 
 interface FormFieldState {
@@ -8,13 +9,25 @@ interface FormFieldState {
 }
 
 export const FormFieldContext = createContextId<FormFieldState>('FormFieldContext');
+export const useFormFieldId = (id?: string) => {
+  const baseId = useWithId(id);
+  const { id: finalId } = useContext(FormFieldContext, { id: baseId });
+  return {
+    id: finalId,
+    hasFormField: id !== baseId,
+  }
+}
 
-export const FormField = component$((props: DivAttributes) => {
+export const FormField = component$((props: PropsOf<'div'>) => {
   useStyles$(styles);
-  const id = useId();
-  useContextProvider(FormFieldContext, { id })
-  return <div {...props} class={clsq('form-field', props.class)}>
-    <Slot/>
+  const id = useWithId(props.id);
+  useContextProvider(FormFieldContext, { id });
+  const merged = mergeProps<'div'>(props, {
+    id,
+    class: 'he-form-field'
+  });
+  return <div {...merged}>
+    <Slot />
   </div>
 });
 
@@ -23,4 +36,13 @@ export const Label = component$(() => {
   return <label for={id} id={'label-' + id}>
     <Slot/>
   </label>
+})
+
+export const InputField = component$<InputProps>((props) => {
+  useStyles$(styles);
+  return <div class="he-input-field">
+    <Slot name="prefix"/>
+    <Input {...props} class={[props.class, 'he-field']} />
+    <Slot name="prefix"/>
+  </div>
 })

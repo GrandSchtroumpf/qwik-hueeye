@@ -1,4 +1,4 @@
-export * from './components/base-form';
+export * from './components/form';
 export * from './components/list';
 export * from './components/dialog/modal';
 export * from './components/dialog/popover';
@@ -11,5 +11,7 @@ export * from './components/types';
 export * from './components/hue/hue';
 export * from './components/utils/clsq';
 export * from './components/utils/cssvar';
-export * from './components/utils/hooks';
 export * from './components/if';
+
+
+export * from './components/old-form/useOnChange';

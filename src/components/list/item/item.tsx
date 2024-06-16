@@ -1,39 +1,43 @@
-import { AriaAttributes, Slot, component$, useStyles$ } from "@builder.io/qwik";
+import { PropsOf, Slot, component$, useStyles$ } from "@builder.io/qwik";
 import { Link, LinkProps, useLocation } from "@builder.io/qwik-city";
 import { isSamePathname } from "../utils";
 import { mergeProps } from "../../utils/attributes";
-import { AnchorAttributes, ButtonAttributes } from "../../types";
 import style from './item.scss?inline';
 
 export const LinkItem = component$((props: LinkProps) => {
   useStyles$(style);
   const { url } = useLocation();
   const href = props.href;
-  const aria: AriaAttributes = {
+  const attributes = mergeProps<'a'>(props, {
+    class: "he-item he-item-link",
     'aria-current': isSamePathname(url.pathname, href) ? 'page' : null as any
-  };
-  return <Link {...mergeProps({ class: "he-link-item", ...aria }, props)}>
+  });
+  return <Link {...attributes}>
     <Slot/>
   </Link>
 });
 
 
-export const AnchorItem = component$((props: AnchorAttributes) => {
+export const AnchorItem = component$((props: PropsOf<'a'>) => {
   useStyles$(style);
   const { url } = useLocation();
   const href = props.href;
-  const aria: AriaAttributes = {
+  const attributes = mergeProps<'a'>(props, {
+    class: "he-item he-item-anchor",
     'aria-current': isSamePathname(url.pathname, href) ? 'page' : null as any
-  };
-  return <a {...mergeProps({ class: "he-anchor-item",...aria }, props)}>
+  });
+  return <a {...attributes}>
     <Slot/>
   </a>
 });
 
-export const ButtonItem = component$((props: ButtonAttributes) => {
+export const ButtonItem = component$((props: PropsOf<'button'>) => {
   useStyles$(style);
+  const attributes = mergeProps<'button'>(props, {
+    class: "he-item he-item-button"
+  });
   return <li>
-    <button {...mergeProps({ class: "he-button-item" }, props)}>
+    <button {...attributes}>
       <Slot/>
     </button>
   </li>

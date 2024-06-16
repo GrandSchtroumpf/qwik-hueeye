@@ -1,4 +1,4 @@
-export * from './base-form';
+export * from './form';
 export * from './list';
 export * from './dialog/modal';
 export * from './dialog/popover';
@@ -11,7 +11,6 @@ export * from './types';
 export * from './hue/hue';
 export * from './utils/clsq';
 export * from './utils/cssvar';
-export * from './utils/hooks';
 export * from './utils/attributes';
 export * from './if';
 export * from './icons/icon';

@@ -1,3 +1,34 @@
+@mixin primary {
+  --primary: oklch(var(--color-lightness) var(--color-chroma) var(--primary-hue));
+  --on-primary: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--primary-hue));
+}
+@mixin secondary {
+  --secondary: oklch(var(--color-lightness) var(--color-chroma) var(--secondary-hue));
+  --on-secondary: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--secondary-hue));
+}
+@mixin warn {
+  --warn: oklch(var(--color-lightness) var(--color-chroma) var(--warn-hue));
+  --on-warn: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--warn-hue));
+}
+
+@mixin surface($lightness) {
+  background-color: oklch($lightness var(--chroma) var(--hue));
+}
+@mixin hover($background, $on-background) {
+  background-color: color-mix(
+    in oklch shorter hue,
+    $on-background var(--alpha-hover),
+    $background
+  );
+}
+@mixin focus($background, $on-background) {
+  background-color: color-mix(
+    in oklch shorter hue,
+    $on-background var(--alpha-focus),
+    $background
+  );
+}
+
 @layer {
   :root {
     --font-family: system-ui,  sans-serif;
@@ -6,6 +37,8 @@
     --size-2: 16px;
     --size-3: 24px;
     --size-4: 32px;
+    --border-radius: 8px;
+    --border: none;
     
     --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
     --ease-out: cubic-bezier(0, 0.55, 0.45, 1);
@@ -31,21 +64,32 @@
   :root, ::backdrop {
     color-scheme: dark light;
     --chroma: 0.01;
+  
+    --color-lightness: 65%;
+    --color-chroma: 0.3;
+
+    --on-color-lightness: 100%;
+    --on-color-chroma: 0;
+
     --alpha-hover: 12%;
     --alpha-focus: 24%;
     --alpha-drag: 32%;
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
+      --color-lightness: 80%;
+      --color-chroma: 0.27;
+  
+      --on-color-lightness: 20%;
+      --on-color-chroma: 0.15;
     }
   }
-  
-  
   
   
   ::backdrop, .theme, :root {
     accent-color: var(--primary);
     --primary-hue: var(--hue);
     --secondary-hue: calc(var(--hue) + 90);
+    --warn-hue: 30;
   
     --text: oklch(10% var(--chroma) var(--hue));
     --text-variant: oklch(40% var(--chroma) var(--hue));
@@ -54,15 +98,6 @@
     --background-bright: oklch(98% var(--chroma) var(--hue));
     --background-blur: none;
     
-    --primary: oklch(65% 0.3 var(--primary-hue));
-    --on-primary: oklch(100% 0 var(--primary-hue));
-  
-    --secondary: oklch(65% 0.3 var(--secondary-hue));
-    --on-secondary: oklch(100% 0 var(--secondary-hue));
-  
-    --warn: oklch(65% 0.21 30);
-    --on-warn: oklch(100% 0 30);
-  
     --overlay: oklch(98% var(--chroma) var(--hue));
     --overlay-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     
@@ -102,15 +137,6 @@
       --background: oklch(15% var(--chroma) var(--hue));
       --background-bright: oklch(20% var(--chroma) var(--hue));
   
-      --primary: oklch(80% 0.27 var(--primary-hue));
-      --on-primary: oklch(20% 0.15 var(--primary-hue));
-  
-      --secondary: oklch(80% 0.27 var(--secondary-hue));
-      --on-secondary: oklch(20% 0.15 var(--secondary-hue));
-
-      --warn: oklch(80% 0.27 30);
-      --on-warn: oklch(20% 0.15 30);
-  
       --divider: oklch(70% var(--chroma) var(--hue));
           
       --overlay: oklch(25% var(--chroma) var(--hue));
@@ -124,6 +150,32 @@
       --gradient-start: oklch(30% var(--chroma) var(--hue));
       --gradient-end: oklch(15% var(--chroma) var(--hue));    
     }
+  }
+  body {
+    @include primary;
+    @include secondary;
+    @include warn;
+  }
+  .analog {
+    --primary-hue: var(--hue);
+    --secondary-hue: calc(var(--hue) - 45);
+    --tertiary-hue: calc(var(--hue) + 45);
+    @include primary;
+    @include secondary;
+  }
+  .triad {
+    --primary-hue: var(--hue);
+    --secondary-hue: calc(var(--hue) - 120);
+    --tertiary-hue: calc(var(--hue) + 120);
+    @include primary;
+    @include secondary;
+  }
+  .complementary {
+    --primary-hue: calc(var(--hue) + 180);
+    --secondary-hue: calc(var(--hue) - 30);
+    --tertiary-hue: calc(var(--hue) + 30);
+    @include primary;
+    @include secondary;
   }
   
   /****************/
@@ -156,8 +208,15 @@
     --gradient-end: var(--secondary);
   }
   
-  
-  
+  .flat {
+    --border-radius: 0;
+  }
+  .round {
+    --border-radius: 40px;
+  }
+  .outline {
+    --border: 1px solid var(--color, var(--outline));
+  }
   
   @keyframes scaleout {
     from {

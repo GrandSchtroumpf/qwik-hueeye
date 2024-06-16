@@ -1,39 +1,75 @@
-import { component$, useStyles$, event$, useSignal, useVisibleTask$, Slot } from "@builder.io/qwik";
-import { clsq, cssvar } from "../../utils";
+import { component$, useStyles$, event$, useSignal, useVisibleTask$, Slot, PropsOf, untrack, Signal, createContextId, QRL, useContextProvider, useContext, JSXChildren } from "@builder.io/qwik";
+import { cssvar } from "../../utils";
 import { round } from "./utils";
-import { useNameId } from "../field";
-import type { FieldsetAttributes } from "../types";
-import { ControlValueProps, extractControlProps, useControllerProvider } from "../control";
+import { useWithId } from "../../hooks/useWithId";
+import { WithControl, WithControlGroup, extractControls, useControlProvider, useGroupControlProvider } from "../control";
+import { mergeProps } from "../../utils/attributes";
+import { InputAttributes } from "../types";
+import { findNode } from "../../utils/jsx";
 import styles from './range.scss?inline';
 
 type RangeType = Record<string, number>;
-interface RangeProps extends FieldsetAttributes, ControlValueProps<RangeType> {
+interface BaseRangeProps extends PropsOf<'fieldset'> {
   min?: number | string;
   max?: number | string;
   step?: number | string;
-  startName?: string;
-  endName?: string;
 }
 
-export const Range = component$((props: RangeProps) => {
+interface RangeCtx {
+  min: number;
+  max: number;
+  step: number;
+  startInput: Signal<HTMLInputElement | undefined>;
+  endInput: Signal<HTMLInputElement | undefined>;
+  resize: QRL<() => void>;
+  move: QRL<(input: HTMLInputElement | undefined, mode: 'start' | 'end') => void>;
+  focusLeft: QRL<(start: HTMLInputElement) => void>;
+  focusRight: QRL<(start: HTMLInputElement) => void>;
+}
+const RangeContext = createContextId<RangeCtx>('RangeContext');
+
+export type RangeProps = BaseRangeProps & {
+  children: JSXChildren;
+}
+export const Range = (props: WithControlGroup<RangeType, RangeProps>) => {
+  const { children, ...attr } = props;
+  const startName = findNode(children, RangeStart)?.props.name ?? 'start';
+  const endName = findNode(children, RangeEnd)?.props.name ?? 'end';
+  return (
+    <RangeImpl {...attr} startName={startName} endName={endName}>
+      {children}
+    </RangeImpl>
+  )
+}
+
+
+export type RangeImplProps = BaseRangeProps & {
+  startName: string | number;
+  endName: string | number;
+}
+export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>((props) => {
   useStyles$(styles);
+  const id = useWithId(props.id);
   const slider = useSignal<HTMLFieldSetElement>();
   const track = useSignal<HTMLElement>();
   const startInput = useSignal<HTMLInputElement>();
   const endInput = useSignal<HTMLInputElement>();
-  const baseName = useNameId(props);
   
   const min = props.min ? Number(props.min) : 0;
   const max = props.max ? Number(props.max) : 100;
   const step = props.step ? Number(props.step) : 1;
-  const startName = props.startName ?? 'start';
-  const endName = props.endName ?? 'end';
-
-  const { bindValue, initialValue } = useControllerProvider(props, { [startName]: min, [endName]: max });
-  const initialPosition = {
-    start: initialValue[startName] / (max - min),
-    end: 1 - initialValue[endName] / (max - min),
-  };
+  const startName = props.startName;
+  const endName = props.endName;
+  
+  const { attr, controls } = extractControls(props);
+  const { control, name } = useGroupControlProvider({
+    value: { [startName]: min, [endName]: max },
+    ...controls
+  });
+  const initialPosition = untrack(() =>({
+    start: control[startName] / (max - min),
+    end: 1 - control[endName] / (max - min),
+  }));
   const cssVariables = cssvar({
     initialStart: round(initialPosition.start, 0.01),
     initialEnd: round(initialPosition.end, 0.01),
@@ -89,54 +125,102 @@ export const Range = component$((props: RangeProps) => {
     }
     setPosition(input, mode);
   });
-  const attr = extractControlProps(props);
+
+
+  useContextProvider(RangeContext, {
+    min,
+    max,
+    step,
+    startInput,
+    endInput,
+    resize,
+    move,
+    focusLeft,
+    focusRight,
+  });
 
   // Update UI on resize
   useVisibleTask$(() => {
     const obs = new ResizeObserver(() => {
-      const inputs = slider.value?.querySelectorAll<HTMLInputElement>('input');
-      setPosition(inputs!.item(0), 'start');
-      setPosition(inputs!.item(1), 'end');
+      if (startInput.value) setPosition(startInput.value, 'start');
+      if (endInput.value) setPosition(endInput.value, 'end');
     });
     obs.observe(slider.value!);
     return () => obs.disconnect();
   });
 
-  return <fieldset {...attr} class={clsq('range', props.class)} ref={slider} {...cssVariables}>
-    <Slot/>
-    <div class="track" ref={track}></div>
-    <input
-      type="range" 
-      name={`${baseName}.${startName}`}
-      ref={startInput}
-      min={min}
-      max={max}
-      step={step}
-      value={initialValue[startName]}
-      onFocus$={(_, el) => focusLeft(el)}
-      onInput$={(_, el) => move(el, 'start')}
-      onChange$={(_, el) => bindValue.value = { ...bindValue.value, [startName]: el.valueAsNumber }}
-      onMouseUp$={resize}
-      onTouchEnd$={resize}
-      onTouchCancel$={resize}
-    />
-    <div class="thumb start" data-value={initialValue[startName]}></div>
+  const fieldsetAttr = mergeProps<'fieldset'>(attr, cssVariables, {
+    id,
+    class: 'range',
+    ref: slider,
+    name: name?.toString(),
+  });
 
-    <input 
-      type="range" 
-      name={`${baseName}.${endName}`}
-      ref={endInput}
-      min={min}
-      max={max}
-      step={step}
-      value={initialValue[endName]}
-      onFocus$={(_, el) => focusRight(el)}
-      onInput$={(_, el) => move(el, 'end')}
-      onChange$={(_, el) => bindValue.value = { ...bindValue.value, [endName]: el.valueAsNumber }}
-      onMouseUp$={resize}
-      onTouchEnd$={resize}
-      onTouchCancel$={resize}
-    />
-    <div class="thumb end" data-value={initialValue[endName]}></div>
-  </fieldset>
+  return (
+    <fieldset {...fieldsetAttr} >
+      <div class="track" ref={track}></div>
+      <Slot/>
+    </fieldset>
+  )
+});
+
+
+export const RangeStart = component$<WithControl<number, InputAttributes>>((props) => {
+  const ctx = useContext(RangeContext);
+  const { attr, controls } = extractControls(props);
+  const { control, onChange, name } = useControlProvider({ name: 'start', ...controls });
+  const merged = mergeProps<'input'>(attr as any, {
+    type: "range", 
+    class: 'he-range-start-input',
+  });
+  return (
+    <>
+      <input
+        {...merged}
+        name={name?.toString()}
+        ref={ctx.startInput}
+        min={ctx.min}
+        max={ctx.max}
+        step={ctx.step}
+        value={control.value}
+        onFocus$={(_, el) => ctx.focusLeft(el)}
+        onInput$={(_, el) => ctx.move(el, 'start')}
+        onChange$={(_, el) => onChange(el.valueAsNumber)}
+        onMouseUp$={ctx.resize}
+        onTouchEnd$={ctx.resize}
+        onTouchCancel$={ctx.resize}
+      />
+      <div class="thumb start" data-value={control.value}></div>
+    </>
+  )
+});
+
+export const RangeEnd = component$<WithControl<number, InputAttributes>>((props) => {
+  const ctx = useContext(RangeContext);
+  const { attr, controls } = extractControls(props);
+  const { control, onChange, name } = useControlProvider({ name: 'end', ...controls });
+  const merged = mergeProps<'input'>(attr as any, {
+    type: "range", 
+    class: 'he-range-start-input',
+  });
+  return (
+    <>
+      <input
+        {...merged}
+        name={name?.toString()}
+        ref={ctx.endInput}
+        min={ctx.min}
+        max={ctx.max}
+        step={ctx.step}
+        value={control.value}
+        onFocus$={(_, el) => ctx.focusRight(el)}
+        onInput$={(_, el) => ctx.move(el, 'end')}
+        onChange$={(_, el) => onChange(el.valueAsNumber)}
+        onMouseUp$={ctx.resize}
+        onTouchEnd$={ctx.resize}
+        onTouchCancel$={ctx.resize}
+      />
+      <div class="thumb end" data-value={control.value}></div>
+    </>
+  )
 });

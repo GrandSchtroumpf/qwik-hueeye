@@ -1,23 +1,22 @@
 import { component$, Slot, useSignal, useStyles$ } from '@builder.io/qwik';
-import { Slider, useHueEye } from 'qwik-hueeye';
+import { Form, Slider, useHueEye } from 'qwik-hueeye';
 import { LinkItem, NavList } from 'qwik-hueeye';
 import { SvgGradient } from 'qwik-hueeye';
 import { Toaster, useToasterProvider } from 'qwik-hueeye';
-import { clsq } from 'qwik-hueeye';
 import styles from './layout.scss?inline';
 
 
 export default component$(() => {
   useStyles$(styles);
   useToasterProvider();
-  const { hue } = useHueEye();
+  const state = useHueEye();
   const open = useSignal(false);
-
   return <>
-    <div class={clsq('nav-overlay', open.value ? 'open' : 'close')} onClick$={() => open.value = false}>
-      <NavList aria-label="primary">
+    <div class={['nav-overlay', open.value ? 'open' : 'close']} onClick$={() => open.value = false}>
+      <NavList aria-label="primary" vertical>
         <LinkItem href="/">Theme</LinkItem>
         <LinkItem href="/form">Form</LinkItem>
+        <LinkItem href="/search-form">Search Form</LinkItem>
         <LinkItem href="/input">Input</LinkItem>
         <LinkItem href="/select">Select</LinkItem>
         <LinkItem href="/checkbox">Checkbox</LinkItem>
@@ -43,10 +42,12 @@ export default component$(() => {
         </svg>
       </button>
       <h1>Playground</h1>
-      <label class="hue-slider">
-        Hue
-        <Slider bind:value={hue} position="end" min="0" max="360"></Slider>
-      </label>
+      <Form bind:value={state}>
+        <label class="hue-slider">
+          Hue
+          <Slider name="hue" position="end" min="0" max="360"></Slider>
+        </label>
+      </Form>
     </header>
     <main>
       <Slot />

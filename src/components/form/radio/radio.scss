@@ -1,4 +1,4 @@
-.radio-group {
+.he-radio-group {
   display: flex;
   flex-direction: row;
   border-radius: 4px;
@@ -12,24 +12,18 @@
   &.fill {
     background-color: var(--surface);
   }
-  &.vertical {
+  &.vertical, &[aria-orientation="vertical"] {
     flex-direction: column;
     align-items: flex-start;
     gap: 0; /* we need padding for a11y, but gap make space too large */
-    .radio-item label {
-      padding: var(--size-1) 0;
-    }
   }
   &:focus-within, &:active {
     border-color: var(--color, var(--primary));
   }
-
-  & .radio-item label {
-    padding: var(--size-1) 0;
-  }
 }
 
-.radio-item {
+.he-radio {
+  padding: var(--size-1) 0;
   & input {
     opacity: 0;
     cursor: pointer;
@@ -85,6 +79,27 @@
       transform-origin: center;
       transform: scale(0);
       transition: transform 0.3s var(--ease-back-in-out);
+    }
+  }
+
+  &.vertical {
+    & label {
+      padding: var(--size-1) var(--size-2);
+      border-radius: var(--size-0);
+      flex-direction: column-reverse;
+      &:hover {
+        background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
+      }
+      & svg {
+        width: 8px;
+        height: 8px;
+      }
+    }
+    & input:checked + label {
+      background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-drag), transparent);
+      &:hover {
+        background-color: color-mix(in oklch, var(--color, var(--text)) var(--alpha-hover), transparent);
+      }
     }
   }
 }

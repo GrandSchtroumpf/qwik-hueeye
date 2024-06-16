@@ -1,34 +1,34 @@
-import type { QRL, Signal } from "@builder.io/qwik";
-import { useTask$, useVisibleTask$} from "@builder.io/qwik";
-import { component$, Slot, useSignal, $, useComputed$, useStyles$ } from "@builder.io/qwik";
-import type { DialogAttributes } from "../types";
+import type { PropsOf, QRL, Signal } from "@builder.io/qwik";
+import { createContextId, sync$, useContext, useContextProvider, useId, useTask$ } from "@builder.io/qwik";
+import { component$, Slot, useSignal, $, useStyles$ } from "@builder.io/qwik";
 import type { PopoverOption} from "./utils";
 import { setMenuPosition } from "./utils";
+import { mergeProps } from "../utils/attributes";
 import styles from './dialog.scss?inline';
-import { clsq } from "../utils";
 
 
-interface PopoverProps extends Omit<DialogAttributes, 'open'> {
+interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
   origin: Signal<HTMLElement | undefined>;
   /** Describe a common parent in case of stacked dialogs */
   layer?: Signal<HTMLElement | undefined>;
-  open: Signal<boolean>;
+  // open: Signal<boolean>;
   position: PopoverOption['position'];
-  onOpen$?: QRL<() => void>
   onClose$?: QRL<() => void>
 }
 
 
 export const Popover = component$((props: PopoverProps) => {
   useStyles$(styles);
-  const opened = props.open;
-  const origin = props.origin;
-  const layer = props.layer;
-  const position = props.position ?? 'block';
+  const {
+    origin,
+    layer,
+    position = 'block',
+    onClose$,
+    ...attr
+  } = props;
+  const { popoverId, open } = useContext(PopoverContext);
   const ref = useSignal<HTMLDialogElement>();
   const closing = useSignal(false);
-  const onClose$ = props.onClose$;
-  const propsClass = props.class;
 
   const close = $(() => {
     if (!ref.value) return;
@@ -41,15 +41,15 @@ export const Popover = component$((props: PopoverProps) => {
   });
 
   useTask$(({ track }) => {
-    track(() => opened.value);
-    if (opened.value) {
+    track(() => open.value);
+    if (open.value) {
       if (window.matchMedia("(min-width: 600px)").matches) {
         const handler = (event: Event) => {
           const target = event.target as HTMLElement;
           if (layer?.value?.contains(target)) return;
           if (ref.value?.contains(event.target as HTMLElement)) return;
           if (ref.value === target) return;
-          opened.value = false;
+          open.value = false;
         }
         setMenuPosition(origin.value!, ref.value!, { position });
         ref.value!.show();
@@ -57,7 +57,7 @@ export const Popover = component$((props: PopoverProps) => {
         return () => document.removeEventListener('click', handler);
       } else {
         const handler = (event: Event) => {
-          if (event.target === ref.value) opened.value = false;
+          if (event.target === ref.value) open.value = false;
         }
         ref.value!.showModal();
         ref.value?.addEventListener('click', handler);
@@ -68,26 +68,61 @@ export const Popover = component$((props: PopoverProps) => {
     }
   });
 
-  // prevent default closing to keep state in sync
-  useVisibleTask$(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        opened.value = false;
-      }
-    }
-    ref.value?.addEventListener("keydown", handler);
-    return (() => ref.value?.removeEventListener("keydown", handler));
+  const merged = mergeProps<'dialog'>(attr, {
+    id: popoverId,
+    ref,
+    class: ['popover', closing.value ? 'closing' : ''],
+    onKeyDown$: [
+      sync$((e: KeyboardEvent) => e.key === 'Escape' && e.preventDefault()),
+      $((e: KeyboardEvent) => {
+        if (e.key === 'Escape') open.value = false
+      }),
+    ]
   });
 
-
-  const classes = useComputed$(() => clsq(
-    'popover',
-    propsClass,
-    closing.value ? 'closing' : ''
-  ));
-
-  return <dialog class={classes} ref={ref} >
+  return <dialog {...merged} >
     <Slot />
   </dialog>
+})
+
+interface PopoverRootProps {
+  popoverId?: string;
+  open?: Signal<boolean>;
+}
+export const PopoverContext = createContextId<PopoverRootProps>('PopoverContext');
+export const PopoverRoot = component$<PopoverRootProps>((props) => {
+  const popoverId = useId();
+  const open = useSignal(false);
+  useContextProvider(PopoverContext, {
+    popoverId,
+    open,
+    ...props
+  });
+  return <Slot />
+})
+
+export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
+  const id = useId();
+  const { popoverId, open } = useContext(PopoverContext);
+  return (
+    <button 
+      id={id}
+      {...props}
+      type="button"
+      role="combobox"
+      aria-haspopup="listbox" 
+      aria-disabled="false"
+      aria-invalid="false"
+      aria-autocomplete="none"
+      aria-expanded={open.value}
+      aria-controls={popoverId}
+      aria-labelledby={'label-' + id}
+      onClick$={() => open.value = !open.value}
+    >
+      <Slot />
+      <svg viewBox="7 10 10 5" class={open.value ? 'opened' : 'closed'} aria-hidden="true" focusable="false">
+        <polygon stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+      </svg>
+    </button>
+  )
 })

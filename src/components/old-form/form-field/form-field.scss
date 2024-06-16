@@ -1,0 +1,107 @@
+.form-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--size-1);
+  &.outline {
+    .field {
+      border: solid 1px var(--outline);
+      border-radius: var(--size-0);
+      &:hover {
+        background-color: var(--surface);
+      }
+      &:focus-within, &:active {
+        border-color: var(--primary);
+        background-color: var(--surface-higher);
+      }
+    }
+  }
+  &.fill {
+    .field {
+      background-color: var(--surface);
+      &:hover {
+        background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--surface));
+      }
+      &:focus-within, &:active {
+        background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--surface));
+      }
+    } 
+  }
+  &.round {
+    .field {
+      border-radius: var(--size-4);
+    }
+    &:not(.outline) .field {
+      border: none;
+    }
+  }
+
+  @supports selector(:has(input)) {
+    &.overlay {
+      position: relative;
+      label {
+        position: absolute;
+        inset: var(--size-1) var(--size-2);
+        opacity: 0.5;
+        pointer-events: none;
+        transform: translateY(-0.8rem) scale(0.6);
+        transform-origin: 0 0;
+        transition: transform 0.1s var(--ease-in-out);
+      }
+      input::placeholder {
+        opacity: 0;
+      }
+      &:has(input:placeholder-shown) {
+        label {
+          transform: translateY(0) scale(1);
+        }
+      }
+      &.fill {
+        label {
+          opacity: 0.7;
+        }
+      }
+      &.outline {
+        label {
+          inset-block: var(--size-2);
+        }
+        .field {
+          padding-block: var(--size-2);
+        }
+      }
+      &.round {
+        label {
+          inset-inline: var(--size-3);
+        }
+        .field {
+          padding-inline: var(--size-3);
+        }
+      }
+    }
+  }
+
+  .field {
+    box-sizing: border-box;
+    padding: var(--size-1) var(--size-2);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: none;
+    border-bottom: solid 2px var(--outline);
+    display: inline-flex;
+    
+    &.round {
+      border-radius: var(--size-4);
+    }
+    &.outline {
+      border: solid 1px var(--outline);
+      border-bottom: solid 2px var(--divider);
+    }
+    &.fill {
+      background-color: var(--surface);
+    }
+  
+    &:focus-within, &:active {
+      border-bottom-color: var(--primary);
+    }
+  }
+}  
+

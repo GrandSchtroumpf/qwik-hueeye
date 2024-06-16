@@ -1,0 +1,93 @@
+.he-toggle-list {
+  --he-toggle-background: transparent;
+  --he-toggle-border-color: var(--outline);
+  --he-toggle-padding: var(--size-1);
+  --he-toggle-gap: 0;
+
+  position: relative;
+  padding: var(--toggle-padding);
+  box-sizing: border-box;
+  display: flex;
+  gap: var(--he-toggle-gap);
+  border-radius: var(--border-radius);
+  border: var(--border);
+  background-color: var(--he-toggle-background);
+
+  &.vertical,
+  &[aria-orientation="vertical"] {
+    flex-direction: column;
+  }
+  &.fill {
+    --he-toggle-background: var(--surface);
+    & input:checked + label {
+      --toggle-background: var(--color, var(--surface-high));
+      --on-toggle-background: var(--on-color, var(--text));
+    }
+  }
+  &:focus-within, &:active {
+    --he-toggle-border-color: var(--color, var(--primary));
+  }
+  &:has(input:invalid) {
+    --he-toggle-border-color: var(--error);
+  }
+
+  & .he-toggle-item {
+    flex: 1;
+    position: relative;
+    &:first-child label {
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+    }
+    &:last-child label {
+      border-top-right-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+  }
+
+  & input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+
+    &:focus-visible + label {
+      // Use divider because surface-low is same as outline
+      outline: solid 1px var(--divider);
+      background-color: color-mix(
+        in oklch,
+        var(--text) var(--alpha-focus),
+        var(--he-toggle-background)
+      );
+    }
+    &:checked + label {
+      --he-toggle-checked-background: var(--color, var(--surface));
+      --on-he-toggle-checked-background: var(--on-color, var(--text));
+      color: var(--on-he-toggle-checked-background);
+      background-color: var(--he-toggle-checked-background);
+      &:hover {
+        background-color: color-mix(
+          in oklch,
+          var(--on-he-toggle-checked-background) var(--alpha-hover),
+          var(--he-toggle-checked-background)
+        );
+      }
+    }
+  }
+  & label {
+    flex: 1;
+    cursor: pointer;
+    display: block;
+    padding: 8px 16px;
+    text-align: center;
+    position: relative;
+    &:hover {
+      background-color: color-mix(
+        in oklch,
+        var(--text) var(--alpha-hover),
+        var(--he-toggle-background)
+      );
+    }
+  }
+
+}

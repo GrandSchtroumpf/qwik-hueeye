@@ -1,11 +1,11 @@
-import { $, component$, createContextId, event$, Slot, useContext, useContextProvider, useId, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
-import type { JSXChildren, JSXNode, QRL} from "@builder.io/qwik";
+import { $, component$, createContextId, event$, Slot, sync$, useContext, useContextProvider, useId, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
+import type { JSXChildren, JSXNode, JSXOutput, PropsOf, QRL} from "@builder.io/qwik";
 import type { DivAttributes, ButtonAttributes } from "../types";
-import { ArrowsKeys, ControlKeys, cssvar, nextFocus, previousFocus } from "../utils";
-import styles from './tabs.scss?inline';
-import { useKeyboard } from "../utils/keyboard";
 import { startViewTransition } from "../utils/transition";
 import { FunctionComponent } from "@builder.io/qwik/jsx-runtime";
+import { mergeProps } from "../utils/attributes";
+import { disableTab, enableTab, focusList } from "../list/utils";
+import styles from './tabs.scss?inline';
 
 export type TabLabel = string | QRL<((id: string, i: number) => JSXNode)>;
 
@@ -54,29 +54,27 @@ const animateTab = $((state: TabsContextState, dir: 1 | -1) => {
 
 const TabsContext = createContextId<TabsContextState>('TabsContext');
 
-interface TabGroupImplProps extends DivAttributes {
-  noAnimation?: boolean
+interface TabGroupProps extends PropsOf<'div'> {
+  vertical?: boolean;
 }
 
-export const TabGroupImpl = component$((props: TabGroupImplProps) => {
+export const TabGroupImpl = component$((props: TabGroupProps) => {
   useStyles$(styles);
-  const ref = useSignal<HTMLElement>();
   const baseTransitionName = useId();
   const tabTransitionName = `tab-${baseTransitionName}`;
   const tabPanelTransitionName = `panel-${baseTransitionName}`;
   const state = useStore({
     active: '',
     leaving: '',
-    noAnimation: props.noAnimation,
     tabTransitionName,
     tabPanelTransitionName
   });
   useContextProvider(TabsContext, state);
+  const merged = mergeProps<'div'>(props, {
+    class: ['tab-group', props.vertical ? 'vertical' : ''],
+  });
 
-  const {style} = state.noAnimation
-    ? { style: '' }
-    : cssvar({tabTransitionName, tabPanelTransitionName});
-  return <div class="tab-group" ref={ref} style={style} {...props}>
+  return <div {...merged}>
       <Slot/>
   </div>
 });
@@ -84,19 +82,18 @@ export const TabGroupImpl = component$((props: TabGroupImplProps) => {
 
 
 export const TabListImpl = component$(() => {
-  const ref = useSignal<HTMLElement>();
-  useKeyboard(ref, [...ArrowsKeys, ...ControlKeys], $((event) => {
-    const key = event.key;
-    if (key === 'ArrowDown' || key === 'ArrowRight') {
-      nextFocus(ref.value?.querySelectorAll<HTMLElement>('[role="tab"]'));
-    }
-    if (key === 'ArrowUp' || key === 'ArrowLeft') {
-      previousFocus(ref.value?.querySelectorAll<HTMLElement>('[role="tab"]'));
-    }
-    if (key === ' ' || key === 'Enter') (document.activeElement as HTMLElement).click();
-  }));
-
-  return <div ref={ref} class="tab-list" role="tablist">
+  const preventKeyDown = sync$((e: KeyboardEvent) => {
+    const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', ' ', 'Home', 'End'];
+    if (keys.includes(e.key)) e.preventDefault();
+  });
+  const onKeyDown = $((e: KeyboardEvent, el: HTMLElement) => focusList('[role="tab"]', e, el));
+  return <div
+    class="tab-list"
+    role="tablist"
+    onKeyDown$={[preventKeyDown, onKeyDown]}
+    onFocusIn$={(e, el) => disableTab(el, '[role="tab"]')}
+    onFocusOut$={(e, el) => enableTab(el, '[role="tab"]', '[role="tab"][aria-selected="true"]')}
+  >
     <Slot/>
   </div>
 });
@@ -138,7 +135,6 @@ export const TabImpl = component$((props: TabProps) => {
     role="tab" 
     class="tab"
     type="button"
-    tabIndex={state.active === id ? 0 : -1}
     aria-controls={`panel-${id}`}
     aria-selected={state.active === id}
     onClick$={activate}
@@ -164,9 +160,8 @@ export const TabPanelImpl = component$((props: TabPanelProps) => {
 
   return <div id={`panel-${tabId}`}
     role="tabpanel"
-    class="tab-panel"
+    class={["tab-panel", props.class]}
     aria-labelledby={tabId}
-    tabIndex={state.active === tabId ? 0 : -1}
     hidden={state.active !== tabId}
     {...attr}
   >
@@ -174,29 +169,33 @@ export const TabPanelImpl = component$((props: TabPanelProps) => {
   </div>
 });
 
-export const Tab: FunctionComponent<{label: JSXChildren, children: any}> = (props) => {
+export const Tab: FunctionComponent<PropsOf<'div'> & { label: JSXChildren, children: JSXOutput }> = (props) => {
   return props.children;
 }
 
 
-export const TabGroup: FunctionComponent<TabGroupImplProps> = ({ children, ...props }) => {
-  const tabIds: string[] = [];
-  const tabs = [];
+export const TabGroup: FunctionComponent<TabGroupProps> = ({ children, ...props }) => {
+  const tabs: JSXChildren[] = [];
   const tabPanels = [];
+  const tabProps: TabPanelProps[] = [];
   if (children instanceof Array) {
-    for (const tab of children as JSXNode[]) {
+    for (const tab of children as JSXNode<typeof Tab>[]) {
       if (tab.type !== Tab) continue;
-      tabIds.push(tab.key ?? crypto.randomUUID());
-      tabs.push(tab.props.label)
+      const { label, ...rest } = tab.props;
+      tabs.push(label);
       tabPanels.push(tab.children);
+      tabProps.push({
+        tabId: tab.key ?? crypto.randomUUID(),
+        ...rest
+      })
     }
   }
   return <TabGroupImpl {...props}>
     <TabListImpl>
-      {tabs.map((tab, i) => <TabImpl id={tabIds[i]} key={tabIds[i]}>{tab}</TabImpl>)}
+      {tabs.map((tab, i) => <TabImpl id={tabProps[i].tabId} key={tabProps[i].tabId}>{tab}</TabImpl>)}
     </TabListImpl>
     <TabPanelListImpl>
-      {tabPanels.map((panel, i) => <TabPanelImpl tabId={tabIds[i]} key={tabIds[i]}>{panel}</TabPanelImpl>)}
+      {tabPanels.map((panel, i) => <TabPanelImpl key={tabProps[i].tabId} {...tabProps[i]}>{panel}</TabPanelImpl>)}
     </TabPanelListImpl>
   </TabGroupImpl>
 
