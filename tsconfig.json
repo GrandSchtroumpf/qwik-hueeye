@@ -17,7 +17,7 @@
     "isolatedModules": true,
     "types": ["node", "vite/client"],
     "paths": {
-      "qwik-hueeye": ["./src/index.ts"]
+      "qwik-hueeye-lib": ["./src/index.ts"]
     }
   },
   "include": ["src"]

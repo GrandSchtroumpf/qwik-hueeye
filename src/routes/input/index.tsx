@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { FormField, Input, Label } from "qwik-hueeye";
+import { FormField, Input, Label } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 

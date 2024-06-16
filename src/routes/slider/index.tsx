@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
-import { Slider, Range, RangeStart, RangeEnd } from "qwik-hueeye";
+import { Slider, Range, RangeStart, RangeEnd } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 

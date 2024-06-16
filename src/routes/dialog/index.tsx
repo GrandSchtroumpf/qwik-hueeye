@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { Modal } from "qwik-hueeye";
+import { Modal } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {

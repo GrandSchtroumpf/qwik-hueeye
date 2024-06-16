@@ -1,9 +1,9 @@
-import { component$, Slot, useSignal, useStyles$ } from '@builder.io/qwik';
-import { Form, Slider, useHueEye } from 'qwik-hueeye';
-import { LinkItem, NavList } from 'qwik-hueeye';
-import { SvgGradient } from 'qwik-hueeye';
-import { Toaster, useToasterProvider } from 'qwik-hueeye';
-import styles from './layout.scss?inline';
+import { component$, Slot, useSignal, useStyles$ } from "@builder.io/qwik";
+import { Form, Slider, useHueEye } from "qwik-hueeye-lib";
+import { LinkItem, NavList } from "qwik-hueeye-lib";
+import { SvgGradient } from "qwik-hueeye-lib";
+import { Toaster, useToasterProvider } from "qwik-hueeye-lib";
+import styles from "./layout.scss?inline";
 
 
 export default component$(() => {

@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
-import { SwitchGroup, Switch } from "qwik-hueeye";
+import { SwitchGroup, Switch } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 

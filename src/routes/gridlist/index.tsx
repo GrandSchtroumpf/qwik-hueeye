@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { NavGrid, LinkItem, ActionGrid, ButtonItem, Modal } from "qwik-hueeye";
+import { NavGrid, LinkItem, ActionGrid, ButtonItem, Modal } from "qwik-hueeye-lib";
 import pokemons from './pokemon.json';
 import styles from './index.scss?inline';
 

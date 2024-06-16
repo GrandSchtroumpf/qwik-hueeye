@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { RadioGroup, Radio } from "qwik-hueeye";
+import { RadioGroup, Radio } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 

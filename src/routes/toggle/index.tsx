@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
-import { ToggleList, ToggleGroup, Toggle, ToggleItem } from "qwik-hueeye";
+import { ToggleList, ToggleGroup, Toggle, ToggleItem } from "qwik-hueeye-lib";
 import { MatIcon } from "../../components";
 import style from './index.scss?inline';
 

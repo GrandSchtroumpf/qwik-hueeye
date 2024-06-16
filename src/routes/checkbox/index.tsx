@@ -1,5 +1,5 @@
 import { component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
-import { CheckAll, CheckList, CheckItem, Checkbox } from "qwik-hueeye";
+import { CheckAll, CheckList, CheckItem, Checkbox } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 

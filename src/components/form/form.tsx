@@ -8,7 +8,7 @@ type FormProps<T extends ControlGroup> =  PropsOf<'form'> & FormControlProps<T> 
 }
 
 export const Form = component$(function <T extends ControlGroup>(props: FormProps<T>) {
-  const form = useFormProvider(props);
+  const { form } = useFormProvider(props);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { value, 'bind:value': bindValue, onFormSubmit$, onFormChange$, ...attr } = props;
   useOn('submit', $((e, el: HTMLFormElement) => onFormSubmit$?.(form, el)));

@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { MenuRoot, MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger, MenuRadio, MenuGroup } from "qwik-hueeye";
+import { MenuRoot, MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger, MenuRadio, MenuGroup } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {

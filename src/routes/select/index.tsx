@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { Select, Label, FormField, Option } from "qwik-hueeye";
+import { Select, Label, FormField, Option } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 const options: Record<string, string> = {

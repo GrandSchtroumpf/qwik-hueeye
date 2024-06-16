@@ -1,7 +1,7 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { FormField, Input, Label } from "qwik-hueeye";
-import { Tab, TabGroup } from "qwik-hueeye";
+import { FormField, Input, Label } from "qwik-hueeye-lib";
+import { Tab, TabGroup } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {

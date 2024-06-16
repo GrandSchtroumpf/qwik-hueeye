@@ -1,7 +1,7 @@
 import { useSignal, useStyles$ } from "@builder.io/qwik";
 import { component$ } from "@builder.io/qwik";
 import styles from './index.scss?inline';
-import { cssvar, Radio, RadioGroup } from "qwik-hueeye";
+import { cssvar, Radio, RadioGroup } from "qwik-hueeye-lib";
 
 export const Icon = component$(() => {
   return <svg viewBox="0 0 24 24">

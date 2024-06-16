@@ -9,6 +9,7 @@ import {
   useComputed$,
   useSignal,
   untrack,
+  useTask$,
 } from '@builder.io/qwik';
 import type { Serializable, ControlGroup } from './types';
 
@@ -91,7 +92,9 @@ export function useGroupControlProvider<T extends ControlGroup>(
   const store = useStore(copyStore(initial));
   const control = bindValue ?? fromParentStore<T>(parent, name) ?? store;
 
-  if (parent && name) parent[name] ||= initial;
+  useTask$(() => {
+    if (parent && name) parent[name] ||= initial;
+  });
 
   const onChange = $((value: Partial<T>) => {
     const group = bindValue ?? fromParentStore<ControlGroup>(parent, name) ?? store;
@@ -126,7 +129,9 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   const store = useStore(copyStore(initial));
   const list = useComputed$(() => bindValue ?? fromParentStore<T[]>(parent, name) ?? store);
 
-  if (parent && name) parent[name] ||= initial;
+  useTask$(() => {
+    if (parent && name) parent[name] ||= initial;
+  });
 
   const set = $((value: T[]) => {
     if (bindValue) bindValue.splice(0, bindValue.length, ...value);
@@ -177,7 +182,9 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
   const initial = untrack(() => fromParent<T>(parent, name) ?? value);
   const signal = useSignal<T | undefined>(initial);
 
-  if (parent && name) parent[name] ||= initial;
+  useTask$(() => {
+    if (parent && name) parent[name] ||= initial;
+  });
 
   // Input
   const control: Readonly<Signal<T | undefined>> = useComputed$(() => {

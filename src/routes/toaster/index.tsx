@@ -1,5 +1,5 @@
 import { $, component$ } from "@builder.io/qwik";
-import { Toaster, ToastNode, useToasterProvider } from "qwik-hueeye";
+import { Toaster, ToastNode, useToasterProvider } from "qwik-hueeye-lib";
 
 export default component$(() => {
   const {add, remove} = useToasterProvider();

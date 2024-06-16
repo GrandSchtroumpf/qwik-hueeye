@@ -1,13 +1,13 @@
 import { component$, event$, useStore, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { Form, Input, Option, RangeEnd, RangeStart, Select } from "qwik-hueeye";
-import { Range, Slider } from "qwik-hueeye";
-import { FormField, Label } from "qwik-hueeye";
-import { ToggleGroup, Toggle } from "qwik-hueeye";
-import { useToaster } from "qwik-hueeye";
-import { RadioGroup, Radio } from "qwik-hueeye";
-import { CheckAll, CheckList, CheckItem } from "qwik-hueeye";
-import { SwitchGroup, Switch } from "qwik-hueeye";
+import { Form, Input, Option, RangeEnd, RangeStart, Select } from "qwik-hueeye-lib";
+import { Range, Slider } from "qwik-hueeye-lib";
+import { FormField, Label } from "qwik-hueeye-lib";
+import { ToggleGroup, Toggle } from "qwik-hueeye-lib";
+import { useToaster } from "qwik-hueeye-lib";
+import { RadioGroup, Radio } from "qwik-hueeye-lib";
+import { CheckAll, CheckList, CheckItem } from "qwik-hueeye-lib";
+import { SwitchGroup, Switch } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 
