@@ -1,4 +1,8 @@
-.he-grid-list {
+@use '../index.scss' as list;
+
+.he-list-grid,
+.he-nav-grid,
+.he-action-grid {
   list-style: none;
   margin-block: 0;
   list-style: none;
@@ -11,4 +15,9 @@
   & > li {
     display: contents;
   }
+}
+
+.he-nav-grid,
+.he-action-grid {
+  @include list.list-vertical-selectable;
 }

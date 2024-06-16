@@ -12,6 +12,10 @@
   }
 }
 
+.he-item-button {
+  @include list.item-selectable;
+}
+
 .he-item-anchor,
 .he-item-link {
   padding: var(--size-1) var(--size-2);

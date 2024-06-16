@@ -1,6 +1,6 @@
 import { $, PropsOf, Slot, component$, sync$, useStyles$ } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
-import { focusList } from "../utils";
+import { disableTab, enableTab, focusList } from "../utils";
 import styles from './list.scss?inline';
 
 const preventKeyDown = sync$((e: KeyboardEvent) => {
@@ -17,6 +17,8 @@ export const ActionList = component$((props: PropsOf<'ul'>) => {
       preventKeyDown,
       $((e, el) => focusList('button', e, el))
     ],
+    onFocusIn$: $((e, el) => disableTab(el, 'ul > li > button')),
+    onFocusOut$: $((e, el) => enableTab(el, 'ul > li > button')),
   });
   return <ul {...merged}>
     <Slot/>
@@ -36,6 +38,8 @@ export const NavList = component$((props: NavListProps) => {
       preventKeyDown,
       $((e, el) => focusList('a', e, el))
     ],
+    onFocusIn$: $((e, el) => disableTab(el, 'nav > a')),
+    onFocusOut$: $((e, el) => enableTab(el, 'nav > a', 'nav > a[aria-current="page"]')),
     'aria-orientation': props.vertical ? 'vertical' : 'horizontal'
   })
   return <nav {...merged}>

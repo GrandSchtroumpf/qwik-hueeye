@@ -31,13 +31,6 @@
     align-items: center;
     padding: var(--size-1) var(--size-2);
     border: none;
-
-    @media (prefers-reduced-motion: no-preference) {
-      view-timeline-name: --card;
-      animation: slide-fade-in both;
-      animation-timeline: --card;
-      animation-range: cover 0% contain var(--card-position);
-    }
   }
 }
 

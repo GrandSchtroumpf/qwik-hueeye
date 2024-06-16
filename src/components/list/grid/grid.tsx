@@ -1,8 +1,9 @@
-import { $, Slot, component$, sync$ } from "@builder.io/qwik";
+import { $, Slot, component$, sync$, useStyles$ } from "@builder.io/qwik";
 import { firstFocus, lastFocus, leaveFocus, nextFocus, previousFocus } from "../../utils";
 import type { NavAttributes, UlAttributes } from "../../types";
 import { mergeProps } from "../../utils/attributes";
-import styles from './grid.module.scss';
+import { disableTab, enableTab } from "../utils";
+import styles from './grid.scss?inline';
 
 const nextLine = $((root: HTMLElement, selector: string, options?: FocusOptions) => {
   const list = root.querySelectorAll<HTMLElement>(selector);
@@ -38,6 +39,7 @@ export const gridKeyboard = (selector: string = 'a') => $((event: KeyboardEvent,
 });
 
 export const NavGrid = component$((props: NavAttributes) => {
+  useStyles$(styles);
   const preventDefault = sync$((event: KeyboardEvent) => {
     const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home'];
     if (keys.includes(event.key)) event.preventDefault();
@@ -45,8 +47,10 @@ export const NavGrid = component$((props: NavAttributes) => {
 
   const onKeyDown$ = gridKeyboard('a');
   const attr = mergeProps<'nav'>(props, {
-    class: styles.heGridList,
+    class: 'he-nav-grid',
     onKeyDown$: [preventDefault, onKeyDown$],
+    onFocusIn$: $((e, el) => disableTab(el, 'nav > a')),
+    onFocusOut$: $((e, el) => enableTab(el, 'nav > a', 'nav > a[aria-current="page"]'))
   });
   return <nav {...attr}>
     <Slot/>
@@ -55,6 +59,7 @@ export const NavGrid = component$((props: NavAttributes) => {
 });
 
 export const ActionGrid = component$((props: UlAttributes) => {
+  useStyles$(styles);
   const preventDefault = sync$((event: KeyboardEvent) => {
     const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home'];
     if (keys.includes(event.key)) event.preventDefault();
@@ -62,8 +67,10 @@ export const ActionGrid = component$((props: UlAttributes) => {
 
   const onKeyDown$ = gridKeyboard('li > button');
   const attr = mergeProps<'ul'>(props, {
-    class: styles.heGridList,
+    class: 'he-action-grid',
     onKeyDown$: [preventDefault, onKeyDown$],
+    onFocusIn$: $((e, el) => disableTab(el, 'ul > li > button')),
+    onFocusOut$: $((e, el) => enableTab(el, 'ul > li > button')),
     role: 'list',
   });
   return <>

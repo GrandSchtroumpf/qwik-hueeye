@@ -45,7 +45,8 @@ export const disableTab = $((root: HTMLElement, itemSelector: string) => {
     if (active !== item[i]) item[i].setAttribute('tabindex', '-1');
   }
 });
-export const enableTab = $((root: HTMLElement, itemSelector: string, selectedSelector: string) => {
+export const enableTab = $((root: HTMLElement, itemSelector: string, selectedSelector?: string) => {
+  if (!selectedSelector) return root.querySelector(itemSelector)?.setAttribute('tabindex', '0');
   const item = root.querySelector(selectedSelector) ?? root.querySelector(itemSelector);
   item?.setAttribute('tabindex', '0');
 });

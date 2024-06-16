@@ -22,6 +22,6 @@
     @include list.list-vertical-selectable;
   }
   &[aria-orientation="horizontal"] {
-    @include list.list-vertical-selectable;
+    @include list.list-horizontal-selectable;
   }
 }
