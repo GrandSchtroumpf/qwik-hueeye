@@ -19,9 +19,9 @@
 
 .he-nav-list {
   &[aria-orientation="vertical"] {
-    @include list.list-vertical-selectable;
+    @include list.list-vertical-selectable(list);
   }
   &[aria-orientation="horizontal"] {
-    @include list.list-horizontal-selectable;
+    @include list.list-horizontal-selectable(list);
   }
 }

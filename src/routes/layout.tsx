@@ -33,6 +33,7 @@ export default component$(() => {
         <LinkItem href="/tooltip">Tooltip</LinkItem>
         <LinkItem href="/toaster">Toaster</LinkItem>
         <LinkItem href="/gridlist">Grid List</LinkItem>
+        <LinkItem href="/listbox">Listbox</LinkItem>
       </NavList>
     </div>
     <header class="page-header">

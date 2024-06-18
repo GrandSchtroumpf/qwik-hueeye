@@ -1,7 +1,8 @@
-import { component$, createContextId, Slot, useContext, useContextProvider, useVisibleTask$, useTask$, useStyles$, useStore } from "@builder.io/qwik";
+import { component$, createContextId, Slot, useContext, useContextProvider, useTask$, useStyles$, useStore } from "@builder.io/qwik";
 import { SvgGradient } from "../svg-gradient";
-import style from './hue.scss?inline';
 import { IconConfig, useIconProvider } from "../icons/useIcon";
+import style from './hue.scss?inline';
+import { isServer } from "@builder.io/qwik/build";
 
 export type HueEyeState = {
   hue?: number;
@@ -19,13 +20,15 @@ if (theme) {
 const HueEyeSession = component$(() => {
   const state = useContext(HueEyeContext);
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useTask$(() => {
+    if (isServer) return;
     const localHue = document.documentElement.style.getPropertyValue('--hue');
     if (localHue) state.hue = Number(localHue);
   });
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
+  useTask$(({ track }) => {
     const change = track(() => state.hue);
+    if (isServer) return;
     if (typeof change === 'undefined') return;
     sessionStorage.setItem('hueeye', JSON.stringify({ hue: change }));
   });

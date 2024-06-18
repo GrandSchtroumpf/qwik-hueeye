@@ -2,7 +2,15 @@
   width: 80%;
   max-width: 800px;
   margin: var(--size-3) auto;
-  height: 200vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-3);
+
+  article {
+    border-radius: var(--size-2);
+    padding: var(--size-2);
+    background-color: var(--surface);
+  }
 }
 .tab-panel {
   padding: var(--size-1) var(--size-2);

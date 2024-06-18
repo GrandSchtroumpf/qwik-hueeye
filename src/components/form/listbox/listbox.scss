@@ -2,9 +2,12 @@
 .he-listbox {
   display: flex;
   flex-direction: column;
-  padding-left: 0;
+  padding: var(--size-0);
   margin-block: 0;
   &[aria-multiselectable="false"] {
-    @include list.list-vertical-selectable;
+    @include list.list-vertical-selectable(listbox);
+  }
+  &[aria-multiselectable="true"] {
+    @include list.list-multi-selectable(multi-listbox);
   }
 }

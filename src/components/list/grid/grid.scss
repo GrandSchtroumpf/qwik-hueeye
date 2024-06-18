@@ -19,5 +19,5 @@
 
 .he-nav-grid,
 .he-action-grid {
-  @include list.list-vertical-selectable;
+  @include list.list-vertical-selectable(grid);
 }

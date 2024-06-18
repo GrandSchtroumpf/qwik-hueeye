@@ -44,7 +44,7 @@ export default () => {
   return (
     <QwikCityProvider>
       <head>
-        <meta charSet="utf-8" />
+        <meta charset="utf-8" />
         <RouterHead />
       </head>
       <body>

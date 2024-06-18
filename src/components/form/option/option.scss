@@ -4,12 +4,9 @@
   cursor: pointer;
   display: flex;
   padding: var(--size-1) var(--size-2);
+  border-radius: var(--border-radius);
   &:hover {
     background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
-  }
-  &:focus-visible {
-    outline: none;
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--overlay));
   }
 
   @include list.item-horizontal-selectable;
@@ -21,7 +18,7 @@
     @include list.item-multi-selected;
   }
   &[aria-selected="true"], &[aria-selected="false"] {
-    @include list.item-multi-selectable;
+    @include list.item-selectable;
   }
   &[aria-selected="true"] {
     @include list.item-selected;

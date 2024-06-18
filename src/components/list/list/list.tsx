@@ -32,7 +32,6 @@ interface NavListProps extends PropsOf<'nav'> {
 export const NavList = component$((props: NavListProps) => {
   useStyles$(styles);
   const merged = mergeProps<'nav'>(props, {
-    role: 'list',
     class: 'he-nav-list',
     onKeyDown$: [
       preventKeyDown,

@@ -9,10 +9,10 @@
       flex-direction: column;
       border-inline-end: 1px solid var(--divider);
       padding-inline: var(--size-1);
-      @include list.list-vertical-selectable;
+      @include list.list-horizontal-selectable(tab);
     }
     .tab {
-      @include list.item-vertical-selectable;
+      @include list.item-horizontal-selectable;
     }
   }
   &:not(.vertical) {
@@ -21,10 +21,10 @@
       flex-direction: row;
       border-block-end: 1px solid var(--divider);
       padding-block: var(--size-1);
-      @include list.list-horizontal-selectable;
+      @include list.list-vertical-selectable(tab);
     }
     .tab {
-      @include list.item-horizontal-selectable;
+      @include list.item-vertical-selectable;
     }
   }
 }
@@ -56,7 +56,6 @@
     @include hue.focus(transparent, var(--on-color, var(--text)));
   }
   @include list.item-selectable;
-  @include list.item-vertical-selectable;
   &[aria-selected="true"] {
     @include list.item-selected;
   }

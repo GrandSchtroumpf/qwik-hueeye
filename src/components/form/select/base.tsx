@@ -4,8 +4,6 @@ import { Popover, PopoverRoot, PopoverTrigger } from "../../dialog/popover";
 import { useFormFieldId } from "../form-field/form-field";
 import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
-import { focusInOptionList } from "../option/option";
-import { focusList } from "../../list/utils";
 import { useControl, useListControl } from "../control";
 import { ListBox } from "../listbox/listbox";
 import styles from './select.scss?inline';
@@ -42,22 +40,13 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
     queueMicrotask(() => (option as HTMLElement)?.focus());
   });
 
-  const onKeyDown = $((e: KeyboardEvent, el: HTMLElement) => {
+  const onKeyDown = $((e: KeyboardEvent) => {
     if (!open.value) {
       const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'Home', 'End'];
       if (keys.includes(e.key)) open.value = true;
     } else {
-      if (e.key === 'Tab') {
-        open.value = false;
-        focusInOptionList(e, el);
-      } else {
-        focusList('[role="option"]', e, el);
-      }
-      if (!multi) {
-        if (e.key === 'Enter' || e.key === ' ') open.value = false;
-      } else {
-        if (e.ctrlKey && e.key === 'a') toggleAll();
-      }
+      if (e.key === 'Tab') open.value = false;
+      if (!multi && (e.key === 'Enter' || e.key === ' ')) open.value = false
     }
   });
   
@@ -66,13 +55,6 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
     if (!open.value) open.value = true;
   });
 
-  const toggleAll = event$(() => {
-    const options = origin.value?.querySelectorAll<HTMLInputElement>('[role="option"]');
-    if (!options) return;
-    options.forEach(option => option.click());
-  });
-  
-
   const attributes = mergeProps<'div'>(divProps, {
     class: 'he-select',
     onClick$: $((e, el) => {
@@ -80,7 +62,6 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
       if (isOption(e.target) && !multi) open.value = false;
     }),
     onKeyDown$: [preventKeyDown, onKeyDown],
-    onFocusIn$: focusInOptionList,
     "aria-label": hasFormField ? undefined : (divProps['aria-label'] || placeholder),
   });
 
