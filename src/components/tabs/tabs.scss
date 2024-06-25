@@ -9,9 +9,10 @@
       flex-direction: column;
       border-inline-end: 1px solid var(--divider);
       padding-inline: var(--size-1);
-      @include list.list-horizontal-selectable(tab);
+      @include list.list-vertical-selectable(tab);
     }
     .tab {
+      text-align: start;
       @include list.item-horizontal-selectable;
     }
   }
@@ -21,7 +22,7 @@
       flex-direction: row;
       border-block-end: 1px solid var(--divider);
       padding-block: var(--size-1);
-      @include list.list-vertical-selectable(tab);
+      @include list.list-horizontal-selectable(tab);
     }
     .tab {
       @include list.item-vertical-selectable;

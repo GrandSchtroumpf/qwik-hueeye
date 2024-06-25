@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import { MenuRoot, MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger, MenuRadio, MenuGroup } from "qwik-hueeye-lib";
+import { MenuRoot, MenuItemBtn, Menu, MenuTrigger, MenuRadio, MenuGroup, MenuPopover, MenuItemTrigger } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {
@@ -8,20 +8,23 @@ export default component$(() => {
     <MenuRoot>
       <MenuTrigger class="btn-fill primary">
         Open a menu
-        <Menu q:slot="menu">
+      </MenuTrigger>
+      <MenuPopover>
+        <Menu>
           <MenuItemBtn>Item 1</MenuItemBtn>
           <MenuItemBtn>Item 2</MenuItemBtn>
-          <MenuItemTrigger>
-            Menu Radio
-            <Menu q:slot="menu">
-              <MenuGroup>
-                <MenuRadio name="radio" value="1">Item 1</MenuRadio>
-                <MenuRadio name="radio" value="2">Item 2</MenuRadio>
-              </MenuGroup>
-            </Menu>
-          </MenuItemTrigger>
+          <MenuItemTrigger id="radio">Menu Radio</MenuItemTrigger>
         </Menu>
-      </MenuTrigger>
+      </MenuPopover>
+      <MenuPopover anchor="radio">
+        <Menu id="radio">
+          <MenuItemBtn>Back</MenuItemBtn>
+          <MenuGroup>
+            <MenuRadio name="radio" value="1">Item 1</MenuRadio>
+            <MenuRadio name="radio" value="2">Item 2</MenuRadio>
+          </MenuGroup>
+        </Menu>
+      </MenuPopover>
     </MenuRoot>
   </section>
 })

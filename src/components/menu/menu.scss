@@ -7,7 +7,13 @@
   .popover.menu-overlay {
     margin: 0;
   }
+  .menu-overlay {
+    overflow-x: hidden;
+    display: flex;
+  }
   .menu-list {
+    flex-grow: 1;
+    flex-shrink: 0;
     margin-block: 0;
     padding-left: 0;
     list-style: none;

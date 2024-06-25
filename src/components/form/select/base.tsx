@@ -1,4 +1,4 @@
-import { component$, Slot, useSignal, event$, $, useTask$, useComputed$, useStyles$, sync$ } from "@builder.io/qwik";
+import { component$, Slot, useSignal, event$, $, useTask$, useComputed$, useStyles$, sync$, useId } from "@builder.io/qwik";
 import type { QRL, PropsOf } from "@builder.io/qwik";
 import { Popover, PopoverRoot, PopoverTrigger } from "../../dialog/popover";
 import { useFormFieldId } from "../form-field/form-field";
@@ -6,6 +6,7 @@ import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
 import { useControl, useListControl } from "../control";
 import { ListBox } from "../listbox/listbox";
+import { isServer } from "@builder.io/qwik/build";
 import styles from './select.scss?inline';
 
 const isOption = (target: EventTarget | null) => {
@@ -27,15 +28,17 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   useStyles$(styles);
   const { id, hasFormField } = useFormFieldId(props.id);
   const { placeholder, display$, multi, ...divProps } = props;
-  const origin = useSignal<HTMLElement>();
+  const anchorId = useId();
   const open = useSignal(false);
   
   useTask$(({ track }) => {
     track(() => open.value);
-    if (!open.value || !origin.value) return;
+    if (isServer) return;
+    const origin = document.getElementById(anchorId);
+    if (!open.value || !origin) return;
     const base = '[role="option"]';
     const selected = `${base}[aria-checked="true"], ${base}[aria-selected="true"]`;
-    const option = origin.value.querySelector(selected) ?? origin.value.querySelector(base);
+    const option = origin.querySelector(selected) ?? origin.querySelector(base);
     // Wait for dialog to open
     queueMicrotask(() => (option as HTMLElement)?.focus());
   });
@@ -56,6 +59,7 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   });
 
   const attributes = mergeProps<'div'>(divProps, {
+    id: anchorId,
     class: 'he-select',
     onClick$: $((e, el) => {
       if (e.target === el) onClick();
@@ -67,14 +71,14 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
 
   return (
     <PopoverRoot open={open}>
-      <div ref={origin} {...attributes}>
+      <div {...attributes}>
         <Slot name="prefix"/>
         {multi
           ? <MultiTrigger id={id} display$={display$} placeholder={placeholder} />
           : <SingleTrigger id={id} display$={display$} placeholder={placeholder} />
         }
         <Slot name="suffix"/>
-        <Popover origin={origin} position="block">
+        <Popover anchor={anchorId} position="block">
           <ListBox multi={multi}>
             <Slot />
           </ListBox>
@@ -93,7 +97,7 @@ export const SingleTrigger = component$(function <T extends Serializable>(props:
   const { display$, placeholder, ...attr } = props;
   const { control } = useControl<T>();
   const text = useComputed$(() => display$(control.value));
-  return <PopoverTrigger {...attr}>
+  return <PopoverTrigger {...attr} aria-haspopup="listbox">
     {text.value ? <span>{text.value}</span> : <span class="placeholder">{placeholder}</span>}
   </PopoverTrigger>
 });
@@ -102,7 +106,7 @@ export const MultiTrigger = component$(function <T extends Serializable>(props: 
   const { display$, placeholder, ...attr } = props;
   const { list } = useListControl<T>();
   const text = useComputed$(() => display$(list.value as any));
-  return <PopoverTrigger {...attr}>
+  return <PopoverTrigger {...attr} aria-haspopup="listbox">
     {text.value ? <span>{text.value}</span> : <span class="placeholder">{placeholder}</span>}
   </PopoverTrigger>
 })

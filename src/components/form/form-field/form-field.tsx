@@ -31,9 +31,9 @@ export const FormField = component$((props: PropsOf<'div'>) => {
   </div>
 });
 
-export const Label = component$(() => {
+export const Label = component$<PropsOf<'label'>>((props) => {
   const { id } = useContext(FormFieldContext);
-  return <label for={id} id={'label-' + id}>
+  return <label {...props} for={id} >
     <Slot/>
   </label>
 })

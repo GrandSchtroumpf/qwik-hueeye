@@ -2,17 +2,16 @@ import type { PropsOf, QRL, Signal } from "@builder.io/qwik";
 import { createContextId, sync$, useContext, useContextProvider, useId, useTask$ } from "@builder.io/qwik";
 import { component$, Slot, useSignal, $, useStyles$ } from "@builder.io/qwik";
 import type { PopoverOption} from "./utils";
-import { setMenuPosition } from "./utils";
+import { setPopoverPosition } from "./utils";
 import { mergeProps } from "../utils/attributes";
 import styles from './dialog.scss?inline';
 
 
-interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
-  origin: Signal<HTMLElement | undefined>;
+export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
+  anchor: string;
   /** Describe a common parent in case of stacked dialogs */
   layer?: Signal<HTMLElement | undefined>;
-  // open: Signal<boolean>;
-  position: PopoverOption['position'];
+  position?: PopoverOption['position'];
   onClose$?: QRL<() => void>
 }
 
@@ -20,7 +19,7 @@ interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
 export const Popover = component$((props: PopoverProps) => {
   useStyles$(styles);
   const {
-    origin,
+    anchor,
     layer,
     position = 'block',
     onClose$,
@@ -51,7 +50,7 @@ export const Popover = component$((props: PopoverProps) => {
           if (ref.value === target) return;
           open.value = false;
         }
-        setMenuPosition(origin.value!, ref.value!, { position });
+        setPopoverPosition(anchor, ref.value!, { position });
         ref.value!.show();
         document.addEventListener('click', handler);
         return () => document.removeEventListener('click', handler);
@@ -80,7 +79,7 @@ export const Popover = component$((props: PopoverProps) => {
     ]
   });
 
-  return <dialog {...merged} >
+  return <dialog {...merged}>
     <Slot />
   </dialog>
 })
@@ -110,12 +109,11 @@ export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
       {...props}
       type="button"
       role="combobox"
-      aria-haspopup="listbox" 
       aria-disabled="false"
       aria-invalid="false"
       aria-autocomplete="none"
       aria-expanded={open.value}
-      aria-controls={popoverId}
+      aria-controls={popoverId} // TODO: should control the listbox/menu
       aria-labelledby={'label-' + id}
       onClick$={() => open.value = !open.value}
     >

@@ -1,17 +1,17 @@
 import { component$, createContextId, Slot, useContext, useContextProvider, useSignal, useId, useStyles$, $, sync$ } from "@builder.io/qwik";
 import type { PropsOf, Signal } from "@builder.io/qwik";
-import { Popover, PopoverRoot } from "../dialog/popover";
-import type { DivAttributes, MenuAttributes } from "../types";
+import { Popover, PopoverProps, PopoverRoot, PopoverTrigger } from "../dialog/popover";
 import { nextFocus, previousFocus, clsq } from "../utils";
 import { mergeProps } from "../utils/attributes";
 import { Link } from "@builder.io/qwik-city";
 import styles from './menu.scss?inline';
+import { useWithId } from "../hooks/useWithId";
 
 interface MenuContext {
   menuId: string;
   triggerId: string;
-  origin: Signal<HTMLElement | undefined>;
-  open: Signal<boolean>;
+  rootId: string;
+  layer: Signal<HTMLElement | undefined>;
 }
 
 interface MenuRootContext  {
@@ -21,41 +21,50 @@ interface MenuRootContext  {
 const MenuRootContext = createContextId<MenuRootContext>('MenuRootContext');
 const MenuContext = createContextId<MenuContext>('MenuContext');
 
-export const MenuRoot = component$((props: DivAttributes) => {
+export const MenuRoot = component$((props: PropsOf<'div'>) => {
   useStyles$(styles);
-  const root = useSignal<HTMLElement>();
-  useContextProvider(MenuRootContext, { root });
-  return <div {...props} ref={root} class={clsq('menu-root', props.class)}>
-    <Slot/>
-  </div>
+  const layer = useSignal<HTMLElement>();
+  const open = useSignal(false);
+  const triggerId = useId();
+  const menuId = useId();
+  const rootId = useWithId(props.id);
+  useContextProvider(MenuContext, { menuId, triggerId, rootId, layer });
+  const attr = mergeProps<'div'>(props, {
+    id: rootId,
+    class: 'menu-root',
+  });
+  return <PopoverRoot open={open}>
+    <div {...attr}>
+      <Slot/>
+    </div>
+  </PopoverRoot>
 });
 
+interface MenuPopoverProps extends Omit<PopoverProps, 'anchor'> {
+  anchor?: string;
+}
+export const MenuPopover = component$<MenuPopoverProps>((props) => {
+  const { layer, rootId } = useContext(MenuContext);
+  const anchor = props.anchor ?? rootId;
+  return (
+    <Popover anchor={anchor} layer={layer} position="inline" class="menu-overlay">
+      <Slot />
+    </Popover>
+  )
+})
 
 interface MenuTriggerProps extends Omit<PropsOf<'button'>, 'ref' | 'onClick$'> {}
 export const MenuTrigger = component$((props: MenuTriggerProps) => {
-  const ref = useSignal<HTMLElement>();
-  const triggerId = useId();
-  const menuId = useId();
-  const open = useSignal(false);
-  useContextProvider(MenuContext, {
-    menuId: menuId,
-    triggerId: triggerId,
-    open,
-    origin: ref
-  })
+  const { triggerId, menuId } = useContext(MenuContext);
   return <>
-    <button {...props}
-      ref={ref}
+    <PopoverTrigger {...props}
       class={clsq('menu-trigger', props.class)}
-      type="button"
       id={triggerId}
-      onClick$={() => open.value = true}
       aria-haspopup="menu"
       aria-controls={menuId}
     >
       <Slot />
-    </button>
-    <Slot name="menu"/>
+    </PopoverTrigger>
   </>
 });
 
@@ -74,10 +83,8 @@ export const MenuTrigger = component$((props: MenuTriggerProps) => {
 //   </button>
 // });
 
-interface MenuProps extends Omit<MenuAttributes, 'id'> {}
-export const Menu = component$((props: MenuProps) => {
-  const {root} = useContext(MenuRootContext);
-  const { menuId, triggerId, origin, open } = useContext(MenuContext);
+export const Menu = component$((props: PropsOf<'menu'>) => {
+  const { menuId, triggerId } = useContext(MenuContext);
 
   const preventDefault = sync$((event: KeyboardEvent) => {
     const keys = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
@@ -100,13 +107,11 @@ export const Menu = component$((props: MenuProps) => {
     'aria-labelledby': triggerId
   });
 
-  return <PopoverRoot open={open}>
-    <Popover origin={origin}  layer={root} position="inline" class="menu-overlay">
-      <menu {...attr} id={menuId}>
-        <Slot />
-      </menu>
-    </Popover>
-  </PopoverRoot>
+  return (
+    <menu {...attr}>
+      <Slot />
+    </menu>
+  );
 });
 
 
@@ -141,38 +146,55 @@ export const MenuItemAnchor = component$((props: PropsOf<'a'>) => {
 });
 
 
-
-// We need to duplicate the code from MenuTrigger because Slot cannot be forwarded
-export const MenuItemTrigger = component$((props: MenuTriggerProps) => {
-  const ref = useSignal<HTMLElement>();
-  const triggerId = useId();
-  const menuId = useId();
-  const open = useSignal(false);
-  useContextProvider(MenuContext, {
-    menuId: menuId,
-    triggerId: triggerId,
-    open,
-    origin: ref
-  });
-  return <li role="none">
-    <button {...props} 
-      ref={ref}
-      id={triggerId}
-      role="menuitem" 
-      class={clsq('menu-trigger', props.class)}
-      type="button"
-      onClick$={() => open.value = true}
-      aria-haspopup="menu"
-      aria-controls={menuId}
-    >
-      <Slot/>
-      <svg viewBox="0 0 5 10" width="5" height="10" focusable="false" aria-hidden="true" fill="currentColor">
-        <polygon points="0,0 5,5 0,10"></polygon>
-      </svg>
-    </button>
-    <Slot name="menu"/>
-  </li>
+export const MenuItemTrigger = component$<PropsOf<'button'>>((props) => {
+  return (
+    <li role="none">
+      <button {...props} role="menuitem">
+        <Slot/>
+      </button>
+    </li>
+  )
 })
+
+// // We need to duplicate the code from MenuTrigger because Slot cannot be forwarded
+// export const NestedMenu = component$(() => {
+//   const layer = useSignal<HTMLElement>();
+//   const triggerId = useId();
+//   const menuId = useId();
+//   const open = useSignal(false);
+//   const { rootId } = useContext(MenuContext);
+//   useContextProvider(MenuContext, {
+//     menuId: menuId,
+//     triggerId: triggerId,
+//     origin: origin,
+//     layer
+//   });
+//   return <PopoverRoot open={open}>
+//     <li role="none" ref={layer}>
+//       <Slot/>
+//     </li>
+//   </PopoverRoot>
+// });
+
+// export const NestedMenuTrigger = component$((props: MenuTriggerProps) => {
+//   const { menuId, triggerId } = useContext(MenuContext);
+//   return (
+//     <button {...props} 
+//       id={triggerId}
+//       role="menuitem" 
+//       class={clsq('menu-trigger', props.class)}
+//       type="button"
+//       onClick$={() => open.value = true}
+//       aria-haspopup="menu"
+//       aria-controls={menuId}
+//     >
+//       <Slot/>
+//       <svg viewBox="0 0 5 10" width="5" height="10" focusable="false" aria-hidden="true" fill="currentColor">
+//         <polygon points="0,0 5,5 0,10"></polygon>
+//       </svg>
+//     </button>
+//   );
+// });
 
 
 export const MenuGroup = component$(() => {

@@ -11,12 +11,9 @@ importers:
       '@builder.io/qwik-worker':
         specifier: ^0.0.1
         version: 0.0.1(@builder.io/qwik@1.5.7(@types/node@20.11.30)(lightningcss@1.24.1)(sass@1.72.0)(undici@6.19.0))
-      svgson:
-        specifier: ^5.3.1
-        version: 5.3.1
-      vite-bundle-visualizer:
-        specifier: ^1.2.1
-        version: 1.2.1(rollup@4.13.0)
+      '@oddbird/popover-polyfill':
+        specifier: ^0.4.3
+        version: 0.4.3
     devDependencies:
       '@builder.io/qwik':
         specifier: 1.5.7
@@ -54,6 +51,9 @@ importers:
       sass:
         specifier: 1.72.0
         version: 1.72.0
+      svgson:
+        specifier: ^5.3.1
+        version: 5.3.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -63,6 +63,9 @@ importers:
       vite:
         specifier: 5.3.1
         version: 5.3.1(@types/node@20.11.30)(lightningcss@1.24.1)(sass@1.72.0)
+      vite-bundle-visualizer:
+        specifier: ^1.2.1
+        version: 1.2.1(rollup@4.13.0)
       vite-plugin-dts:
         specifier: 3.9.1
         version: 3.9.1(@types/node@20.11.30)(rollup@4.13.0)(typescript@5.4.5)(vite@5.3.1(@types/node@20.11.30)(lightningcss@1.24.1)(sass@1.72.0))
@@ -435,6 +438,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@oddbird/popover-polyfill@0.4.3':
+    resolution: {integrity: sha512-kBS0ZAwH8kZqFl0mV89KPK4cLYl2ZoKSfYngK4dz1eLAhKzTK0yu4LrvLdMeM7JhjWK6GxBtiY+cl1s6vR2pUg==}
 
   '@pnpm/config.env-replace@1.1.0':
     resolution: {integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w==}
@@ -3535,6 +3541,8 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  '@oddbird/popover-polyfill@0.4.3': {}
 
   '@pnpm/config.env-replace@1.1.0': {}
 
