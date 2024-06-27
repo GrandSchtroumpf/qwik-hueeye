@@ -1,26 +1,52 @@
 dialog {
-
   --closing-duration: var(--modal-closing-duration, 300ms);
   border: none;
   padding: 0;
   overflow: hidden;
   background-color: var(--overlay);
   box-shadow: var(--overlay-shadow);
+  transition:
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete,
+    opacity 0.2s,
+    transform 0.2s;
 
   &[open]::backdrop {
     opacity: 0.6;
     background-color: var(--backdrop-color, black);
-    animation: backdrop-fade 0.2s forwards;
+    transition:
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete,
+      opacity 0.2s;
+    @supports not (transition-behavior: allow-discrete) {
+      animation: backdrop-fade 0.2s forwards;
+    }
+  }
+  &:not([open])::backdrop {
+    opacity: 0;
+  }
+  @starting-style {
+    opacity: 0;
   }
   &.closing::backdrop {
     animation: backdrop-fade var(--closing-duration) backwards;
     animation-direction: reverse;
   }
-
+  
 
   &.modal {
     border-radius: 8px;
-    animation: scalein 0.2s var(--ease-out);
+    @supports not (transition-behavior: allow-discrete) {
+      animation: scalein 0.2s var(--ease-out);
+    }
+    &:not([open]) {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.8);
+    }
     &.closing {
       opacity: 0;
       animation: scaleout var(--closing-duration) var(--ease-in);
@@ -48,13 +74,6 @@ dialog {
       animation: slideRight var(--closing-duration) var(--ease-in);
     }
   }
-  &.popover {
-    z-index: 1;
-    border-radius: 4px;
-    &.closing {
-      opacity: 0;
-    }
-  }
   & .dialog-content {
     padding: var(--size-1) var(--size-2);
   }
@@ -78,28 +97,6 @@ dialog {
   }
   dialog.sidenav {
     border-right: solid 1px var(--outline);
-  }
-}
-
-
-@media (min-width: 600px) {
-  dialog.popover {
-    --modal-closing-duration: 0.1s;
-    animation: slideup 0.1s var(--ease-out);
-    &.closing {
-      animation: fade 0.1s var(--ease-in) backwards reverse;
-    }
-  }
-}
-
-@media (max-width: 599px) {
-  dialog.popover {
-    --modal-closing-duration: 0.1s;
-    position: fixed;
-    animation: scalein 0.1s var(--ease-out);
-    &.closing {
-      animation: scaleout 0.1s var(--ease-in);
-    }
   }
 }
 

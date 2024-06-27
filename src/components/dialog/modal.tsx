@@ -2,7 +2,7 @@ import { component$, useTask$, Slot, useSignal, $, useComputed$, useStyles$, syn
 import type { Signal, QRL } from "@builder.io/qwik";
 import type { DialogAttributes } from "../types";
 import { clsq } from "../utils";
-import styles from './dialog.scss?inline';
+import styles from './modal.scss?inline';
 
 interface ModalProps extends Omit<DialogAttributes, 'open'> {
   type?: 'bottom-sheet' | 'modal' | 'sidenav';

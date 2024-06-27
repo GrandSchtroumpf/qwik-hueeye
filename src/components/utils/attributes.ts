@@ -10,9 +10,9 @@ export function mergeProps<T extends keyof IntrinsicElements>(
       if (['class', 'style'].includes(key)) {
         attributes[key] ||= [];
         attributes[key].push(value);
-      } else if (key.startsWith('on') && typeof value === 'function') {
+      } else if (key.startsWith('on') && key.endsWith('$')) {
         attributes[key] ||= [];
-        attributes[key] = value; // TODO: use $(value) to wrap the function
+        attributes[key].push(value);
       } else {
         attributes[key] = value;
       }

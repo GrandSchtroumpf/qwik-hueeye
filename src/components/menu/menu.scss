@@ -1,112 +1,99 @@
-.menu-root {
-  display: inline-block;
-  position: relative;
-  .menu-trigger {
-    width: 100%;
-  }
-  .popover.menu-overlay {
-    margin: 0;
-  }
-  .menu-overlay {
-    overflow-x: hidden;
-    display: flex;
-  }
-  .menu-list {
-    flex-grow: 1;
-    flex-shrink: 0;
-    margin-block: 0;
-    padding-left: 0;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    li, fieldset {
-      display: contents;
-    }
-    .menu-radio,
-    [role="menuitem"],
-    [role="menucheckbox"] {
-      display: inline-flex;
-      align-items: center;
-      border: none;
-      gap: var(--size-1);
-      cursor: pointer;
-      background-color: transparent;
-      padding: var(--size-1) var(--size-2);
-      &:hover {
-        background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
-      }
-    }
-    [role="menuitem"] {
-      &:focus-visible {
-        outline: none;
-        background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
-      }
-      &:active {
-        background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--overlay));
-      }
-    }
-    a[role="menuitem"] {
-      text-decoration: none;
-      color: inherit;
-    }
+@import '../popover/popover.scss';
 
-    // TODO: share some part with checkbox. but carefull with precision level
-    .menu-radio {
-      input {
-        opacity: 0;
-        cursor: pointer;
-        position: absolute;
+.popover.menu-overlay {
+  margin: 0;
+}
+.he-menu {
+  flex-grow: 1;
+  flex-shrink: 0;
+  margin-block: 0;
+  list-style: none;
+  .he-menu-radio,
+  [role="menuitem"],
+  [role="menucheckbox"] {
+    width: 100%;
+    border-radius: var(--size-0);
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    gap: var(--size-1);
+    cursor: pointer;
+    background-color: transparent;
+    padding: var(--size-1) var(--size-2);
+    &:hover {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
+    }
+  }
+  [role="menuitem"] {
+    &:focus-visible {
+      outline: none;
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
+    }
+    &:active {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--overlay));
+    }
+  }
+  a[role="menuitem"] {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // TODO: share some part with checkbox. but carefull with precision level
+  .he-menu-radio {
+    input {
+      opacity: 0;
+      cursor: pointer;
+      position: absolute;
+      height: var(--size-2);
+      width: var(--size-2);
+      margin: 0;
+      &:focus + label svg {
+        outline: solid 1px var(--divider);
+      }
+      &:checked + label svg {
+        border-color: var(--color, var(--primary));
+        background-color: var(--color, var(--primary));
+        circle {
+          transform: scale(1);
+        }
+      }
+      &:checked + label:hover {
+        circle {
+          transform: scale(1.1);
+        }
+      }
+
+      &:active + label svg {
+        circle {
+          transform: scale(0.6);
+        }
+      }
+    }
+    label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      &:hover svg {
+        background-color: var(--surface);
+      }
+      svg {
+        pointer-events: none;
         height: var(--size-2);
         width: var(--size-2);
-        margin: 0;
-        &:focus + label svg {
-          outline: solid 1px var(--divider);
-        }
-        &:checked + label svg {
-          border-color: var(--color, var(--primary));
-          background-color: var(--color, var(--primary));
-          circle {
-            transform: scale(1);
-          }
-        }
-        &:checked + label:hover {
-          circle {
-            transform: scale(1.1);
-          }
-        }
-
-        &:active + label svg {
-          circle {
-            transform: scale(0.6);
-          }
-        }
-      }
-      label {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        &:hover svg {
-          background-color: var(--surface);
-        }
-        svg {
-          pointer-events: none;
-          height: var(--size-2);
-          width: var(--size-2);
-          border-radius: 50%;
-          border: solid 1px var(--outline);
-          background-color: transparent;
-          transition: background-color 0.2s;
-          circle {
-            fill: var(--on-color, var(--on-primary));
-            transform-origin: center;
-            transform: scale(0);
-            transition: transform 0.3s var(--ease-back-in-out);
-          }
+        border-radius: 50%;
+        border: solid 1px var(--outline);
+        background-color: transparent;
+        transition: background-color 0.2s;
+        circle {
+          fill: var(--on-color, var(--on-primary));
+          transform-origin: center;
+          transform: scale(0);
+          transition: transform 0.3s var(--ease-back-in-out);
         }
       }
     }
-
   }
+
 }
