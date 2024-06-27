@@ -1,7 +1,6 @@
 import type { CorrectedToggleEvent, PropsOf, QRL, Signal } from "@builder.io/qwik";
 import { createContextId, useContext, useContextProvider, useId } from "@builder.io/qwik";
-import { component$, Slot, useSignal, $, useStyles$ } from "@builder.io/qwik";
-import styles from './popover.scss?inline';
+import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
 
 
 export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
@@ -26,7 +25,7 @@ export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) =
   if (!anchor) throw new Error('[HueEye Popover] Could not find anchor');
   const anchorRect = anchor.getBoundingClientRect();
   const positionDialog = () => {
-    const dialogRect = el.getBoundingClientRect();
+    const popoverRect = el.getBoundingClientRect();
     el.style.removeProperty('inset-inline-start');
     el.style.removeProperty('inset-inline-end');
     el.style.removeProperty('inset-block-start');
@@ -35,32 +34,32 @@ export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) =
     const left = anchorRect.left;
   
     if (options.position === 'inline') {
-      const overflowWidth = (dialogRect.width + anchorRect.width + anchorRect.left) > window.innerWidth;
-      if (overflowWidth) el.style.setProperty('inset-inline-start', `${left - dialogRect.width}px`);
+      const overflowWidth = (popoverRect.width + anchorRect.width + anchorRect.left) > window.innerWidth;
+      if (overflowWidth) el.style.setProperty('inset-inline-start', `${left - popoverRect.width}px`);
       else el.style.setProperty('inset-inline-start', `${left + anchorRect.width}px`);
       
-      const overflowHeight = (dialogRect.height + anchorRect.top) > window.innerHeight;
+      const overflowHeight = (popoverRect.height + anchorRect.top) > window.innerHeight;
       if (overflowHeight) el.style.setProperty('inset-block-end', `${top}px`);
       else el.style.setProperty('inset-block-start', `${top}px`);
     }
     if (options.position === 'block') {
-      const overflowHeight = (dialogRect.height + anchorRect.height + anchorRect.top) > window.innerHeight;
-      if (overflowHeight) el.style.setProperty('inset-block-start', `${top - dialogRect.height}px`);
+      const overflowHeight = (popoverRect.height + anchorRect.height + anchorRect.top) > window.innerHeight;
+      console.log({ overflowHeight, dialogRect: popoverRect, anchorRect })
+      if (overflowHeight) el.style.setProperty('inset-block-start', `${top - popoverRect.height}px`);
       else el.style.setProperty('inset-block-start', `${top + anchorRect.height}px`);
       
-      const overflowWidth = (dialogRect.width + anchorRect.left) > window.innerWidth;
+      const overflowWidth = (popoverRect.width + anchorRect.left) > window.innerWidth;
       if (overflowWidth) el.style.setProperty('inset-inline-end', `${left}px`);
       else el.style.setProperty('inset-inline-start', `${left}px`);
 
       el.style.setProperty('min-width', `${anchorRect.width}px`);
     }
-    if (!dialogRect.height) return requestAnimationFrame(positionDialog);
+    if (!popoverRect.height) return requestAnimationFrame(positionDialog);
   }
   positionDialog();
 });
 
 export const usePopover = (anchorId?: string) => {
-  useStyles$(styles);
   const popoverId = useId();
   const open = useSignal(false);
 

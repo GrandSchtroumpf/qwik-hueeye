@@ -10,8 +10,10 @@ const nextLine = $((root: HTMLElement, selector: string, options?: FocusOptions)
   const focusedEl = document.activeElement as HTMLElement;
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
   const { width: rootWidth } = root.getBoundingClientRect();
-  const { width: itemWidth } = list[0].getBoundingClientRect();
-  const line = Math.floor(rootWidth / itemWidth);
+  const { width: itemWidth, left: firstLeft } = list[0].getBoundingClientRect();
+  const { left: secondLeft } = list[1].getBoundingClientRect();
+  const gap = secondLeft - (firstLeft + itemWidth);
+  const line = Math.floor(rootWidth / (itemWidth + gap));
   const nextIndex = (index + line) % list.length;
   list[nextIndex].focus(options);
 });
@@ -21,8 +23,10 @@ const previousLine = $((root: HTMLElement, selector: string, options?: FocusOpti
   const focusedEl = document.activeElement as HTMLElement;
   const index = Array.from(list).findIndex((el) => el === focusedEl || el.contains(focusedEl));
   const { width: rootWidth } = root.getBoundingClientRect();
-  const { width: itemWidth } = list[0].getBoundingClientRect();
-  const line = Math.floor(rootWidth / itemWidth);
+  const { width: itemWidth, left: firstLeft } = list[0].getBoundingClientRect();
+  const { left: secondLeft } = list[1].getBoundingClientRect();
+  const gap = secondLeft - (firstLeft + itemWidth);
+  const line = Math.floor(rootWidth / (itemWidth + gap));
   const nextIndex = (index - line + list.length) % list.length;
   list[nextIndex].focus(options);
 });

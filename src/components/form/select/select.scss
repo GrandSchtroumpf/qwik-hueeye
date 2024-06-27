@@ -1,3 +1,4 @@
+@import '../../popover/popover.scss';
 .he-select-field,
 .he-select:not(.he-field) {
   --he-input-radius: var(--size-0);
@@ -124,14 +125,12 @@
       }
     }
   }
-  & .popover {
-    min-width: 100%;
-    width: max-content;
-    backdrop-filter: var(--background-blur);
-    max-height: 275px;
-    overflow: auto;
-  }
 }  
+.he-select-popover {
+  backdrop-filter: var(--background-blur);
+  max-height: 275px;
+  overflow: auto;
+}
 
 
 

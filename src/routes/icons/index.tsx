@@ -36,7 +36,7 @@ export default component$(() => {
       <h1 id="icon-title">Icons</h1>
       <p>Currently HueEye only support material icons</p>
       <Form role="search" class="search">
-        <ToggleGroup bind:value={weight as any} class="round compact outline primary">
+        <ToggleGroup bind:value={weight} class="round compact outline primary">
           <Toggle value="100">100</Toggle>
           <Toggle value="200">200</Toggle>
           <Toggle value="300">300</Toggle>

@@ -1,6 +1,6 @@
 export * from './form';
 export * from './list';
-export * from './dialog/modal';
+export * from './dialog/dialog';
 export * from './popover/popover';
 export * from './accordion/accordion';
 export * from './toaster/toaster';

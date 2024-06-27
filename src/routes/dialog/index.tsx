@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { Modal } from "qwik-hueeye-lib";
+import { Dialog } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {
@@ -20,7 +20,7 @@ export default component$(() => {
         Open Sidenav
       </button>
     </div>
-    <Modal class="container" open={openModal}>
+    <Dialog class="container" bind:open={openModal}>
       <article class="modal-content">
         <h3>Modal</h3>
         <p>This is a modal</p>  
@@ -28,8 +28,8 @@ export default component$(() => {
       <footer class="modal-actions">
         <button class="btn" onClick$={() => openModal.value = false}>Close</button>
       </footer>
-    </Modal>
-    <Modal class="container" open={openBottomSheet} type="bottom-sheet">
+    </Dialog>
+    <Dialog class="container" bind:open={openBottomSheet} type="bottom-sheet">
       <article class="modal-content">
         <h3>Bottom Sheet</h3>
         <p>This is a bottom sheet</p>  
@@ -37,8 +37,8 @@ export default component$(() => {
       <footer class="modal-actions">
         <button class="btn" onClick$={() => openBottomSheet.value = false}>Close</button>
       </footer>
-    </Modal>
-    <Modal class="container" open={openSidenav} type="sidenav">
+    </Dialog>
+    <Dialog class="container" bind:open={openSidenav} type="sidenav">
       <article class="modal-content">
         <h3>Sidenav</h3>
         <p>This is a sidenav</p>  
@@ -46,6 +46,6 @@ export default component$(() => {
       <footer class="modal-actions">
         <button class="btn" onClick$={() => openSidenav.value = false}>Close</button>
       </footer>
-    </Modal>
+    </Dialog>
   </section>
 })

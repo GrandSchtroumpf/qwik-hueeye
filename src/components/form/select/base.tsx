@@ -51,6 +51,7 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
     });
     
   const popoverProps = mergeProps<'ul'>(popover, {
+    class: 'he-select-popover',
     onToggle$,
     onKeyDown$: $((e, el) => {
       if (e.key === 'Tab') el?.hidePopover();

@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { NavGrid, LinkItem, ActionGrid, ButtonItem, Modal } from "qwik-hueeye-lib";
+import { NavGrid, LinkItem, ActionGrid, ButtonItem, Dialog } from "qwik-hueeye-lib";
 import pokemons from './pokemon.json';
 import styles from './index.scss?inline';
 
@@ -15,10 +15,10 @@ const ItemButton = component$(({ item }: { item: Item }) => {
       <img width="150" height="150" src={item.img} alt={item.name} />
       <h3>{item.name}</h3>
     </ButtonItem>
-    <Modal open={open}>
+    <Dialog bind:open={open}>
       <img width="150" height="150" src={item.img} alt={item.name} />
       <h3>{item.name}</h3>
-    </Modal>
+    </Dialog>
   </>
 })
 
