@@ -10,3 +10,13 @@ h1 {
 h2 {
   font-size: 1.1rem;
 }
+
+@media (max-width: 599px) {
+  :root {
+    --size-0: 5px;
+    --size-1: 10px;
+    --size-2: 20px;
+    --size-3: 25px;
+    --size-4: 35px;
+  }
+}

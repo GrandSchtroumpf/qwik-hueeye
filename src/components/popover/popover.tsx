@@ -14,6 +14,14 @@ export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
 
 export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) => {
   if (e.newState !== 'open') return;
+  // Cleanup style if screen changed size
+  // TODO: move it into a Media Matcher event instead
+  if (matchMedia('(max-width: 599px)').matches) {
+    el.style.removeProperty('inset-block-start');
+    el.style.removeProperty('inset-inline-start');
+    el.style.removeProperty('min-width');
+    return;
+  }
   const popoverId = el.id;
   const anchorId = el.dataset.anchor;
   const options = {
@@ -44,7 +52,6 @@ export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) =
     }
     if (options.position === 'block') {
       const overflowHeight = (popoverRect.height + anchorRect.height + anchorRect.top) > window.innerHeight;
-      console.log({ overflowHeight, dialogRect: popoverRect, anchorRect })
       if (overflowHeight) el.style.setProperty('inset-block-start', `${top - popoverRect.height}px`);
       else el.style.setProperty('inset-block-start', `${top + anchorRect.height}px`);
       

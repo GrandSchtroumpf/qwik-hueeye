@@ -11,22 +11,21 @@
     overlay 0.2s allow-discrete,
     opacity 0.2s,
     transform 0.2s;
+
   &:popover-open {
     opacity: 1;
     transform: scale(1) translateY(0);
     transition-timing-function: var(--ease-out);
   }
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+    }
+  }
   &:not(:popover-open) {
     opacity: 0;
     transform: scale(0.9);
     transition-timing-function: var(--ease-in);
-  }
-}
-
-@starting-style {
-  .he-popover:popover-open {
-    opacity: 0;
-    transform: scale(1) translateY(10px);
   }
 }
 
@@ -37,13 +36,26 @@
     @supports not (transition-behavior: allow-discrete) {
       animation: slideup 0.1s var(--ease-out);
     }
+    @starting-style {
+      &:popover-open {
+        transform: scale(1) translateY(10px);
+      }
+    }
   }
+
 }
 
 @media (max-width: 599px) {
   .he-popover {
+    min-width: 70dvw;
+    max-width: 90dvw;
     @supports not (transition-behavior: allow-discrete) {
       animation: scalein 0.1s var(--ease-out);
+    }
+    @starting-style {
+      &:popover-open {
+        transform: scale(0.9);
+      }
     }
   }
 }
