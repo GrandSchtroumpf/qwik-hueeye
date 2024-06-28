@@ -8,8 +8,7 @@
   }
   
   .container {
-    width: 250px;
-    max-width: 80vw;
+    min-width: 250px;
     padding: var(--size-2);
     article {
       display: flex;

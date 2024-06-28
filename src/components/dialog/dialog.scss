@@ -5,6 +5,7 @@
   overflow: hidden;
   background-color: var(--overlay);
   box-shadow: var(--overlay-shadow);
+  box-sizing: border-box;
   transition:
     display 0.3s allow-discrete,
     overlay 0.3s allow-discrete,
@@ -65,6 +66,9 @@
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     margin-bottom: 0;
+    @media (max-width: 599px) {
+      width: 100dvw;
+    }
     @supports not (transition-behavior: allow-discrete) {
       animation: slideUp 0.3s var(--ease-out);
     }
