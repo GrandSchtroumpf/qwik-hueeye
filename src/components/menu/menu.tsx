@@ -26,12 +26,16 @@ interface MenuTriggerProps extends PropsOf<'button'> {
 export const MenuTrigger = component$<MenuTriggerProps>((props) => {
   const { menuId, ...buttonProps } = props;
   const attr = mergeProps<'button'>(buttonProps, {
+    id: `anchor-${menuId}`,
     type: 'button',
     class: 'he-menu-trigger',
     popovertarget: menuId,
     popovertargetaction: 'toggle' as const,
     'aria-controls': menuId,
     'aria-haspopup': 'menu',
+    style: {
+      ['anchor-name' as any]: `--anchor-${menuId}`
+    }
   });
   return <button {...attr}>
     <Slot />
@@ -58,10 +62,13 @@ export const Menu = component$<MenuProps>((props) => {
 
   const attr = mergeProps<'menu'>(props, {
     onKeyDown$: [preventDefault, onKeyDown$],
-    class: "he-menu he-popover",  // TODO: import popover style
+    class: "he-menu he-popover",
     role: "menu",
     popover: 'auto',
-    onToggle$: setPopoverPosition
+    onToggle$: setPopoverPosition,
+    style: {
+      ['position-anchor' as any]: `--anchor-${props.id}`,
+    }
     // 'aria-labelledby': triggerId // TODO
   });
 

@@ -17,7 +17,10 @@ type CheckListProps = BaseCheckListProps & {
 export function CheckList(props: CheckListProps) {
   const { children, ...rest } = props;
   const childrenArray = Array.isArray(children) ? children : [children];
-  const merged = mergeProps<'div'>(rest, { class: 'he-check-list' });
+  const merged = mergeProps<'div'>(rest, {
+    role: 'group',
+    class: 'he-check-list'
+  });
   const allValues = childrenArray.filter(isNodeType(CheckItem)).map(node => node.props.value);
   
   return <BaseCheckList {...merged} allValues={allValues}>

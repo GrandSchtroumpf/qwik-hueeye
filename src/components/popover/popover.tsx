@@ -14,6 +14,7 @@ export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
 
 export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) => {
   if (e.newState !== 'open') return;
+  if ("anchorName" in document.documentElement.style) return;
   // Cleanup style if screen changed size
   // TODO: move it into a Media Matcher event instead
   if (matchMedia('(max-width: 599px)').matches) {
@@ -83,13 +84,19 @@ export const usePopover = (anchorId?: string) => {
       class: 'he-popover',
       'data-position': 'block',
       'data-anchor': anchorId,
-      onToggle$: [setPopoverPosition, setOpen]
+      onToggle$: [setPopoverPosition, setOpen],
+      style: {
+        'position-anchor': `--${anchorId}`,
+      }
     },
     trigger: {
       role: 'combobox',
       popovertarget: popoverId,
       'aria-controls': popoverId,
       'aria-expanded': open.value,
+      style: {
+        'anchor-name': `--${anchorId}`,
+      }
     }
   };
 }
