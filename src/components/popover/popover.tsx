@@ -35,34 +35,35 @@ export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) =
   const anchorRect = anchor.getBoundingClientRect();
   const positionDialog = () => {
     const popoverRect = el.getBoundingClientRect();
-    el.style.removeProperty('inset-inline-start');
-    el.style.removeProperty('inset-inline-end');
-    el.style.removeProperty('inset-block-start');
-    el.style.removeProperty('inset-block-end');
+    el.style.insetInlineStart = '';
+    el.style.insetInlineEnd = '';
+    el.style.insetBlockStart = '';
+    el.style.insetBlockEnd = '';
     const top = anchorRect.top;
     const left = anchorRect.left;
   
     if (options.position === 'inline') {
       const overflowWidth = (popoverRect.width + anchorRect.width + anchorRect.left) > window.innerWidth;
-      if (overflowWidth) el.style.setProperty('inset-inline-start', `${left - popoverRect.width}px`);
-      else el.style.setProperty('inset-inline-start', `${left + anchorRect.width}px`);
+      if (overflowWidth) el.style.insetInlineStart = `${left - popoverRect.width}px`;
+      else el.style.insetInlineStart = `${left + anchorRect.width}px`;
       
       const overflowHeight = (popoverRect.height + anchorRect.top) > window.innerHeight;
-      if (overflowHeight) el.style.setProperty('inset-block-end', `${top}px`);
-      else el.style.setProperty('inset-block-start', `${top}px`);
+      if (overflowHeight) el.style.insetBlockEnd = `${top}px`;
+      else el.style.insetBlockStart = `${top}px`;
     }
     if (options.position === 'block') {
       const overflowHeight = (popoverRect.height + anchorRect.height + anchorRect.top) > window.innerHeight;
-      if (overflowHeight) el.style.setProperty('inset-block-start', `${top - popoverRect.height}px`);
-      else el.style.setProperty('inset-block-start', `${top + anchorRect.height}px`);
+      if (overflowHeight) el.style.insetBlockStart = `${top - popoverRect.height}px`;
+      else el.style.insetBlockStart = `${top + anchorRect.height}px`;
       
       const overflowWidth = (popoverRect.width + anchorRect.left) > window.innerWidth;
-      if (overflowWidth) el.style.setProperty('inset-inline-end', `${left}px`);
-      else el.style.setProperty('inset-inline-start', `${left}px`);
+      if (overflowWidth) el.style.insetInlineEnd = `${left}px`;
+      else el.style.insetInlineStart = `${left}px`;
 
-      el.style.setProperty('min-width', `${anchorRect.width}px`);
+      el.style.minWidth = `${anchorRect.width}px`;
     }
     if (!popoverRect.height) return requestAnimationFrame(positionDialog);
+    el.setAttribute('data-ready', 'true');
   }
   positionDialog();
 });

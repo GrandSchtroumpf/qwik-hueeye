@@ -120,10 +120,10 @@
       var(--gradient-end)
     );
   
-    @supports (background: linear-gradient(in oklch, black, white)) {
-      --gradient-direction: in oklch 160deg;
+    @supports (background: linear-gradient(in oklab, black, white)) {
+      --gradient-direction: 160deg in oklab;
     }
-    @supports not (background: linear-gradient(in oklch, black, white)) {
+    @supports not (background: linear-gradient(in oklab, black, white)) {
       --gradient-direction: 160deg;
     }
     --gradient-start: oklch(95% 0.02 var(--hue));

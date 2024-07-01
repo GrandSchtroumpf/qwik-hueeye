@@ -1,34 +1,16 @@
 @mixin list-selectable($anchorPrefix) {
   @supports (anchor-name: --myanchor) {
     --anchor-selected: --#{$anchorPrefix}-selected;
-    --anchor-focused: --#{$anchorPrefix}-focused;
-    &::before, &::after {
-      position: absolute;
-      transition-property: top, left, width, height;
-      transition-duration: 0.25s;
-      transition-timing-function: var(--ease-in-out);
-    }
     &::before {
       content: '';
       position-anchor: var(--anchor-selected, --selected);
       border-radius: var(--size-0);
       background-color: var(--color, var(--primary));
+      transition-property: top, left, width, height;
+      position: absolute;
+      transition-duration: 0.25s;
+      transition-timing-function: var(--ease-in-out);
     }
-    &::after {
-      content: '';
-      position-anchor: var(--anchor-focused, --focused);
-      top: anchor(top); 
-      left: anchor(left);
-      width: anchor-size(width);
-      height: anchor-size(height);
-      border-radius: var(--border-radius);
-      outline: 1px solid var(--divider);
-      pointer-events: none;
-    }
-    // TODO: break animation for some reason
-    // &:not(:has(:focus-visible))::after {
-
-    // }
   }
 }
 
@@ -58,17 +40,11 @@
 }
 
 @mixin item-selectable {
-  @supports (anchor-name: --myanchor) {
-    &:focus-visible {
-      anchor-name: var(--anchor-focused, --focused);
-      outline: none;
-    }
+  &:focus-visible {
+    outline: solid 1px var(--color, var(--divider));
   }
   @supports not (anchor-name: --myanchor) {
     position: relative;
-    &:focus-visible {
-      outline: solid 1px var(--color, var(--divider));
-    }
     &::before {
       content: '';
       position: absolute;
@@ -97,9 +73,6 @@
 @mixin item-selected {
   @supports (anchor-name: --myanchor) {
     anchor-name: var(--anchor-selected, --selected);
-    &:focus-visible {
-      anchor-name: var(--anchor-selected, --selected), var(--anchor-focused, --focused);
-    }
   }
   @supports not (anchor-name: --myanchor) {
     &::before {
@@ -114,30 +87,7 @@
 
 
 @mixin list-multi-selectable($anchorPrefix) {
-  @supports (anchor-name: --myanchor) {
-    --anchor-focused: --#{$anchorPrefix}-focused;
-    &::after {
-      position: absolute;
-      transition-property: top, left, width, height;
-      transition-duration: 0.25s;
-      transition-timing-function: var(--ease-in-out);
-    }
-    &::after {
-      content: '';
-      position-anchor: var(--anchor-focused, --focused);
-      top: anchor(top); 
-      left: anchor(left);
-      width: anchor-size(width);
-      height: anchor-size(height);
-      border-radius: var(--border-radius);
-      outline: 1px solid var(--divider);
-      pointer-events: none;
-    }
-    // TODO: break animation for some reason
-    // &:not(:has(:focus-visible))::after {
 
-    // }
-  }
 }
 
 
@@ -152,17 +102,8 @@
     opacity: 0;
     transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
   }
-  @supports (anchor-name: --myanchor) {
-    anchor-name: var(--anchor-selected, --selected);
-    &:focus-visible {
-      outline: none;
-      anchor-name: var(--anchor-selected, --selected), var(--anchor-focused, --focused);
-    }
-  }
-  @supports not (anchor-name: --myanchor) {
-    &:focus-visible {
-      outline: solid 1px var(--color, var(--divider));
-    }
+  &:focus-visible {
+    outline: solid 1px var(--color, var(--divider));
   }
 }
 

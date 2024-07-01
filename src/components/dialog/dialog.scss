@@ -1,5 +1,4 @@
 .he-dialog {
-  --closing-duration: var(--modal-closing-duration, 300ms);
   border: none;
   padding: 0;
   overflow: hidden;
@@ -33,7 +32,7 @@
     transition-timing-function: var(--ease-in);
   }
   &[open]::backdrop {
-    opacity: 0.6;
+    opacity: 0.32;
     @supports not (transition-behavior: allow-discrete) {
       animation: backdrop-fade 0.3s forwards;
     }

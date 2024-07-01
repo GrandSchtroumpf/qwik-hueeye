@@ -20,7 +20,7 @@ function useSwipeDown<E extends HTMLElement = HTMLElement>(cb: QRL<(el: E) => an
   });
   const onTouchEnd$ = $((e: TouchEvent, el: E) => {
     const deltaY = Math.max(e.changedTouches.item(0)!.clientY - y.value, 0);
-    if (deltaY > 100) cb(el);
+    if (deltaY > 20) cb(el);
     el.style.transform = '';
   });
   return {
@@ -41,7 +41,7 @@ function useSwipeLeft<E extends HTMLElement = HTMLElement>(cb: QRL<(el: E) => an
   });
   const onTouchEnd$ = $((e: TouchEvent, el: E) => {
     const deltaX = Math.min(e.changedTouches.item(0)!.clientX - x.value, 0);
-    if (deltaX < -100) cb(el);
+    if (deltaX < -20) cb(el);
     el.style.transform = '';
   });
   return {

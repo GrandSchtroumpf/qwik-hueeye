@@ -24,7 +24,7 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   useStyles$(styles);
   const { id: anchorId } = useFormFieldId(props.id);
   const { placeholder, display$, multi, ...buttonProps } = props;
-  const { open, popover, trigger } = usePopover(anchorId);
+  const { popover, trigger } = usePopover(anchorId);
 
   const onKeyDown = $((e: KeyboardEvent) => {
     const popoverEl = document.getElementById(popover.id);
@@ -67,9 +67,9 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
           : <SingleTrigger display$={display$} placeholder={placeholder} />
         }
         <Slot name="suffix"/>
-        <svg viewBox="7 10 10 5" height="4px" class={open.value ? 'opened' : ''} aria-hidden="true" focusable="false">
+        {/* <svg viewBox="7 10 10 5" height="4px" class={open.value ? 'opened' : ''} aria-hidden="true" focusable="false">
           <polygon stroke="none" fill="currentColor" points="7 10 12 15 17 10"></polygon>
-        </svg>
+        </svg> */}
       </button>
       <ListBox multi={multi} {...popoverProps}>
         <Slot />

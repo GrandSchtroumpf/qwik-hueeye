@@ -3,36 +3,43 @@
   border: none;
   overflow: hidden;
   background-color: var(--overlay);
+  backdrop-filter: var(--background-blur);
   box-shadow: var(--overlay-shadow);
   border-radius: 4px;
   box-sizing: border-box;
-  transition:
-    display 0.2s allow-discrete,
-    overlay 0.2s allow-discrete,
-    opacity 0.2s,
-    transform 0.2s;
-
   &:popover-open {
     opacity: 1;
-    transform: scale(1) translateY(0);
     transition-timing-function: var(--ease-out);
   }
-  @starting-style {
-    &:popover-open {
+
+  @supports (transition-behavior: allow-discrete) {
+    transition-property: display overlay opacity transform;
+    transition-duration: 0.2s;
+    transition-behavior: allow-discrete;
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+      }
+    }
+    &:not(:popover-open) {
       opacity: 0;
+      transform: scale(0.9);
+      transition-timing-function: var(--ease-in);
     }
   }
-  &:not(:popover-open) {
-    opacity: 0;
-    transform: scale(0.9);
-    transition-timing-function: var(--ease-in);
-  }
+
 
   // Desktop
   @media (min-width: 600px) {
     margin: 0;
+    
     @supports not (transition-behavior: allow-discrete) {
-      animation: slideup 0.1s var(--ease-out);
+      &:not([data-ready="true"]) {
+        opacity: 0;
+      }
+      &[data-ready="true"] {
+        animation: slideup 0.1s var(--ease-out);
+      }
     }
     @starting-style {
       &:popover-open {
