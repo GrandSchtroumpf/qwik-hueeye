@@ -27,7 +27,7 @@ interface DetailsService {
 
 const accordionFlip = $((ids: string[], root: HTMLUListElement) => {
   const state = new Map<string, DOMRect>();
-  const list = root.querySelectorAll<HTMLElement>('li.details');
+  const list = root.querySelectorAll<HTMLElement>('.he-details');
   const openingPanels: HTMLElement[] = [];
 
   state.set('root', root.getBoundingClientRect());
@@ -74,7 +74,7 @@ const accordionFlip = $((ids: string[], root: HTMLUListElement) => {
         duration: 200,
         easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
       });
-      const content = panel.querySelector('.details-panel-content')!;
+      const content = panel.querySelector('.he-details-panel-content')!;
       content.animate([
         { opacity: 0 },
         { opacity: 0, transform: 'scale(0.995)' },
@@ -108,8 +108,8 @@ export const Accordion = component$((props: AccordionProps) => {
   });
   useContextProvider(AccordionContext, {
     state,
-    next: $(() => nextFocus(ref.value?.querySelectorAll<HTMLElement>('button.details-controller'))),
-    previous: $(() => previousFocus(ref.value?.querySelectorAll<HTMLElement>('button.details-controller'))),
+    next: $(() => nextFocus(ref.value?.querySelectorAll<HTMLElement>('.he-details-controller'))),
+    previous: $(() => previousFocus(ref.value?.querySelectorAll<HTMLElement>('.he-details-controller'))),
     openAll: $(() => {
       const list = ref.value!.querySelectorAll('li.details')!;
       state.opened = Array.from(list).map(item => item.id);
@@ -128,7 +128,7 @@ export const Accordion = component$((props: AccordionProps) => {
       }
     })
   });
-  return <ul class="accordion" {...ulProps} ref={ref}>
+  return <ul class="he-accordion" {...ulProps} ref={ref}>
     <Slot/>
   </ul>
 });
@@ -141,7 +141,7 @@ export const Details = component$(() => {
   const opened = useComputed$(() => state.opened.includes(id));
   
   useContextProvider(DetailsContext, { id, opened });
-  return <li id={id} class="details">
+  return <li id={id} class="he-details">
     <Slot/>
   </li>
 });
@@ -164,7 +164,7 @@ export const Summary = component$(() => {
   });
 
   return <button ref={ref} type="button"
-    class="details-controller"
+    class="he-details-controller"
     aria-expanded={opened.value}
     aria-controls={panelId}
     onClick$={() => toggle(id)}
@@ -178,8 +178,8 @@ export const DetailsPanel = component$(() => {
   const ref = useSignal<HTMLElement>();
   const { id } = useContext(DetailsContext);
   const panelId = `panel-${id}`;
-  return <div ref={ref} id={panelId} role="region" class="details-panel">
-    <div class="details-panel-content">
+  return <div ref={ref} id={panelId} role="region" class="he-details-panel">
+    <div class="he-details-panel-content">
       <Slot/>
     </div>
   </div>

@@ -1,4 +1,5 @@
 @use '../../list' as list;
+@use '../../hue/hue' as hue;
 
 [role="option"] {
   cursor: pointer;
@@ -6,7 +7,10 @@
   padding: var(--size-1) var(--size-2);
   border-radius: var(--border-radius);
   &:hover {
-    background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--overlay));
+    @include hue.hover(transparent, var(--text));
+  }
+  &:active {
+    @include hue.focus(transparent, var(--text));
   }
 
   @include list.item-horizontal-selectable;

@@ -1,14 +1,15 @@
 @use '../index' as list;
+@use '../../hue/hue' as hue;
 
 .he-item-anchor,
 .he-item-link,
 .he-item-button {
   box-sizing: border-box;
   &:hover {
-    background-color: var(--surface);
+    @include hue.hover(transparent, var(--text));
   }
   &:active {
-    background-color: var(--surface-higher);
+    @include hue.focus(transparent, var(--text));
   }
 }
 

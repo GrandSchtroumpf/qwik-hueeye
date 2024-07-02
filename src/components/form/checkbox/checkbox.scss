@@ -64,9 +64,10 @@
         stroke-width: 2px;
         stroke-dasharray: 30;
         stroke-dashoffset: 30;
-        transition: d 0.1s 0.2s var(--ease-out),
-          stroke-dashoffset 0.2s var(--ease-out),
-          transform 0.3s var(--ease-back-in-out);
+        transition:
+          d 0.2s 0.3s var(--ease-out),
+          stroke-dashoffset 0.3s var(--ease-out),
+          transform 0.4s var(--ease-back-in-out);
       }
     }
     &:hover svg {

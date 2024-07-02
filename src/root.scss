@@ -1,7 +1,13 @@
 html, ::backdrop {
   --hue: 0;
-  scroll-behavior: smooth;
   font-size: 16px;
+}
+body {
+  // thumb track
+  scrollbar-color: var(--outline) transparent;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  background-color: var(--surface-0);
 }
 
 h1 {

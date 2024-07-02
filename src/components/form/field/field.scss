@@ -40,7 +40,7 @@
   &.underline {
     outline: none;
     border-bottom: solid 2px var(--outline);
-    &:focus-within {
+    &:has(:focus-visible) {
       border-bottom-color: var(--primary);
     }
   }

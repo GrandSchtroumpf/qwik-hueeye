@@ -16,7 +16,7 @@ $distance: calc($size - $padding);
   &.fill {
     background-color: var(--surface);
   }
-  &:focus-within, &:active {
+  &:has(:focus-visible), &:active {
     border-color: var(--primary);
   }
   &:has(input:invalid) {

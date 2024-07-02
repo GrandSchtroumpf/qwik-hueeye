@@ -39,6 +39,13 @@
     --size-4: 32px;
     --border-radius: 8px;
     --border: none;
+
+    --surface-0: oklch(var(--lum-0) var(--chroma) var(--hue));
+    --surface-1: oklch(var(--lum-1) var(--chroma) var(--hue));
+    --surface-2: oklch(var(--lum-2) var(--chroma) var(--hue));
+    --surface-3: oklch(var(--lum-3) var(--chroma) var(--hue));
+    --surface-4: oklch(var(--lum-4) var(--chroma) var(--hue));
+
     
     --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
     --ease-out: cubic-bezier(0, 0.55, 0.45, 1);
@@ -64,6 +71,12 @@
   :root, ::backdrop {
     color-scheme: dark light;
     --chroma: 0.01;
+
+    --lum-0: 100%;
+    --lum-1: 95%;
+    --lum-2: 93%;
+    --lum-3: 92%;
+    --lum-4: 91%;
   
     --color-lightness: 65%;
     --color-chroma: 0.3;
@@ -71,13 +84,23 @@
     --on-color-lightness: 100%;
     --on-color-chroma: 0;
 
-    --alpha-hover: 12%;
-    --alpha-focus: 24%;
-    --alpha-drag: 32%;
+    --alpha-hover: 8%;
+    --alpha-focus: 12%;
+    --alpha-drag: 24%;
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --color-lightness: 80%;
       --color-chroma: 0.27;
+
+      --lum-0: 12%;
+      --lum-1: 17%;
+      --lum-2: 22%;
+      --lum-3: 26%;
+      --lum-4: 28%;
+
+      --alpha-hover: 12%;
+      --alpha-focus: 24%;
+      --alpha-drag: 32%;
   
       --on-color-lightness: 20%;
       --on-color-chroma: 0.15;
@@ -91,21 +114,23 @@
     --secondary-hue: calc(var(--hue) + 90);
     --warn-hue: 30;
   
-    --text: oklch(10% var(--chroma) var(--hue));
+    --text: oklch(20% var(--chroma) var(--hue));
     --text-variant: oklch(40% var(--chroma) var(--hue));
-    --background-dim: oklch(90% var(--chroma) var(--hue));
-    --background: oklch(92% var(--chroma) var(--hue));
-    --background-bright: oklch(98% var(--chroma) var(--hue));
+
+    --background-dim: var(--surface-4);
+    --background: var(--surface-2);
+    --background-bright: var(--surface-0);
     --background-blur: none;
     
-    --overlay: oklch(98% var(--chroma) var(--hue));
+    --overlay: var(--surface-4);
+
     --overlay-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     
-    --surface-higher: oklch(90% var(--chroma) var(--hue));
-    --surface-high: oklch(92% var(--chroma) var(--hue));
-    --surface: oklch(94% var(--chroma) var(--hue));
-    --surface-low: oklch(96% var(--chroma) var(--hue));
-    --surface-lower: oklch(100% var(--chroma) var(--hue));
+    --surface-higher: var(--surface-4);
+    --surface-high: var(--surface-3);
+    --surface: var(--surface-2);
+    --surface-low: var(--surface-1);
+    --surface-lower:  var(--surface-0);
   
     --disabled: oklch(50% 0 var(--hue));
     --outline: oklch(30% var(--chroma) var(--hue));
@@ -126,29 +151,14 @@
     @supports not (background: linear-gradient(in oklab, black, white)) {
       --gradient-direction: 160deg;
     }
-    --gradient-start: oklch(95% 0.02 var(--hue));
-    --gradient-end: oklch(93% 0 var(--hue));
+    --gradient-start: var(--surface-1);
+    --gradient-end: var(--surface-3);
     
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --text: oklch(100% var(--chroma) var(--hue));
-      --text-variant: oklch(85% var(--chroma) var(--hue));
-      --background-dim: oklch(10% var(--chroma) var(--hue));
-      --background: oklch(15% var(--chroma) var(--hue));
-      --background-bright: oklch(20% var(--chroma) var(--hue));
-  
+      --text-variant: oklch(85% var(--chroma) var(--hue));  
       --divider: oklch(70% var(--chroma) var(--hue));
-          
-      --overlay: oklch(25% var(--chroma) var(--hue));
-      
-      --surface-higher: oklch(32% var(--chroma) var(--hue));
-      --surface-high: oklch(28% var(--chroma) var(--hue));
-      --surface: oklch(24% var(--chroma) var(--hue));
-      --surface-low: oklch(18% var(--chroma) var(--hue));
-      --surface-lower: oklch(12% var(--chroma) var(--hue));
-  
-      --gradient-start: oklch(30% var(--chroma) var(--hue));
-      --gradient-end: oklch(15% var(--chroma) var(--hue));    
     }
   }
   body {
