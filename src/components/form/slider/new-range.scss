@@ -1,0 +1,97 @@
+@use '../../hue/hue' as hue;
+
+.he-range-container {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  --he-thumb-start: 0;
+  --he-thumb-end: 0;
+}
+.he-range-track {
+  position: relative;
+  height: 8px;
+  border-radius: 8px;
+  background-color: var(--divider);
+  width: 100%;
+  &::after {
+    content: "";
+    position: absolute;
+    border-radius: 8px;
+    background-color: var(--color, var(--primary));
+    inset-inline-start: calc(var(--he-thumb-start) * (100% - 20px));
+    inset-inline-end: calc((1 - var(--he-thumb-end)) * (100% - 20px));
+    inset-block-start: 0;
+    inset-block-end: 0;
+  }
+}
+
+.he-range-thumb-start,
+.he-range-thumb-end {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--outline);
+  border: none;
+  position: absolute;
+  padding: 0;
+  --he-thumb-background: var(--color, var(--primary));
+  --he-thumb-foreground: var(--on-color, var(--on-primary));
+  &::before {
+    content: attr(aria-valuenow);
+    font-size: 1rem;
+    position: absolute;
+    inset-block-end: 150%;
+    background-color: var(--overlay);
+    backdrop-filter: var(--background-blur);
+    box-shadow: var(--overlay-shadow);
+    border-radius: 4px;
+    padding: 4px 8px;
+    opacity: 0;
+    transform: translate(-50%, 10px) scale(0.8);
+    transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--he-thumb-background);
+    border-radius: 50%;
+    transform: scale(0.7);
+    transition: transform 0.2s var(--ease-out);
+  }
+  &:hover, &:focus-visible, &:active {
+    &::before {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+  }
+  &:hover {
+    &::after {
+      transform: scale(0.4);
+      @include hue.hover(var(--he-thumb-background), var(--he-thumb-foreground));
+    }
+  }
+  &:focus-visible {
+    outline: solid 1px var(--he-thumb-background);
+    &::after {
+      transform: scale(0.4);
+      background-color: var(--he-thumb-foreground);
+    }
+  }
+  &:active {
+    &::after {
+      transform: scale(0.2);
+      background-color: var(--he-thumb-foreground);
+    }
+  }
+}
+
+.he-range-thumb-start {
+  inset-inline-start: calc(var(--he-thumb-start) * (100% - 20px));
+}
+.he-range-thumb-end {
+  inset-inline-end: calc((1 - var(--he-thumb-end)) * (100% - 20px));
+}

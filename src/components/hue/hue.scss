@@ -79,7 +79,7 @@
     --lum-4: 91%;
   
     --color-lightness: 65%;
-    --color-chroma: 0.3;
+    --color-chroma: 0.25;
 
     --on-color-lightness: 100%;
     --on-color-chroma: 0;
@@ -87,6 +87,26 @@
     --alpha-hover: 8%;
     --alpha-focus: 12%;
     --alpha-drag: 24%;
+
+    @media (prefers-contrast: more) {
+      --chroma: 0.02;
+      --color-chroma: 0.3;
+      --lum-0: 100%;
+      --lum-1: 95%;
+      --lum-2: 90%;
+      --lum-3: 85%;
+      --lum-4: 80%;
+      --on-primary: #000;
+      --on-secondary: #000;
+      --on-tertiary: #000;
+      --surface-0: #fff;
+      --text: #000;
+
+      --alpha-hover: 12%;
+      --alpha-focus: 24%;
+      --alpha-drag: 32%;
+    }
+
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --color-lightness: 80%;
@@ -104,6 +124,25 @@
   
       --on-color-lightness: 20%;
       --on-color-chroma: 0.15;
+      @media (prefers-contrast: more) {
+        --chroma: 0.01;
+        --chroma-color: 0.2;
+        --on-color-lightness: 0%;
+        --lum-0: 0%;
+        --lum-1: 20%;
+        --lum-2: 25%;
+        --lum-3: 30%;
+        --lum-4: 35%;
+        --text: #fff;
+        --on-primary: #000;
+        --on-secondary: #000;
+        --on-tertiary: #000;
+        --surface-0: #000;
+
+        --alpha-hover: 24%;
+        --alpha-focus: 32%;
+        --alpha-drag: 40%;
+      }
     }
   }
   
@@ -409,6 +448,7 @@
     border: none;
     color: var(--color, currentColor);
     &.gradient {
+      font-weight: 500;
       background-image: linear-gradient(
         var(--gradient-direction),
         var(--gradient-start) 30%,

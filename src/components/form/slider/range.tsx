@@ -1,4 +1,4 @@
-import { component$, useStyles$, event$, useSignal, useVisibleTask$, Slot, PropsOf, untrack, Signal, createContextId, QRL, useContextProvider, useContext, JSXChildren } from "@builder.io/qwik";
+import { component$, useStyles$, $, useSignal, useVisibleTask$, Slot, PropsOf, untrack, Signal, createContextId, QRL, useContextProvider, useContext, JSXChildren } from "@builder.io/qwik";
 import { cssvar } from "../../utils";
 import { round } from "./utils";
 import { useWithId } from "../../hooks/useWithId";
@@ -78,9 +78,9 @@ export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>
   });
 
   /** Set the position of the thumb & track for the input */
-  const setPosition = event$((input: HTMLInputElement, mode: 'start' | 'end') => {
+  const setPosition = $((input: HTMLInputElement, mode: 'start' | 'end') => {
     const percent = input.valueAsNumber / (max - min);
-    // total width - inline padding - thumb size
+    // track width - thumb size
     const distance = track.value!.clientWidth - 20;
     const position = mode === 'start'
       ? (percent - initialPosition[mode]) * distance
@@ -89,7 +89,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>
     input.nextElementSibling?.setAttribute('data-value', `${Math.floor(input.valueAsNumber)}`);
   });
 
-  const focusLeft = event$((start: HTMLInputElement) => {
+  const focusLeft = $((start: HTMLInputElement) => {
     const end = endInput.value!;
     const percent = end.valueAsNumber / (max - min) * 100;
     start.max = end.value;
@@ -97,7 +97,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>
     end.style.setProperty('width', `${100 - percent}%`);
   });
 
-  const focusRight = event$((end: HTMLInputElement) => {
+  const focusRight = $((end: HTMLInputElement) => {
     const start = startInput.value!;
     const percent = start.valueAsNumber / (max - min) * 100;
     end.min = start.value;
@@ -105,7 +105,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>
     end.style.setProperty('width', `${100 - percent}%`);
   });
 
-  const resize = event$(() => {
+  const resize = $(() => {
     const end = endInput.value!;
     const start = startInput.value!;
     const middle = start.valueAsNumber + (end.valueAsNumber - start.valueAsNumber) / 2;
@@ -116,7 +116,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>
   });
   
   /** Resize input & set the new position */
-  const move = event$((input: HTMLInputElement | undefined, mode: 'start' | 'end') => {
+  const move = $((input: HTMLInputElement | undefined, mode: 'start' | 'end') => {
     if (!input) return;
     // If input have no focus yet, resize input
     if (document.activeElement !== input) {

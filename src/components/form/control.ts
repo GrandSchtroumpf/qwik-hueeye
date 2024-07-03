@@ -198,7 +198,7 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
     else signal.value = value;
   });
 
-  const ctx = { control, onChange, name };
+  const ctx = { parent, control, onChange, name };
   useContextProvider<ControlCtx<T>>(ControlContext, ctx);
   return ctx;
 }

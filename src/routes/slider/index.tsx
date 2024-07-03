@@ -1,6 +1,7 @@
 import { component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
 import { Slider, Range, RangeStart, RangeEnd } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
+import { NewRange, NewRangeEnd, NewRangeStart } from "../../components/form/slider/new-range";
 
 
 export default component$(() => {
@@ -19,6 +20,13 @@ export default component$(() => {
         <RangeStart name="start"/>
         <RangeEnd name="end" />
       </Range>
+    </article>
+    <article>
+      <h2>New Rang</h2>
+      <NewRange bind:value={range}>
+        <NewRangeStart name="start"/>
+        <NewRangeEnd name="end" />
+      </NewRange>
     </article>
   </section>
 })
