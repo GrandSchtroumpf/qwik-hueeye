@@ -48,7 +48,7 @@ export default () => {
         <RouterHead />
       </head>
       <body>
-        <HueEyeProvider icon={iconConfig}>
+        <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
           <ServiceWorkerRegister />
         </HueEyeProvider>
