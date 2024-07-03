@@ -1,40 +1,39 @@
-import { component$, useStyles$, $, useSignal, useVisibleTask$, Slot, PropsOf, untrack, Signal, createContextId, QRL, useContextProvider, useContext, JSXChildren } from "@builder.io/qwik";
-import { cssvar } from "../../utils";
-import { round } from "./utils";
-import { useWithId } from "../../hooks/useWithId";
+import { component$, useStyles$, $, useComputed$, PropsOf, useContext, createContextId, useContextProvider, Slot, JSXOutput } from "@builder.io/qwik";
 import { WithControl, WithControlGroup, extractControls, useControlProvider, useGroupControlProvider } from "../control";
 import { mergeProps } from "../../utils/attributes";
-import { InputAttributes } from "../types";
 import { findNode } from "../../utils/jsx";
-import styles from './range.scss?inline';
+import style from './range.scss?inline';
 
 type RangeType = Record<string, number>;
-interface BaseRangeProps extends PropsOf<'fieldset'> {
-  min?: number | string;
-  max?: number | string;
-  step?: number | string;
-}
-
-interface RangeCtx {
+interface BaseProps {
+  /** Default to 0 */
   min: number;
+  /** Default to 100 */
   max: number;
-  step: number;
-  startInput: Signal<HTMLInputElement | undefined>;
-  endInput: Signal<HTMLInputElement | undefined>;
-  resize: QRL<() => void>;
-  move: QRL<(input: HTMLInputElement | undefined, mode: 'start' | 'end') => void>;
-  focusLeft: QRL<(start: HTMLInputElement) => void>;
-  focusRight: QRL<(start: HTMLInputElement) => void>;
+  /** Default to 1 */
+  step: number
+  /** Default to false */
+  vertical: boolean;
+  /** Disable both thumbs */
+  disabled: boolean;
 }
-const RangeContext = createContextId<RangeCtx>('RangeContext');
 
-export type RangeProps = BaseRangeProps & {
-  children: JSXChildren;
+interface Context extends BaseProps {
+  startName: string | number;
+  endName: string | number;
+  range: RangeType;
 }
-export const Range = (props: WithControlGroup<RangeType, RangeProps>) => {
+
+const RangeContext = createContextId<Context>('RangeContext');
+
+
+interface Props extends Partial<BaseProps>, PropsOf<'div'> {
+  children: JSXOutput;
+}
+export const Range = (props: WithControlGroup<RangeType, Props>) => {
   const { children, ...attr } = props;
-  const startName = findNode(children, RangeStart)?.props.name ?? 'start';
-  const endName = findNode(children, RangeEnd)?.props.name ?? 'end';
+  const startName = findNode(children, RangeStart)?.props.name;
+  const endName = findNode(children, RangeEnd)?.props.name;
   return (
     <RangeImpl {...attr} startName={startName} endName={endName}>
       {children}
@@ -42,185 +41,213 @@ export const Range = (props: WithControlGroup<RangeType, RangeProps>) => {
   )
 }
 
-
-export type RangeImplProps = BaseRangeProps & {
-  startName: string | number;
-  endName: string | number;
+interface PropsImpl extends Partial<BaseProps>, PropsOf<'div'> {
+  /** Default to "start" */
+  startName?: string | number;
+  /** Default to "end" */
+  endName?: string | number;
 }
-export const RangeImpl = component$<WithControlGroup<RangeType, RangeImplProps>>((props) => {
-  useStyles$(styles);
-  const id = useWithId(props.id);
-  const slider = useSignal<HTMLFieldSetElement>();
-  const track = useSignal<HTMLElement>();
-  const startInput = useSignal<HTMLInputElement>();
-  const endInput = useSignal<HTMLInputElement>();
-  
-  const min = props.min ? Number(props.min) : 0;
-  const max = props.max ? Number(props.max) : 100;
-  const step = props.step ? Number(props.step) : 1;
-  const startName = props.startName;
-  const endName = props.endName;
-  
+export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((props) => {
+  useStyles$(style);
+
   const { attr, controls } = extractControls(props);
-  const { control, name } = useGroupControlProvider({
+  const {
+    min = 0,
+    max = 100,
+    step = 1,
+    startName = 'start',
+    endName = 'end',
+    vertical = false,
+    disabled = false,
+    ...rest
+  } = attr;
+  const { control } = useGroupControlProvider({
     value: { [startName]: min, [endName]: max },
     ...controls
   });
-  const initialPosition = untrack(() =>({
-    start: control[startName] / (max - min),
-    end: 1 - control[endName] / (max - min),
-  }));
-  const cssVariables = cssvar({
-    initialStart: round(initialPosition.start, 0.01),
-    initialEnd: round(initialPosition.end, 0.01),
-    start: 0,
-    end: 0
-  });
-
-  /** Set the position of the thumb & track for the input */
-  const setPosition = $((input: HTMLInputElement, mode: 'start' | 'end') => {
-    const percent = input.valueAsNumber / (max - min);
-    // track width - thumb size
-    const distance = track.value!.clientWidth - 20;
-    const position = mode === 'start'
-      ? (percent - initialPosition[mode]) * distance
-      : (percent + initialPosition[mode] - 1) * distance;
-    slider.value!.style.setProperty(`--${mode}`, `${position}px`);
-    input.nextElementSibling?.setAttribute('data-value', `${Math.floor(input.valueAsNumber)}`);
-  });
-
-  const focusLeft = $((start: HTMLInputElement) => {
-    const end = endInput.value!;
-    const percent = end.valueAsNumber / (max - min) * 100;
-    start.max = end.value;
-    start.style.setProperty('width', `${percent}%`);
-    end.style.setProperty('width', `${100 - percent}%`);
-  });
-
-  const focusRight = $((end: HTMLInputElement) => {
-    const start = startInput.value!;
-    const percent = start.valueAsNumber / (max - min) * 100;
-    end.min = start.value;
-    start.style.setProperty('width', `${percent}%`);
-    end.style.setProperty('width', `${100 - percent}%`);
-  });
-
-  const resize = $(() => {
-    const end = endInput.value!;
-    const start = startInput.value!;
-    const middle = start.valueAsNumber + (end.valueAsNumber - start.valueAsNumber) / 2;
-    const percent = middle / (max - min) * 100;
-    start.style.setProperty('width', `${percent}%`);
-    end.style.setProperty('width', `${100 - percent}%`);
-    end.min = start.max = middle.toString();
-  });
-  
-  /** Resize input & set the new position */
-  const move = $((input: HTMLInputElement | undefined, mode: 'start' | 'end') => {
-    if (!input) return;
-    // If input have no focus yet, resize input
-    if (document.activeElement !== input) {
-      if (mode === 'start') focusLeft(input);
-      if (mode === 'end') focusRight(input);
-    }
-    setPosition(input, mode);
-  });
-
-
   useContextProvider(RangeContext, {
     min,
     max,
     step,
-    startInput,
-    endInput,
-    resize,
-    move,
-    focusLeft,
-    focusRight,
+    range: control,
+    startName,
+    endName,
+    vertical,
+    disabled
   });
 
-  // Update UI on resize
-  useVisibleTask$(() => {
-    const obs = new ResizeObserver(() => {
-      if (startInput.value) setPosition(startInput.value, 'start');
-      if (endInput.value) setPosition(endInput.value, 'end');
-    });
-    obs.observe(slider.value!);
-    return () => obs.disconnect();
+  const start = control[startName];
+  const end = control[endName];
+
+  const thumbStart = useComputed$(() => (start - min) / (max - min));
+  const thumbEnd = useComputed$(() => (end - min) / (max - min));
+
+  const start$ = $((e: MouseEvent, el: HTMLElement) => {
+    const clamp = (v: number) => Math.max(0, Math.min(v, 1));
+    const round = (v: number) => Math.round(v / step) * step;
+    const getPercent = (event: MouseEvent) => {
+      const { width, height, left, top } = el.getBoundingClientRect();
+      if (vertical) return clamp(((event.clientY - top) / height));
+      else return clamp(((event.clientX - left) / width));
+    }
+    const percent = getPercent(e);
+    const middle = (start + end) / 200;
+    
+    const selected = percent < middle ? 'start' : 'end';
+
+    const setValue = (percent: number) => {
+      if (selected === 'start') {
+        control[startName] = round(Math.min(min + percent * (max - min), end));
+      } else {
+        control[endName] = round(Math.max(min + percent * (max - min), start));
+      }
+    }
+
+    const move = (event: MouseEvent) => {
+      const percent = getPercent(event);
+      setValue(percent)
+    };
+
+    const leave = () => {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', leave);
+    };
+
+    setValue(percent);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', leave);
   });
 
-  const fieldsetAttr = mergeProps<'fieldset'>(attr, cssVariables, {
-    id,
-    class: 'range',
-    ref: slider,
-    name: name?.toString(),
+  const wheel$ = $((e: WheelEvent, el: HTMLElement) => {
+    const clamp = (v: number) => Math.max(0, Math.min(v, 1));
+    const getPercent = (event: MouseEvent) => {
+      const { width, height, left, top } = el.getBoundingClientRect();
+      if (vertical) return clamp(((event.clientY - top) / height));
+      else return clamp(((event.clientX - left) / width));
+    }
+    const percent = getPercent(e);
+    const middle = (start + end) / 200;
+    const selected = percent < middle ? 'start' : 'end';
+    if (selected === 'start') {
+      if (e.deltaY < 0) control[startName] = Math.max(start - step, min);
+      else control[startName] = Math.min(start + step, end);
+    } else {
+      if (e.deltaY < 0) control[endName] = Math.max(end - step, start);
+      else control[endName] = Math.min(end + step, max);
+    }
+  })
+
+  const attributes = mergeProps<'div'>(rest, {
+    role: 'group',
+    class: ['he-range-container', disabled ? 'disable' : ''],
+    style: {
+      '--he-thumb-start': thumbStart.value,
+      '--he-thumb-end': thumbEnd.value
+    },
+    onMouseDown$: start$,
+    onWheel$: wheel$,
+    'preventdefault:wheel': true,
+    'aria-orientation': vertical ? 'vertical' : 'horizontal',
   });
 
   return (
-    <fieldset {...fieldsetAttr} >
-      <div class="track" ref={track}></div>
-      <Slot/>
-    </fieldset>
+    <div {...attributes}>
+      <div class="he-range-track"></div>
+      <Slot />
+    </div>
   )
 });
 
-
-export const RangeStart = component$<WithControl<number, InputAttributes>>((props) => {
-  const ctx = useContext(RangeContext);
+export const RangeStart = component$<WithControl<number, PropsOf<'button'>>>((props) => {
+  const { min, step, range, endName, vertical, disabled } = useContext(RangeContext);
   const { attr, controls } = extractControls(props);
-  const { control, onChange, name } = useControlProvider({ name: 'start', ...controls });
-  const merged = mergeProps<'input'>(attr as any, {
-    type: "range", 
-    class: 'he-range-start-input',
+  const { control, onChange } = useControlProvider({
+    name: 'start',
+    ...controls
   });
+
+  const onKeydown$ = $((e: KeyboardEvent) => {
+    const current = control.value ?? min;
+    const end = range[endName];
+    if (e.key === 'Home') onChange(min);
+    if (vertical) {
+      if (e.key === 'ArrowUp') onChange(Math.max(current - step, min));
+      if (e.key === 'ArrowDown') onChange(Math.min(current + step, end));
+    } else {
+      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, min));
+      if (e.key === 'ArrowRight') onChange(Math.min(current + step, end));
+    }
+    if (e.key === 'End') onChange(end);
+  });
+
+  const end = range[endName];
+  const merged = mergeProps<'button'>(attr, {
+    type: 'button',
+    disabled: disabled,
+    class: 'he-range-thumb-start',
+    onKeyDown$: onKeydown$,
+    'aria-valuemin': min,
+    'aria-valuemax': end,
+    'aria-valuenow': control.value ?? min,
+  });
+
   return (
-    <>
-      <input
-        {...merged}
-        name={name?.toString()}
-        ref={ctx.startInput}
-        min={ctx.min}
-        max={ctx.max}
-        step={ctx.step}
-        value={control.value}
-        onFocus$={(_, el) => ctx.focusLeft(el)}
-        onInput$={(_, el) => ctx.move(el, 'start')}
-        onChange$={(_, el) => onChange(el.valueAsNumber)}
-        onMouseUp$={ctx.resize}
-        onTouchEnd$={ctx.resize}
-        onTouchCancel$={ctx.resize}
-      />
-      <div class="thumb start" data-value={control.value}></div>
-    </>
+    <button {...merged}>
+      <div class="he-range-thumb-shadow"></div>
+      <div class="he-range-thumb-indicator"></div>
+    </button>
   )
 });
 
-export const RangeEnd = component$<WithControl<number, InputAttributes>>((props) => {
-  const ctx = useContext(RangeContext);
+export const RangeEnd = component$<WithControl<number, PropsOf<'button'>>>((props) => {
+  const { max, step, range, startName, vertical, disabled } = useContext(RangeContext);
   const { attr, controls } = extractControls(props);
-  const { control, onChange, name } = useControlProvider({ name: 'end', ...controls });
-  const merged = mergeProps<'input'>(attr as any, {
-    type: "range", 
-    class: 'he-range-start-input',
+  const { control, onChange } = useControlProvider({
+    name: 'end',
+    ...controls
   });
+
+  const onKeydown$ = $((e: KeyboardEvent) => {
+    const current = control.value ?? max;
+    if (e.key === 'Home') onChange(start);
+    if (vertical) {
+      if (e.key === 'ArrowUp') onChange(Math.max(current - step, start));
+      if (e.key === 'ArrowDown') onChange(Math.min(current + step, max));
+    } else {
+      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, start));
+      if (e.key === 'ArrowRight') onChange(Math.min(current + step, max));
+    }
+    if (e.key === 'End') onChange(max);
+  });
+
+  const start = range[startName];
+  const merged = mergeProps<'button'>(attr, {
+    type: 'button',
+    class: 'he-range-thumb-end',
+    disabled: disabled,
+    onKeyDown$: onKeydown$,
+    'aria-valuemin': start,
+    'aria-valuemax': max,
+    'aria-valuenow': control.value ?? max,
+  });
+
   return (
-    <>
-      <input
-        {...merged}
-        name={name?.toString()}
-        ref={ctx.endInput}
-        min={ctx.min}
-        max={ctx.max}
-        step={ctx.step}
-        value={control.value}
-        onFocus$={(_, el) => ctx.focusRight(el)}
-        onInput$={(_, el) => ctx.move(el, 'end')}
-        onChange$={(_, el) => onChange(el.valueAsNumber)}
-        onMouseUp$={ctx.resize}
-        onTouchEnd$={ctx.resize}
-        onTouchCancel$={ctx.resize}
-      />
-      <div class="thumb end" data-value={control.value}></div>
-    </>
+    <button {...merged}>
+      <div class="he-range-thumb-shadow"></div>
+      <div class="he-range-thumb-indicator"></div>
+    </button>
+  );
+});
+
+
+export const RangeTickList = component$(() => {
+  const { min, max, step } = useContext(RangeContext);
+  const ticks = [];
+  for (let i = min; i <= max; i += step) ticks.push(i);
+
+  return (
+    <ul class="he-range-tick-list">
+      {ticks.map(i => <li key={i} class="he-range-tick"></li>)}
+    </ul>
   )
 });

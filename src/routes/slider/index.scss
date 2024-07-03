@@ -1,5 +1,13 @@
 #slider-page {
+  article {
+    background-color: var(--surface-2);
+    padding: var(--size-2);
+    border-radius: var(--size-2);
+  }
   article, h1, h2 {
     margin-bottom: var(--size-2);
+  }
+  .vertical {
+    height: 200px;
   }
 }
