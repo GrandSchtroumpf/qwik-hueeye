@@ -60,32 +60,51 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
     if (e.key === 'End') onChange(max);
   });
 
-  const start$ = $((e: MouseEvent, el: HTMLElement) => {
+  const start$ = $((e: TouchEvent | MouseEvent, el: HTMLElement) => {
     const clamp = (v: number) => Math.max(0, Math.min(v, 1));
     const round = (v: number) => Math.round(v / step) * step;
-    const getPercent = (event: MouseEvent) => {
+    const getPercent = (event: TouchEvent | MouseEvent) => {
       const { width, height, left, top } = el.getBoundingClientRect();
-      if (vertical) return clamp(((event.clientY - top) / height));
-      else return clamp(((event.clientX - left) / width));
+      if (vertical) {
+        const y = 'touches' in event
+          ? event.touches.item(0)!.clientY
+          : event.clientY;
+        return clamp(((y - top) / height));
+      } else {
+        const x = 'touches' in event
+          ? event.touches.item(0)!.clientX
+          : event.clientX;
+        return clamp(((x - left) / width));
+      }
     }
     const setValue = (percent: number) => {
       onChange(round(min + percent * (max - min)));
     }
     
-    const move = (event: MouseEvent) => {
+    const move = (event: TouchEvent | MouseEvent) => {
       const percent = getPercent(event);
       setValue(percent)
     };
     
     const leave = () => {
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', leave);
+      if ('touches' in e) {
+        document.removeEventListener('touchmove', move);
+        document.removeEventListener('touchend', leave);
+      } else {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', leave);
+      }
     };
       
     const percent = getPercent(e);
     setValue(percent);
-    document.addEventListener('mousemove', move);
-    document.addEventListener('mouseup', leave);
+    if ('touches' in e) {
+      document.addEventListener('touchmove', move);
+      document.addEventListener('touchend', leave);
+    } else {
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', leave);
+    }
   });
 
   const wheel$ = $((e: WheelEvent) => {
@@ -101,8 +120,10 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
       '--he-thumb': thumb.value,
     },
     onMouseDown$: start$,
+    onTouchStart$: start$,
     onWheel$: wheel$,
     'preventdefault:wheel': true,
+    'preventdefault:touchstart': true,
     'aria-orientation': vertical ? 'vertical' : 'horizontal',
   });
 
