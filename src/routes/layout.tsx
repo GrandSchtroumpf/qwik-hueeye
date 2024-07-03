@@ -44,9 +44,9 @@ export default component$(() => {
       </button>
       <h1>Playground</h1>
       <Form bind:value={state}>
-        <label class="hue-slider">
+        <label class="hue-controller">
           Hue
-          <Slider name="hue" position="end" min="0" max="360"></Slider>
+          <Slider class="hue-slider" name="hue" min={0} max={360}></Slider>
         </label>
       </Form>
     </header>

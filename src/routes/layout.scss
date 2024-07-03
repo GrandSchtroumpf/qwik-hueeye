@@ -44,10 +44,13 @@ body {
     margin-right: auto;
     font-size: 1.3rem;
   }
-  .hue-slider {
+  .hue-controller {
     display: inline-flex;
     gap: var(--size-1);
     align-items: center;
+  }
+  .hue-slider {
+    width: 200px;
   }
 }
 

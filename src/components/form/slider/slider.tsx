@@ -1,61 +1,141 @@
-import { component$, useStyles$, useSignal, event$, PropsOf, untrack } from "@builder.io/qwik";
-import { cssvar } from "../../utils";
-import { round } from "./utils";
-import { mergeProps } from "../../utils/attributes";
+import { component$, useStyles$, $, useComputed$, PropsOf, useContext, createContextId, useContextProvider, Slot } from "@builder.io/qwik";
 import { WithControl, extractControls, useControlProvider } from "../control";
-import { useWithId } from "../../hooks/useWithId";
-import styles from './slider.scss?inline';
+import { mergeProps } from "../../utils/attributes";
+import style from './slider.scss?inline';
 
-interface SliderProps extends PropsOf<'div'> {
-  position?: 'start' | 'end';
-  min?: string | number;
-  max?: string | number;
-  step?: string | number;
-  id?: string;
-  class?: string;
+interface BaseProps {
+  /** Default to 0 */
+  min: number;
+  /** Default to 100 */
+  max: number;
+  /** Default to 1 */
+  step: number
+  /** Default to false */
+  vertical: boolean;
+  /** Disable both thumbs */
+  disabled: boolean;
 }
 
+interface Context extends BaseProps {}
 
-export const Slider = component$<WithControl<number, SliderProps>>((props) => {
-  useStyles$(styles);
-  const id = useWithId(props.id);
+const SliderContext = createContextId<Context>('SliderContext');
+
+type Props = Partial<BaseProps> & PropsOf<'div'>;
+
+export const Slider = component$<WithControl<number, Props>>((props) => {
+  useStyles$(style);
+
   const { attr, controls } = extractControls(props);
-  const { control, onChange, name } = useControlProvider(controls);
-  const sliderEl = useSignal<HTMLElement>();
-  const trackEl = useSignal<HTMLElement>();
-  const min = props.min ? Number(props.min) : 0;
-  const max = props.max ? Number(props.max) : 100;
-  const step = props.step ? Number(props.step) : 1;
+  const { control, onChange } = useControlProvider(controls);
+  const {
+    min = 0,
+    max = 100,
+    step = 1,
+    vertical = false,
+    disabled = false,
+    ...rest
+  } = attr;
 
-  const initialPosition = untrack(() => (control.value ?? 0) / (max - min));
-  
-  const move = event$((e: any, input: HTMLInputElement) => {
-    const percent = input.valueAsNumber / (max - min) - initialPosition;
-    const value = input ? percent * (trackEl.value!.clientWidth - 20) : 0;
-    sliderEl.value?.style.setProperty('--position', `${round(value, 1)}px`);
-    input.nextElementSibling?.setAttribute('data-value', `${round(input.valueAsNumber, step)}`);
+  useContextProvider(SliderContext, {
+    min,
+    max,
+    step,
+    vertical,
+    disabled
   });
-  
-  const sliderAttr = mergeProps<'div'>(
-    attr,
-    { class: 'slider' },
-    { class: props.position },
-    cssvar({ initialPosition }),
-  )
 
-  return <div ref={sliderEl} {...sliderAttr }>
-    <div class="track" ref={trackEl}></div>
-    <input
-      id={id}
-      name={name?.toString()}
-      type="range"
-      step={step}
-      min={min}
-      max={max}
-      value={control.value ?? 0}
-      onInput$={move}
-      onChange$={(e, i) => onChange(i.valueAsNumber)}
-    />
-    <div class="thumb" data-value={control.value ?? 0}></div>
-  </div>
+
+  const thumb = useComputed$(() => ((control.value ?? min) - min) / (max - min));
+
+  const onKeydown$ = $((e: KeyboardEvent) => {
+    const current = control.value ?? min;
+    if (e.key === 'Home') onChange(min);
+    if (vertical) {
+      if (e.key === 'ArrowUp') onChange(Math.max(current - step, min));
+      if (e.key === 'ArrowDown') onChange(Math.min(current + step, max));
+    } else {
+      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, min));
+      if (e.key === 'ArrowRight') onChange(Math.min(current + step, max));
+    }
+    if (e.key === 'End') onChange(max);
+  });
+
+  const start$ = $((e: MouseEvent, el: HTMLElement) => {
+    const clamp = (v: number) => Math.max(0, Math.min(v, 1));
+    const round = (v: number) => Math.round(v / step) * step;
+    const getPercent = (event: MouseEvent) => {
+      const { width, height, left, top } = el.getBoundingClientRect();
+      if (vertical) return clamp(((event.clientY - top) / height));
+      else return clamp(((event.clientX - left) / width));
+    }
+    const setValue = (percent: number) => {
+      onChange(round(min + percent * (max - min)));
+    }
+    
+    const move = (event: MouseEvent) => {
+      const percent = getPercent(event);
+      setValue(percent)
+    };
+    
+    const leave = () => {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', leave);
+    };
+      
+    const percent = getPercent(e);
+    setValue(percent);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', leave);
+  });
+
+  const wheel$ = $((e: WheelEvent) => {
+    const current = control.value ?? min;
+    if (e.deltaY < 0) onChange(Math.max(current - step, min));
+    else onChange(Math.min(current + step, max));
+  })
+
+  const containerProps = mergeProps<'div'>(rest, {
+    role: 'group',
+    class: ['he-slider-container', disabled ? 'disable' : ''],
+    style: {
+      '--he-thumb': thumb.value,
+    },
+    onMouseDown$: start$,
+    onWheel$: wheel$,
+    'preventdefault:wheel': true,
+    'aria-orientation': vertical ? 'vertical' : 'horizontal',
+  });
+
+  const btnProps: PropsOf<'button'> = {
+    type: 'button',
+    disabled: disabled,
+    class: 'he-slider-thumb',
+    onKeyDown$: onKeydown$,
+    'aria-valuemin': min,
+    'aria-valuemax': max,
+    'aria-valuenow': control.value ?? min,
+  };
+
+  return (
+    <div {...containerProps}>
+      <div class="he-slider-track"></div>
+      <button {...btnProps}>
+        <div class="he-slider-thumb-shadow"></div>
+        <div class="he-slider-thumb-indicator"></div>
+      </button>
+      <Slot />
+    </div>
+  )
+});
+
+export const SliderTickList = component$(() => {
+  const { min, max, step } = useContext(SliderContext);
+  const ticks = [];
+  for (let i = min; i <= max; i += step) ticks.push(i);
+
+  return (
+    <ul class="he-slider-tick-list">
+      {ticks.map(i => <li key={i} class="he-slider-tick"></li>)}
+    </ul>
+  )
 });
