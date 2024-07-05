@@ -1,6 +1,7 @@
 import type { CorrectedToggleEvent, PropsOf, QRL, Signal } from "@builder.io/qwik";
 import { createContextId, useContext, useContextProvider, useId } from "@builder.io/qwik";
 import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
+import { mergeProps } from "../utils/attributes";
 
 
 export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
@@ -68,7 +69,14 @@ export const setPopoverPosition = $((e: CorrectedToggleEvent, el: HTMLElement) =
   positionDialog();
 });
 
-export const usePopover = (anchorId?: string) => {
+
+interface PopoverRootProps {
+  popoverId?: string;
+  open: Signal<boolean>;
+}
+export const PopoverContext = createContextId<PopoverRootProps>('PopoverContext');
+
+export const usePopoverProvider = (anchorId?: string) => {
   const popoverId = useId();
   const open = useSignal(false);
 
@@ -77,7 +85,7 @@ export const usePopover = (anchorId?: string) => {
   });
 
   
-  return {
+  const ctx = {
     open,
     popover: {
       id: popoverId,
@@ -100,13 +108,12 @@ export const usePopover = (anchorId?: string) => {
       }
     }
   };
+  useContextProvider(PopoverContext, ctx);
+  return ctx;
 }
 
-interface PopoverRootProps {
-  popoverId?: string;
-  open: Signal<boolean>;
-}
-export const PopoverContext = createContextId<PopoverRootProps>('PopoverContext');
+
+
 export const PopoverRoot = component$<Partial<PopoverRootProps>>((props) => {
   const popoverId = useId();
   const open = useSignal(false);
@@ -116,6 +123,20 @@ export const PopoverRoot = component$<Partial<PopoverRootProps>>((props) => {
     ...props
   });
   return <Slot />
+})
+
+export const Popover = component$<PropsOf<'div'>>((props) => {
+  const { popoverId, open } = useContext(PopoverContext);
+  const merged = mergeProps<'div'>(props, {
+    id: popoverId,
+    popover: "auto",
+    onToggle$: $((e) => open.value = e.newState === 'open')
+  });
+  return (
+    <div {...merged}>
+      <Slot />
+    </div>
+  )
 })
 
 export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
@@ -131,7 +152,7 @@ export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
       aria-invalid="false"
       aria-autocomplete="none"
       aria-expanded={open.value}
-      aria-controls={popoverId} // TODO: should control the listbox/menu
+      aria-controls={popoverId}
       aria-labelledby={'label-' + id}
     >
       <Slot />

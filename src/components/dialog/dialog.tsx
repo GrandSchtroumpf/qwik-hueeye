@@ -48,7 +48,6 @@ function useSwipeLeft<E extends HTMLElement = HTMLElement>(cb: QRL<(el: E) => an
     onTouchStart$,
     onTouchMove$,
     onTouchEnd$,
-    'preventdefault:touchstart': true,
   }
 }
 

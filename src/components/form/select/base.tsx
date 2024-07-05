@@ -1,6 +1,6 @@
 import { component$, Slot, $, useComputed$, useStyles$, sync$ } from "@builder.io/qwik";
 import type { QRL, PropsOf, CorrectedToggleEvent } from "@builder.io/qwik";
-import { usePopover } from "../../popover/popover";
+import { usePopoverProvider } from "../../popover/popover";
 import { useFormFieldId } from "../form-field/form-field";
 import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
@@ -24,7 +24,7 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   useStyles$(styles);
   const { id: anchorId } = useFormFieldId(props.id);
   const { placeholder, display$, multi, ...buttonProps } = props;
-  const { popover, trigger } = usePopover(anchorId);
+  const { popover, trigger } = usePopoverProvider(anchorId);
 
   const onKeyDown = $((e: KeyboardEvent) => {
     const popoverEl = document.getElementById(popover.id);

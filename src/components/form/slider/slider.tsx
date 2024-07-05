@@ -123,7 +123,6 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
     onTouchStart$: start$,
     onWheel$: wheel$,
     'preventdefault:wheel': true,
-    'preventdefault:touchstart': true,
     'aria-orientation': vertical ? 'vertical' : 'horizontal',
   });
 
