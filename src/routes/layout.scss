@@ -35,6 +35,27 @@ body {
   }
 }
 
+::view-transition-group(page-indicator) {
+  animation-duration: 0.3s;
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition-new(page-indicator),
+::view-transition-old(page-indicator) {
+  animation: scaleIndicator 0.3s var(--ease-in-out);
+}
+
+
+@keyframes scaleIndicator {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(2);
+  }
+}
+
+
 .page-header {
   grid-area: header;
   border-radius: var(--size-0);
