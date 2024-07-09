@@ -31,8 +31,18 @@ body {
     scrollbar-color: var(--outline) transparent;
   }
   nav::before {
+    animation-duration: 2s;
     view-transition-name: page-indicator;
   }
+}
+
+::view-transition-old(page-indicator) {
+  animation-duration: 2s;
+  height: 100%;
+  }
+::view-transition-new(page-indicator) {
+  animation-duration: 2s;
+  height: 100%;
 }
 
 .page-header {
