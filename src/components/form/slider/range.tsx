@@ -82,13 +82,22 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
   const thumbStart = useComputed$(() => (start - min) / (max - min));
   const thumbEnd = useComputed$(() => (end - min) / (max - min));
 
-  const start$ = $((e: MouseEvent, el: HTMLElement) => {
+  const start$ = $((e: TouchEvent | MouseEvent, el: HTMLElement) => {
     const clamp = (v: number) => Math.max(0, Math.min(v, 1));
     const round = (v: number) => Math.round(v / step) * step;
-    const getPercent = (event: MouseEvent) => {
+    const getPercent = (event: TouchEvent | MouseEvent) => {
       const { width, height, left, top } = el.getBoundingClientRect();
-      if (vertical) return clamp(((event.clientY - top) / height));
-      else return clamp(((event.clientX - left) / width));
+      if (vertical) {
+        const y = 'touches' in event
+          ? event.touches.item(0)!.clientY
+          : event.clientY;
+        return clamp(((y - top) / height));
+      } else {
+        const x = 'touches' in event
+          ? event.touches.item(0)!.clientX
+          : event.clientX;
+        return clamp(((x - left) / width));
+      }
     }
     const percent = getPercent(e);
     const middle = (start + end) / 200;
@@ -103,7 +112,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
       }
     }
 
-    const move = (event: MouseEvent) => {
+    const move = (event: TouchEvent | MouseEvent) => {
       const percent = getPercent(event);
       setValue(percent)
     };
@@ -145,6 +154,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
       '--he-thumb-end': thumbEnd.value
     },
     onMouseDown$: start$,
+    onTouchStart$: start$,
     onWheel$: wheel$,
     'preventdefault:wheel': true,
     'aria-orientation': vertical ? 'vertical' : 'horizontal',
