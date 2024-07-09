@@ -17,7 +17,7 @@ export default component$(() => {
       <h2>Select one option</h2>
       <FormField>
         <Label>Meal Options</Label> 
-        <Select placeholder="Options" value="pickles">
+        <Select class="outline" placeholder="Options" value="pickles">
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}
@@ -28,7 +28,7 @@ export default component$(() => {
       <h2>Multiple options</h2>
       <FormField class="fill">
         <Label>Meal Options</Label> 
-        <Select multi placeholder="Options" value={['pickles', 'cheese']}>
+        <Select class="fill" multi placeholder="Options" value={['pickles', 'cheese']}>
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}
