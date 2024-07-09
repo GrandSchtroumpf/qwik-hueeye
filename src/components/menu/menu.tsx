@@ -3,7 +3,7 @@ import type { PropsOf, Signal } from "@builder.io/qwik";
 import { nextFocus, previousFocus } from "../utils";
 import { mergeProps } from "../utils/attributes";
 import { Link } from "@builder.io/qwik-city";
-import { setPopoverPosition } from "../popover/popover";
+import { usePopoverProvider } from "../popover/popover";
 import styles from './menu.scss?inline';
 
 interface MenuContext {
@@ -25,17 +25,17 @@ interface MenuTriggerProps extends PropsOf<'button'> {
 }
 export const MenuTrigger = component$<MenuTriggerProps>((props) => {
   const { menuId, ...buttonProps } = props;
-  const attr = mergeProps<'button'>(buttonProps, {
+
+  // TODO: bind aria-expanded without root
+  const { trigger } = usePopoverProvider({
+    anchorId: `anchor-${menuId}`,
+    popoverId: `popover-${menuId}`,
+  });
+  const attr = mergeProps<'button'>(buttonProps, trigger, {
     id: `anchor-${menuId}`,
     type: 'button',
     class: 'he-menu-trigger',
-    popovertarget: menuId,
-    popovertargetaction: 'toggle' as const,
-    'aria-controls': menuId,
     'aria-haspopup': 'menu',
-    style: {
-      ['anchor-name' as any]: `--anchor-${menuId}`
-    }
   });
   return <button {...attr}>
     <Slot />
@@ -47,6 +47,11 @@ interface MenuProps extends PropsOf<'menu'> {
 }
 export const Menu = component$<MenuProps>((props) => {
   useStyles$(styles);
+  const { popover } = usePopoverProvider({
+    anchorId: `anchor-${props.id}`,
+    popoverId: `popover-${props.id}`,
+  });
+
   const preventDefault = sync$((event: KeyboardEvent) => {
     const keys = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
     if (keys.includes(event.key)) event.preventDefault();
@@ -60,15 +65,10 @@ export const Menu = component$<MenuProps>((props) => {
     }
   });
 
-  const attr = mergeProps<'menu'>(props, {
+  const attr = mergeProps<'menu'>(props, popover, {
     onKeyDown$: [preventDefault, onKeyDown$],
-    class: "he-menu he-popover",
+    class: "he-menu",
     role: "menu",
-    popover: 'auto',
-    onToggle$: setPopoverPosition,
-    style: {
-      ['position-anchor' as any]: `--anchor-${props.id}`,
-    }
     // 'aria-labelledby': triggerId // TODO
   });
 

@@ -1,3 +1,4 @@
+@use '../../hue/hue' as hue;
 .he-input-field,
 .he-input:not(.he-field) {
   --he-input-radius: var(--size-0);
@@ -10,8 +11,12 @@
   background-color: var(--he-input-background);
   border: none;
 
+  &::placeholder {
+    color: color-mix(in oklch, transparent 70%, var(--text));
+  }
+
   &:hover {
-    background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--he-input-background));
+    @include hue.hover(var(--he-input-background), var(--text));
   }
   &:focus-within, &:focus-visible, &:active {
     --he-input-border-color: var(--color, var(--primary));
@@ -36,7 +41,10 @@
     border: solid 1px var(--he-input-border-color);
   }
   &.fill {
-    --he-input-background: var(--surface);
+    --he-input-background: color-mix(in oklch, var(--text) 10%, transparent);
+    &::placeholder {
+      color: color-mix(in oklch, transparent 60%, var(--text));
+    }
   }
   &.round.underline {
     --he-input-radius: var(--size-2);

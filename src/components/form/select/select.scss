@@ -1,4 +1,4 @@
-@import '../../popover/popover.scss';
+@import '../../popover/popover';
 .he-select-field,
 .he-select:not(.he-field) {
   --he-input-radius: var(--size-0);
@@ -125,93 +125,11 @@
       }
     }
   }
-}  
+}
 .he-select-popover {
-  max-height: 275px;
   overflow: auto;
   scrollbar-width: thin;
-}
-
-
-
-// .he-select {
-//   flex: 1;
-//   display: inline-flex;
-//   position: relative;
-//   cursor: pointer;
-
-
-//   & button {
-//     font-size: 1rem;
-//     flex: 1;
-//     cursor: pointer;
-//     background-color: transparent;
-    
-//     border: none;
-//     box-sizing: content-box;
-//     display: flex;
-//     align-items: center;
-//     gap: var(--size-2);
-//     min-height: 1rem;
-
-//     /* Prevent blue flash on android */
-//     &[aria-expanded="true"] {
-//       -webkit-tap-highlight-color: transparent;
-//     }
-//     &:focus-visible {
-//       outline: none;
-//       & span.value {
-//         color: currentColor;
-//       }
-//     }
-//     & span {
-//       text-align: left;
-//       display: inline-block;
-//       flex: 1;
-//     }
-//     & span.placeholder {
-//       opacity: 0.5;
-//     }
-//     & svg {
-//       height: 4px;
-//       transition: transform 0.1s var(--ease-in-out);
-//       &.opened {
-//         transform: rotate(180deg);
-//       }
-//       & polygon {
-//         fill: currentColor;
-//       }
-//     }
-//   }
-
-//   & .popover {
-//     width: 100%;
-//   }
-
-//   & .listbox {
-//     display: flex;
-//     flex-direction: column;
-//   }
-  
-//   & .popover {
-//     backdrop-filter: var(--background-blur);
-//     max-height: 275px;
-//     overflow: auto;
-//   }
-// }
-
-@media (max-width: 599px) {
-  .he-select {
-
-    & .popover {
-      max-width: 80vw;
-      max-height: 400px;
-    }
-    & .option {
-      font-size: 1rem;
-      & label {
-        padding: var(--size-2);
-      }
-    }
+  @media (min-width: 600px) {
+    max-height: 275px;
   }
 }

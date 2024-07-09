@@ -26,13 +26,14 @@ export const AnchorItem = component$<AnchorItemProps>((props) => {
   useStyles$(style);
   const rules = useSpeculativeRules();
   const { url } = useLocation();
-  const { rule = 'prefetch', eagerness, ...attr } = props;
+  const { rule, eagerness, ...attr } = props;
   const href = props.href;
 
   useTask$(() => {
     if (rule === 'none') return;
+    if (!rule && href?.startsWith('http')) return;
     const url = href === '/' ? '/index.html' : `${href}/index.html`;
-    rules.push({ type: rule, eagerness, urls: [url] });
+    rules.push({ type: rule ?? 'prefetch', eagerness, urls: [url] });
   });
 
   const attributes = mergeProps<'a'>(attr, {

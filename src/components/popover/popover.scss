@@ -1,7 +1,6 @@
 .he-popover {
   position: absolute;
   border: none;
-  overflow: hidden;
   background-color: var(--overlay);
   backdrop-filter: var(--background-blur);
   box-shadow: var(--overlay-shadow);
@@ -13,7 +12,7 @@
   }
 
   @supports (transition-behavior: allow-discrete) {
-    transition-property: display overlay opacity transform;
+    transition-property: display, overlay, opacity, transform;
     transition-duration: 0.2s;
     transition-behavior: allow-discrete;
     @starting-style {
@@ -47,6 +46,7 @@
       }
     }
     @supports (anchor-name: --test) {
+      position-anchor: var(--anchor-popover);
       inset-block-start: anchor(end);
       inset-inline-start: anchor(start);
       min-width: anchor-size(width);
@@ -55,14 +55,22 @@
 
   // Mobile
   @media (max-width: 599px) {
-    min-width: 70dvw;
+    position: fixed;
+    min-width: 80dvw;
     max-width: 90dvw;
+    max-height: 80dvh;
+    &::backdrop {
+      background-color: var(--backdrop-color, black);
+      opacity: 0.32;
+    }
     @supports not (transition-behavior: allow-discrete) {
       animation: scalein 0.1s var(--ease-out);
     }
-    @starting-style {
-      &:popover-open {
-        transform: scale(0.9);
+    @supports (transition-behavior: allow-discrete) {
+      @starting-style {
+        &:popover-open {
+          transform: scale(0.9);
+        }
       }
     }
   }

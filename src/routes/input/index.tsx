@@ -11,37 +11,39 @@ export default component$(() => {
   const datetime = useSignal(new Date());
   const time = useSignal(new Date());
   const month = useSignal(new Date());
-  return <section id="input-page" aria-labelledby="input-title">
+  return <div id="input-page" aria-labelledby="input-title">
     <h1 id="input-title">Input</h1>
     <article>
       <h2>Input's styles</h2>
-      <fieldset>
-        <legend>Flat</legend>
-        <Input placeholder="Default" class="flat"/>
-        <Input placeholder="Underline" class="flat underline" />
-        <Input placeholder="Fill" class="flat fill"/>
-        <Input placeholder="Outline" class="flat outline" />
-        <Input placeholder="Underline Fill" class="flat underline fill" />
-        <Input placeholder="Outline Fill" class="flat outline fill" />
-      </fieldset>
-      <fieldset>
-        <legend>Default</legend>
-        <Input placeholder="Default"/>
-        <Input placeholder="Underline" class="underline" />
-        <Input placeholder="Fill" class="fill"/>
-        <Input placeholder="Outline" class="outline" />
-        <Input placeholder="Underline Fill" class="underline fill" />
-        <Input placeholder="Outline Fill" class="outline fill" />
-      </fieldset>
-      <fieldset>
-        <legend>Round</legend>
-        <Input placeholder="Default" class="round"/>
-        <Input placeholder="Underline" class="round underline" />
-        <Input placeholder="Fill" class="round fill"/>
-        <Input placeholder="Outline" class="round outline" />
-        <Input placeholder="Underline Fill" class="round underline fill" />
-        <Input placeholder="Outline Fill" class="round outline fill" />
-      </fieldset>
+      <div class="input-styles">
+        <fieldset>
+          <legend>Flat</legend>
+          <Input placeholder="Default" class="flat"/>
+          <Input placeholder="Outline" class="flat outline" />
+          <Input placeholder="Underline" class="flat underline" />
+          <Input placeholder="Fill" class="flat fill"/>
+          <Input placeholder="Outline Fill" class="flat outline fill" />
+          <Input placeholder="Underline Fill" class="flat underline fill" />
+        </fieldset>
+        <fieldset>
+          <legend>Default</legend>
+          <Input placeholder="Default"/>
+          <Input placeholder="Outline" class="outline" />
+          <Input placeholder="Underline" class="underline" />
+          <Input placeholder="Fill" class="fill"/>
+          <Input placeholder="Outline Fill" class="outline fill" />
+          <Input placeholder="Underline Fill" class="underline fill" />
+        </fieldset>
+        <fieldset>
+          <legend>Round</legend>
+          <Input placeholder="Default" class="round"/>
+          <Input placeholder="Outline" class="round outline" />
+          <Input placeholder="Underline" class="round underline" />
+          <Input placeholder="Fill" class="round fill"/>
+          <Input placeholder="Outline Fill" class="round outline fill" />
+          <Input placeholder="Underline Fill" class="round underline fill" />
+        </fieldset>
+      </div>
     </article>
 
     <article>
@@ -92,5 +94,5 @@ export default component$(() => {
       </section>
     </article>
 
-  </section>
+  </div>
 })
