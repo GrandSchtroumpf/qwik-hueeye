@@ -30,11 +30,11 @@ Available types are "modal", "bottom-sheet", "sidenav".
 Default is "modal".
 
 Here are some classes: 
-- `"modal"`: dialog dislayed in the center of the page
-- `"bottom-sheet"`: dialog displayed at the bottom of the page
-- `"sidenav"`: dialog displayed at the left of the page
-- `"dialog-content"`: main content of the dialog
-- `"dialog-actions"`: most often a footer with action buttons
+- `"he-modal"`: dialog dislayed in the center of the page
+- `"he-bottom-sheet"`: dialog displayed at the bottom of the page
+- `"he-sidenav"`: dialog displayed at the left of the page
+- `"he-dialog-content"`: main content of the dialog
+- `"he-dialog-actions"`: most often a footer with action buttons
 
 ## popover
 Dialog display next to an element. Hueeye will do it's best to not overflow the viewbox
@@ -48,7 +48,7 @@ export default component$(() => {
       Open Modal
     </button>
     <Popover origin={origin} open={open} position="block">
-      <article class="dialog-content">
+      <article class="he-dialog-content">
         <h3>Modal</h3>
         <p>This is a modal</p>  
       </article>

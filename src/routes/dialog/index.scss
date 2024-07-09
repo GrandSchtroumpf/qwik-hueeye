@@ -6,24 +6,21 @@
     display: flex;
     gap: var(--size-2);
   }
+
   
   .container {
     min-width: 250px;
-    padding: var(--size-2);
     article {
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: var(--size-2);
     }
   }
-  
-  .container.sidenav.opened,
-  .container.sidenav.closing {
+  .sidenav-content {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    footer {
-      margin-top: auto;
-    }
   }
 }

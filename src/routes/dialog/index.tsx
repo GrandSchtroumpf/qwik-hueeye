@@ -21,31 +21,33 @@ export default component$(() => {
       </button>
     </div>
     <Dialog class="container" bind:open={openModal}>
-      <article class="modal-content">
+      <article class="he-dialog-content">
         <h3>Modal</h3>
         <p>This is a modal</p>  
       </article>
-      <footer class="modal-actions">
+      <footer class="he-dialog-actions">
         <button class="btn" onClick$={() => openModal.value = false}>Close</button>
       </footer>
     </Dialog>
     <Dialog class="container" bind:open={openBottomSheet} type="bottom-sheet">
-      <article class="modal-content">
+      <article class="he-dialog-content">
         <h3>Bottom Sheet</h3>
         <p>This is a bottom sheet</p>  
       </article>
-      <footer class="modal-actions">
+      <footer class="he-dialog-actions">
         <button class="btn" onClick$={() => openBottomSheet.value = false}>Close</button>
       </footer>
     </Dialog>
     <Dialog class="container" bind:open={openSidenav} type="sidenav">
-      <article class="modal-content">
-        <h3>Sidenav</h3>
-        <p>This is a sidenav</p>  
-      </article>
-      <footer class="modal-actions">
-        <button class="btn" onClick$={() => openSidenav.value = false}>Close</button>
-      </footer>
+      <section class="sidenav-content">
+        <article class="he-dialog-content">
+          <h3>Sidenav</h3>
+          <p>This is a sidenav</p>  
+        </article>
+        <footer class="he-dialog-actions">
+          <button class="btn" onClick$={() => openSidenav.value = false}>Close</button>
+        </footer>
+      </section>
     </Dialog>
   </section>
 })
