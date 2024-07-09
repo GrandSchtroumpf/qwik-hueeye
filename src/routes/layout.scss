@@ -30,6 +30,9 @@ body {
   &:hover {
     scrollbar-color: var(--outline) transparent;
   }
+  nav::before {
+    view-transition-name: page-indicator;
+  }
 }
 
 .page-header {
