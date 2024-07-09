@@ -37,12 +37,11 @@ body {
 
 ::view-transition-group(page-indicator) {
   animation-duration: 0.3s;
-  animation-timing-function: var(--ease-in-out);
 }
 
 ::view-transition-new(page-indicator),
 ::view-transition-old(page-indicator) {
-  animation: scaleIndicator 0.3s var(--ease-in-out);
+  animation: scaleIndicator 0.3s linear;
 }
 
 
