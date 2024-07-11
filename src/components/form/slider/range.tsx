@@ -118,13 +118,23 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
     };
 
     const leave = () => {
-      document.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseup', leave);
+      if ('touches' in e) {
+        document.removeEventListener('touchmove', move);
+        document.removeEventListener('touchend', leave);
+      } else {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', leave);
+      }
     };
 
     setValue(percent);
-    document.addEventListener('mousemove', move);
-    document.addEventListener('mouseup', leave);
+    if ('touches' in e) {
+      document.addEventListener('touchmove', move);
+      document.addEventListener('touchend', leave);
+    } else {
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', leave);
+    }
   });
 
   const wheel$ = $((e: WheelEvent, el: HTMLElement) => {

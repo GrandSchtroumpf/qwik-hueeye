@@ -5,6 +5,8 @@
   display: grid;
   grid-template-areas: "stack";
   cursor: pointer;
+  // Prevent scroll on touch
+  touch-action: none;
 
   --he-thumb-start: 0;
   --he-thumb-end: 0;
