@@ -5,7 +5,7 @@
   width: 100%;
   max-width: fit-content;
   margin: var(--size-2) auto;
-  padding: 16px;
+  padding: var(--size-2);
   background-color: var(--surface);
   border-radius: var(--size-0);
   box-sizing: border-box;
@@ -22,8 +22,9 @@
     gap: var(--size-2);
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 599px) {
   #form-page {
+    padding: var(--size-1);
     max-width: unset;
     .date-inputs {
       flex-direction: column;
