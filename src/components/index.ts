@@ -14,3 +14,4 @@ export * from './utils/cssvar';
 export * from './utils/attributes';
 export * from './if';
 export * from './icons/icon';
+export * from './script/script';

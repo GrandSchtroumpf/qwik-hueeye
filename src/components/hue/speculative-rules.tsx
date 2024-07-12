@@ -1,4 +1,5 @@
 import { component$, createContextId, useContext, useContextProvider, useStore } from "@builder.io/qwik";
+import { Script } from "../script/script";
 
 type RuleType = 'prefetch' | 'prerender';
 type RuleSource = 'list' | 'document';
@@ -122,8 +123,7 @@ export const HueEyeSpeculativeRules = component$(() => {
       }
     }
   }
-  return <script
-    type="speculationrules"
-    dangerouslySetInnerHTML={JSON.stringify(rules)}>
-  </script>
+  return <Script type="speculationrules">
+    {JSON.stringify(rules)}
+  </Script>
 })
