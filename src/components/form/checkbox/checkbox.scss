@@ -1,3 +1,8 @@
+.he-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-0);
+}
 .he-checkbox, .he-check-item, .he-check-all {
   position: relative;
   & input {
@@ -18,7 +23,7 @@
         & path {
           stroke-dashoffset: 0;
           transition: d 0.1s var(--ease-out),
-            stroke-dashoffset 0.2s var(--ease-out),
+            stroke-dashoffset 0.4s var(--ease-in-out),
             transform 0.3s var(--ease-back-in-out);
         }
       }
@@ -66,7 +71,7 @@
         stroke-dashoffset: 30;
         transition:
           d 0.2s 0.3s var(--ease-out),
-          stroke-dashoffset 0.3s var(--ease-out),
+          stroke-dashoffset 0.4s var(--ease-out),
           transform 0.4s var(--ease-back-in-out);
       }
     }

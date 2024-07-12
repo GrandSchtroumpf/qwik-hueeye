@@ -5,6 +5,9 @@
   .buttons {
     display: flex;
     gap: var(--size-2);
+    @media (max-width: 599px) {
+      flex-direction: column;
+    }
   }
 
   
