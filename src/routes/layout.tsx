@@ -1,5 +1,5 @@
 import { component$, Slot, useSignal, useStyles$ } from "@builder.io/qwik";
-import { AnchorItem, Form, Slider, useHueEye } from "qwik-hueeye-lib";
+import { AnchorItem, Form, MatIcon, Slider, useHueEye } from "qwik-hueeye-lib";
 import { NavList } from "qwik-hueeye-lib";
 import { SvgGradient } from "qwik-hueeye-lib";
 import { Toaster, useToasterProvider } from "qwik-hueeye-lib";
@@ -13,6 +13,9 @@ export default component$(() => {
   const open = useSignal(false);
   return <>
     <div class={['nav-overlay', open.value ? 'open' : 'close']} onClick$={() => open.value = false}>
+      <button class="close-btn">
+        <MatIcon name="close" weight="500" />
+      </button>
       <NavList aria-label="primary" vertical>
         <AnchorItem href="/">Theme</AnchorItem>
         <AnchorItem href="/form">Form</AnchorItem>

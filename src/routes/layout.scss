@@ -30,6 +30,9 @@ body {
   &:hover {
     scrollbar-color: var(--outline) transparent;
   }
+  .btn.close {
+    display: none;
+  }
   nav::before {
     view-transition-name: page-indicator;
   }
@@ -93,7 +96,11 @@ main {
     z-index: 1;
     background-color: oklch(20% var(--chroma) var(--hue) / 0.6);
     pointer-events: none;
-    transition: opacity 0.1s 0.2s var(--ease-out);
+    transition: opacity 0.2s 0.2s var(--ease-out);
+    background-color: var(--overlay);
+    display: flex;
+    flex-direction: column;
+  
     &.open {
       pointer-events: all;
       opacity: 1;
@@ -103,10 +110,17 @@ main {
         transform: translateX(0);
       }
     }
+    .close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: var(--size-1) var(--size-2);
+      background-color: var(--surface-2);
+      border: none;
+    }
     nav {
       transform: translateX(calc((100% + 2 * var(--size-2)) * -1));
       transition: transform 0.3s var(--ease-out);
-      background-color: var(--overlay);
     }
   }
   .page-header {
