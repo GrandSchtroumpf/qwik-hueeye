@@ -51,10 +51,10 @@
     @include list.item-selectable;
     @include list.item-vertical-selectable;
     &:hover {
-      @include hue.hover(transparent, var(--on-color, var(--text)));
+      @include hue.hover(transparent, var(--text));
     }
     &:active {
-      @include hue.focus(transparent, var(--on-color, var(--text)));
+      @include hue.focus(transparent, var(--text));
     }
   }
 }

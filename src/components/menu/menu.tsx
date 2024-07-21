@@ -1,4 +1,4 @@
-import { component$, createContextId, Slot, useContext, useId, $, sync$, useStyles$ } from "@builder.io/qwik";
+import { component$, createContextId, Slot, $, sync$, useStyles$ } from "@builder.io/qwik";
 import type { PropsOf, Signal } from "@builder.io/qwik";
 import { nextFocus, previousFocus } from "../utils";
 import { mergeProps } from "../utils/attributes";
@@ -67,7 +67,7 @@ export const Menu = component$<MenuProps>((props) => {
 
   const attr = mergeProps<'menu'>(props, popover, {
     onKeyDown$: [preventDefault, onKeyDown$],
-    class: "he-menu",
+    class: "he-menu position-block-end",
     role: "menu",
     // 'aria-labelledby': triggerId // TODO
   });
@@ -110,45 +110,24 @@ export const MenuItemAnchor = component$<PropsOf<'a'>>((props) => {
   </li>
 });
 
-
-export const MenuItemTrigger = component$<PropsOf<'button'>>((props) => {
-  return (
-    <li role="none">
-      <button {...props} role="menuitem" type="button">
-        <Slot/>
-      </button>
-    </li>
-  )
-});
-
-export const MenuGroup = component$(() => {
-  const { triggerId } = useContext(MenuContext);
-  return <fieldset aria-labelledby={triggerId}>
-    <Slot/>
-  </fieldset>
-})
-
-export const MenuRadio = component$((props: Omit<PropsOf<'input'>, 'children'>) => {
-  const id = useId();
-  const attr = mergeProps<'input'>(props as any, {
-    id,
-    type: 'radio',
-    role: 'menuitemradio',
-  })
-  return <li class="he-menu-radio">
-    <input {...attr} />
-    <label for={id}>
-      <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-        <circle r="8" cx="12" cy="12"/>
-      </svg>
+interface MenuItemTriggerProps extends PropsOf<'button'> {
+  menuId: string;
+}
+export const MenuItemTrigger = component$<MenuItemTriggerProps>((props) => {
+  const { menuId, ...attributes } = props;
+  const { trigger } = usePopoverProvider({
+    anchorId: `anchor-${menuId}`,
+    popoverId: `popover-${menuId}`,
+  });
+  const attrs = mergeProps<'button'>(attributes, trigger, {
+    id: `anchor-${menuId}`,
+    role: 'menuitem',
+    type: 'button',
+    'aria-haspopup': 'menu',
+  });
+  return <li role="none">
+    <button {...attrs}>
       <Slot/>
-    </label>
-  </li>
-});
-
-
-export const MenuCheckbox = component$(() => {
-  // TODO 
-  return <li role="menuitemcheckbox">
+    </button>
   </li>
 });

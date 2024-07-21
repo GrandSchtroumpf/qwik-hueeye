@@ -5,6 +5,7 @@ import styles from './index.scss?inline';
 export default component$(() => {
   useStyles$(styles);
   const menuId = useId();
+  const nestedMenuId = useId();
   return <section class="menus">
     <MenuTrigger menuId={menuId} class="btn-fill primary">
       Open a menu
@@ -12,7 +13,11 @@ export default component$(() => {
     <Menu id={menuId}>
       <MenuItemBtn>Item 1</MenuItemBtn>
       <MenuItemBtn>Item 2</MenuItemBtn>
-      <MenuItemTrigger id="radio">Menu Radio</MenuItemTrigger>
+      <MenuItemTrigger id="radio" menuId={nestedMenuId}>Menu Radio</MenuItemTrigger>
+    </Menu>
+    <Menu id={nestedMenuId} class="position-inline-end">
+      <MenuItemBtn>Nested Item 1</MenuItemBtn>
+      <MenuItemBtn>Nested Item 2</MenuItemBtn>
     </Menu>
   </section>
 })

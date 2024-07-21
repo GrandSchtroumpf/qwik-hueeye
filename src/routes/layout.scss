@@ -11,6 +11,10 @@ body {
   grid-template-columns: 200px 1fr;
 }
 
+.close-btn {
+  display: none;
+}
+
 @media (max-width: 899px) {
   body {
     display: block;
@@ -41,22 +45,6 @@ body {
 ::view-transition-group(page-indicator) {
   animation-duration: 0.3s;
 }
-
-::view-transition-new(page-indicator),
-::view-transition-old(page-indicator) {
-  animation: scaleIndicator 0.3s linear;
-}
-
-
-@keyframes scaleIndicator {
-  0%, 100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(2);
-  }
-}
-
 
 .page-header {
   grid-area: header;
@@ -93,7 +81,6 @@ main {
     width: 100vw;
     opacity: 0;
     z-index: 1;
-    background-color: oklch(20% var(--chroma) var(--hue) / 0.6);
     pointer-events: none;
     transition: opacity 0.2s 0.2s var(--ease-out);
     background-color: var(--overlay);

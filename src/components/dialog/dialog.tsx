@@ -78,7 +78,7 @@ export const Dialog = component$((props: DialogProps) => {
 
   const onClick$ = $((event: MouseEvent, element: HTMLDialogElement) => {
     if (event.target === element) element.close();
-  });
+  }); 
 
   const attr = mergeProps<'dialog'>(dialogProps, {
     ref,

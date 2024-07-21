@@ -106,7 +106,7 @@ export const usePopoverProvider = (props: Props) => {
     popover: {
       id: popoverId,
       popover: 'auto' as const,
-      class: 'he-popover',
+      class: 'he-popover position-block-end',
       'data-position': 'block',
       'data-anchor': anchorId,
       'data-ready': ready.value.toString(),
@@ -117,7 +117,6 @@ export const usePopoverProvider = (props: Props) => {
       id: anchorId,
       role: 'combobox',
       popovertarget: popoverId,
-      'aria-controls': popoverId,
       'aria-expanded': open.value,
       style: {
         'anchor-name': `--${anchorId}`,

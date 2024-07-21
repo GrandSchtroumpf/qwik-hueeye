@@ -2,7 +2,7 @@
   position: absolute;
   border: none;
   background-color: var(--overlay);
-  backdrop-filter: var(--background-blur);
+  backdrop-filter: var(--overlay-filter);
   box-shadow: var(--overlay-shadow);
   border-radius: 4px;
   box-sizing: border-box;
@@ -47,9 +47,24 @@
     }
     @supports (anchor-name: --test) {
       position-anchor: var(--anchor-popover);
-      inset-block-start: anchor(end);
-      inset-inline-start: anchor(start);
-      min-width: anchor-size(width);
+      &.position-block-start {
+        inset-block-end: anchor(start);
+        inset-inline-start: anchor(start);
+        min-width: anchor-size(width);
+      }
+      &.position-block-end {
+        inset-block-start: anchor(end);
+        inset-inline-start: anchor(start);
+        min-width: anchor-size(width);
+      }
+      &.position-inline-start {
+        inset-block-start: anchor(start);
+        inset-inline-end: anchor(start);
+      }
+      &.position-inline-end {
+        inset-block-start: anchor(start);
+        inset-inline-start: anchor(end);
+      }
     }  
   }
 

@@ -1,7 +1,6 @@
 import { $, component$, createContextId, event$, Slot, sync$, useContext, useContextProvider, useId, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
 import type { JSXChildren, JSXNode, JSXOutput, PropsOf, QRL} from "@builder.io/qwik";
 import type { DivAttributes, ButtonAttributes } from "../types";
-import { startViewTransition } from "../utils/transition";
 import { FunctionComponent } from "@builder.io/qwik/jsx-runtime";
 import { mergeProps } from "../utils/attributes";
 import { disableTab, enableTab, focusList } from "../list/utils";
@@ -12,45 +11,9 @@ export type TabLabel = string | QRL<((id: string, i: number) => JSXNode)>;
 interface TabsContextState {
   active: string;
   leaving: string;
-  noAnimation: boolean;
   tabTransitionName: string;
   tabPanelTransitionName: string;
 }
-
-const animateTab = $((state: TabsContextState, dir: 1 | -1) => {
-  document.documentElement.animate({
-    height: ['100%', '100%']
-  },{
-    duration: 275,
-    pseudoElement: `::view-transition-old(${state.tabTransitionName})`,
-  });
-  document.documentElement.animate({
-    height: ['100%', '100%']
-  },{
-    duration: 275,
-    pseudoElement: `::view-transition-new(${state.tabTransitionName})`,
-  });
-
-
-  document.documentElement.animate({
-    overflow: ['hidden', 'hidden']
-  },{
-    duration: 275,
-    pseudoElement: `::view-transition-group(${state.tabPanelTransitionName})`,
-  });
-  document.documentElement.animate({
-    transform: ['translateX(0)', `translateX(${100 * dir}%)`]
-  },{
-    duration: 275,
-    pseudoElement: `::view-transition-old(${state.tabPanelTransitionName})`,
-  });
-  document.documentElement.animate({
-    transform: [`translateX(${-100 * dir}%)`, 'translateX(0)']
-  },{
-    duration: 275,
-    pseudoElement: `::view-transition-new(${state.tabPanelTransitionName})`,
-  });
-})
 
 const TabsContext = createContextId<TabsContextState>('TabsContext');
 
@@ -111,24 +74,8 @@ export const TabImpl = component$((props: TabProps) => {
 
   const activate = event$(() => {
     if (id === state.active) return;
-    if (state.noAnimation || !('startViewTransition' in document)) {
-      state.leaving = state.active;
-      state.active = id;
-    } else {
-      const transition = startViewTransition(async () => {
-        state.leaving = state.active;
-        state.active = id;
-      });
-      const [oldPanel, newPanel] = [
-        document.getElementById(`panel-${state.active}`)!,
-        document.getElementById(`panel-${id}`)!,
-      ];
-      const dir = oldPanel?.compareDocumentPosition(newPanel) === Node.DOCUMENT_POSITION_FOLLOWING
-        ? -1
-        : 1;
-      if (!transition) return;
-      transition.ready.then(() => animateTab(state, dir));
-    }
+    state.leaving = state.active;
+    state.active = id;
   });
 
   return <button id={id} 

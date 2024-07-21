@@ -232,6 +232,10 @@
   /****************/
   /* Colors Utils */
   /****************/
+  .blur-overlay {
+    --overlay: oklch(var(--lum-2) var(--chroma) var(--hue) / 60%);
+    --overlay-filter: blur(10px) saturate(150%);
+  }
   .primary {
     --color: var(--primary);
     --on-color: var(--on-primary);
