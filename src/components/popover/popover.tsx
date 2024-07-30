@@ -106,7 +106,7 @@ export const usePopoverProvider = (props: Props) => {
     popover: {
       id: popoverId,
       popover: 'auto' as const,
-      class: 'he-popover position-block-end',
+      class: 'he-popover position-block',
       'data-position': 'block',
       'data-anchor': anchorId,
       'data-ready': ready.value.toString(),

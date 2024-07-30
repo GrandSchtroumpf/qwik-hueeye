@@ -31,23 +31,14 @@
   }
   @supports (anchor-name: --test) {
     position-anchor: var(--anchor-popover);
-    &.position-block-start {
-      inset-block-end: anchor(start);
-      inset-inline-start: anchor(start);
+    &.position-block {
+      inset-area: bottom span-right;
       min-width: anchor-size(width);
+      position-try-options: flip-block;
     }
-    &.position-block-end {
-      inset-block-start: anchor(end);
-      inset-inline-start: anchor(start);
-      min-width: anchor-size(width);
-    }
-    &.position-inline-start {
-      inset-block-start: anchor(start);
-      inset-inline-end: anchor(start);
-    }
-    &.position-inline-end {
-      inset-block-start: anchor(start);
-      inset-inline-start: anchor(end);
+    &.position-inline {
+      inset-area: right span-bottom;
+      position-try-options: flip-inline;
     }
   }
 }

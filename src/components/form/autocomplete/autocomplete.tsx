@@ -3,8 +3,8 @@ import { mergeProps } from "../../utils/attributes";
 import { WithControl, extractControls, useControlProvider } from "../control";
 import { useFormFieldId } from "../form-field/form-field";
 import { isServer } from "@builder.io/qwik/build";
+import { usePopoverProvider } from "../../popover/popover";
 import style from './autocomplete.scss?inline';
-import { setPopoverPosition, usePopoverProvider } from "../../popover/popover";
 
 interface AutocompleteProps extends WithControl<string, PropsOf<'input'>> {
   datalist: string[];

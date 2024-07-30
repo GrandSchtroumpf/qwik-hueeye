@@ -67,7 +67,7 @@ export const Menu = component$<MenuProps>((props) => {
 
   const attr = mergeProps<'menu'>(props, popover, {
     onKeyDown$: [preventDefault, onKeyDown$],
-    class: "he-menu position-block-end",
+    class: "he-menu position-block",
     role: "menu",
     // 'aria-labelledby': triggerId // TODO
   });

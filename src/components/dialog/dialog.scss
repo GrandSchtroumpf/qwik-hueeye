@@ -1,3 +1,33 @@
+@mixin backdrop($openState) {
+  &::backdrop {
+    background-color: var(--backdrop-color, black);
+    transition:
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete,
+      opacity 0.3s;
+  }
+  &#{$openState}::backdrop {
+    transition-timing-function: var(--ease-out);
+  }
+  &:not(#{$openState})::backdrop {
+    transition-timing-function: var(--ease-in);
+  }
+  &#{$openState}::backdrop {
+    opacity: 0.32;
+    @supports not (transition-behavior: allow-discrete) {
+      animation: backdrop-fade 0.3s forwards;
+    }
+  }
+  &:not(#{$openState})::backdrop {
+    opacity: 0;
+  }
+  @starting-style {
+    &#{$openState}::backdrop {
+      opacity: 0;
+    }
+  }
+}
+
 .he-dialog {
   border: none;
   padding: 0;
@@ -19,33 +49,7 @@
   }
 
 
-  &::backdrop {
-    background-color: var(--backdrop-color, black);
-    transition:
-      display 0.3s allow-discrete,
-      overlay 0.3s allow-discrete,
-      opacity 0.3s;
-  }
-  &[open]::backdrop {
-    transition-timing-function: var(--ease-out);
-  }
-  &:not([open])::backdrop {
-    transition-timing-function: var(--ease-in);
-  }
-  &[open]::backdrop {
-    opacity: 0.32;
-    @supports not (transition-behavior: allow-discrete) {
-      animation: backdrop-fade 0.3s forwards;
-    }
-  }
-  &:not([open])::backdrop {
-    opacity: 0;
-  }
-  @starting-style {
-    &[open]::backdrop {
-      opacity: 0;
-    }
-  }
+  @include backdrop('[open]');
 
 
   &.modal {
