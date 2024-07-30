@@ -4,6 +4,7 @@ import { WithControl, extractControls, useControlProvider } from "../control";
 import { useFormFieldId } from "../form-field/form-field";
 import { isServer } from "@builder.io/qwik/build";
 import style from './autocomplete.scss?inline';
+import { setPopoverPosition, usePopoverProvider } from "../../popover/popover";
 
 interface AutocompleteProps extends WithControl<string, PropsOf<'input'>> {
   datalist: string[];
@@ -45,13 +46,15 @@ const flip$ = $((listbox: HTMLElement) => {
 
 export const Autocomplete = component$<AutocompleteProps>((props) => {
   useStyles$(style);
-  const anchorId = useId();
   const popoverId = useId();
-  const { id, hasFormField } = useFormFieldId(props.id);
+  const { id: anchorId, hasFormField } = useFormFieldId(props.id);
   const { attr, controls } = extractControls(props);
   const { control, onChange, name } = useControlProvider(controls);
   const { datalist = [], ...inputProps } = (attr as PropsOf<'input'> & { datalist: string[] });
-
+  const { trigger, popover } = usePopoverProvider({
+    anchorId,
+    popoverId,
+  });
   const preventKeydown = sync$((e: KeyboardEvent, input: HTMLInputElement) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') e.preventDefault();
     if (e.key === 'Enter') {
@@ -109,7 +112,7 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
 
   const select$ = $((value: string) => {
     onChange(value);
-    const input = document.getElementById(id) as HTMLInputElement;
+    const input = document.getElementById(anchorId) as HTMLInputElement;
     setActive(input);
     document.getElementById(popoverId)?.hidePopover();
   });
@@ -137,32 +140,24 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
     document.getElementById(popoverId)?.hidePopover();
   });
 
-  const inputAttrs = mergeProps<'input'>(inputProps, {
-    id,
+  const inputAttrs = mergeProps<'input'>(inputProps, trigger, {
     name: name?.toString(),
     class: 'he-input',
-    style: {
-      'anchor-name': `--${anchorId}`
-    } as any,
     onBlur$: blur$,
     onInput$: [filter$, $((e, input) => toggle$(input.value.toLowerCase()))],
     onKeyDown$: [preventKeydown, onKeyDown$],
     autocomplete: 'off',
-    role: 'combobox',
     value: control.value,
     'aria-label': hasFormField ? undefined : (props['aria-label'] || props['placeholder']),
     'aria-autocomplete': 'list',
   });
 
-  const listboxAttrs: PropsOf<'ul'> = {
+  const listboxAttrs: PropsOf<'ul'> = mergeProps<'ul'>(popover, {
     id: popoverId,
-    class: "he-autocomplete-popover  he-popover position-block-end he-listbox",
+    class: "he-autocomplete-popover he-listbox",
     popover: 'manual',
     role: 'listbox',
-    style: {
-      '--anchor-popover':  `--${anchorId}`
-    }
-  };
+  });
 
   return (
     <>
@@ -171,7 +166,7 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
         {datalist.map((option) => (
           <li
             key={option}
-            id={`${id}-${option.split(' ').join('-')}`}
+            id={`${anchorId}-${option.split(' ').join('-')}`}
             role="option"
             class="he-autocomplete-option"
             onClick$={() => select$(option)}
