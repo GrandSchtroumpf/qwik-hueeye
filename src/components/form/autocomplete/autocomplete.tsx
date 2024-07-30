@@ -143,7 +143,7 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
     class: 'he-input',
     style: {
       'anchor-name': `--${anchorId}`
-    },
+    } as any,
     onBlur$: blur$,
     onInput$: [filter$, $((e, input) => toggle$(input.value.toLowerCase()))],
     onKeyDown$: [preventKeydown, onKeyDown$],

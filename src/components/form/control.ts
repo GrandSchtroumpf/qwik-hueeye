@@ -10,7 +10,6 @@ import {
   useSignal,
   untrack,
   useTask$,
-  QRL,
 } from '@builder.io/qwik';
 import type { Serializable, ControlGroup } from './types';
 
@@ -48,7 +47,6 @@ export function useFormProvider<T extends ControlGroup>(props: FormControlProps<
 export interface ControlProps<T> {
   name?: string | number;
   value?: T;
-  onChange$?: QRL<(value?: T) => any>;
   'bind:value'?: Signal<T | undefined>;
 }
 
@@ -179,7 +177,7 @@ export function useListControl<T extends Serializable>() {
 const ControlContext = createContextId<ControlCtx<any>>('ControlContext');
 type ControlCtx<T extends Serializable> = ReturnType<typeof useControlProvider<T>>;
 export function useControlProvider<T extends Serializable>(props: ControlProps<T>) {
-  const { name, 'bind:value': bindValue, value, onChange$ } = props;
+  const { name, 'bind:value': bindValue, value } = props;
   const { control: parent } = useGroupControl<T | undefined>();
   const initial = untrack(() => fromParent<T>(parent, name) ?? value);
   const signal = useSignal<T | undefined>(initial);
@@ -198,7 +196,6 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
     if (bindValue) bindValue.value = value;
     else if (isProxy(parent) && exists(name)) parent[name] = value;
     else signal.value = value;
-    if (onChange$) onChange$(value);
   });
 
   const ctx = { parent, control, onChange, name };
