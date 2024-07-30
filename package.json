@@ -42,28 +42,28 @@
     "@builder.io/qwik-city": ">1.1.0"
   },
   "devDependencies": {
-    "@builder.io/qwik": "1.5.7",
-    "@builder.io/qwik-city": "1.5.7",
-    "@types/eslint": "8.56.6",
+    "@builder.io/qwik": "1.7.3",
+    "@builder.io/qwik-city": "1.7.3",
+    "@types/eslint": "9.6.0",
     "@types/node": "20.11.30",
-    "@typescript-eslint/eslint-plugin": "7.3.1",
-    "@typescript-eslint/parser": "7.3.1",
+    "@typescript-eslint/eslint-plugin": "7.18.0",
+    "@typescript-eslint/parser": "7.18.0",
     "eslint": "8.57.0",
-    "eslint-plugin-qwik": "1.5.7",
-    "lightningcss": "1.24.1",
-    "np": "10.0.1",
-    "prettier": "3.2.5",
-    "sass": "1.72.0",
+    "eslint-plugin-qwik": "1.7.3",
+    "lightningcss": "1.25.1",
+    "np": "10.0.7",
+    "prettier": "3.3.3",
+    "sass": "1.77.8",
     "svgson": "^5.3.1",
-    "typescript": "5.4.5",
+    "typescript": "5.5.4",
     "undici": "6.19.0",
-    "vite": "5.3.1",
+    "vite": "5.3.5",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-dts": "3.9.1",
     "vite-tsconfig-paths": "4.3.2"
   },
   "dependencies": {
     "@builder.io/qwik-worker": "^0.0.1",
-    "@oddbird/popover-polyfill": "^0.4.3"
+    "@oddbird/popover-polyfill": "^0.4.4"
   }
 }
