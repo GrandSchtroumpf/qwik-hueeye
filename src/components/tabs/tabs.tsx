@@ -72,10 +72,12 @@ export const TabImpl = component$((props: TabProps) => {
     if (!state.active) state.active = id;
   });
 
-  const activate = event$(() => {
+  const activate = event$((e: Event, el: HTMLElement) => {
     if (id === state.active) return;
     state.leaving = state.active;
     state.active = id;
+    el.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+    console.log(el);
   });
 
   return <button id={id} 
