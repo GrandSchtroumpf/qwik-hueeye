@@ -1,0 +1,29 @@
+@use '../../hue/hue' as hue;
+@use "../../popover/popover.scss" as popover;
+@import "../../popover/popover.scss";
+@import "../input/input.scss";
+
+.he-autocomplete-popover {
+  max-height: 275px;
+  overflow: auto;
+  scrollbar-width: thin;
+  list-style: none;
+  @include popover.anchor;
+}
+
+.he-autocomplete-option {
+  cursor: pointer;
+  padding: var(--size-1) var(--size-2);
+  border-radius: var(--border-radius);
+
+  &:hover {
+    @include hue.hover(transparent, var(--text));
+  }
+  &:active {
+    @include hue.focus(transparent, var(--text));
+  }
+  &[data-active] {
+    outline: solid 1px var(--color, var(--divider));
+  }
+}
+

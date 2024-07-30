@@ -43,6 +43,7 @@ const MultiOption = component$<BaseOptionProps>((props) => {
   const checked = useComputed$(() => list.value.includes(value));
 
   const attr = mergeProps<'li'>(otherProps, {
+    class: 'he-option',
     onClick$: $(() => {
       return checked.value
         ? removeAt(list.value.indexOf(value))
@@ -67,6 +68,7 @@ const SingleOption = component$<BaseOptionProps>((props) => {
   const { control, onChange } = useControl();
 
   const attr = mergeProps<'li'>(otherProps, {
+    class: 'he-option',
     onClick$: $(() => {
       return control.value === value
         ? onChange(undefined)

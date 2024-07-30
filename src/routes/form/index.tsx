@@ -9,6 +9,7 @@ import { RadioGroup, Radio } from "qwik-hueeye-lib";
 import { CheckAll, CheckList, CheckItem } from "qwik-hueeye-lib";
 import { SwitchGroup, Switch } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
+import { Autocomplete } from "../../components/form/autocomplete/autocomplete";
 
 
 const MOVIES = {
@@ -41,6 +42,7 @@ export default component$(() => {
 
   const initial = useStore({
     title: 'Hello World',
+    movie: '',
     date: new Date(),
     time: new Date(),
     month: new Date(),
@@ -64,6 +66,10 @@ export default component$(() => {
     <FormField class="overlay">
       <Label>Some Text here</Label>
       <Input name="title" placeholder="Some Text here" class="outline"/>
+    </FormField>
+    <FormField>
+      <Label>Autocomplete</Label>
+      <Autocomplete placeholder="Select movie" name="movie" class="outline" datalist={Object.values(MOVIES)} />
     </FormField>
     <fieldset class="date-inputs">
       <FormField>

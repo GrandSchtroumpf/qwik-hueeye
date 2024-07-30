@@ -1,21 +1,17 @@
-@import '../../popover/popover';
+@use '../../popover/popover.scss' as popover;
+@import '../../popover/popover.scss';
+
+@layer popover, select;
 .he-select-field,
 .he-select:not(.he-field) {
   --he-input-radius: var(--size-0);
   --he-input-border-color: var(--outline);
   --he-input-background: transparent;
-  
-
-  
-  border: none;
-  box-sizing: content-box;
-  display: flex;
+    
+  display: inline-flex;
   align-items: center;
   gap: var(--size-2);
   min-height: 1rem;
-
-  display: inline-flex;
-  font-size: 1rem;
 
   box-sizing: border-box;
   padding: var(--size-1) var(--size-2);
@@ -126,10 +122,36 @@
     }
   }
 }
-.he-select-popover {
-  overflow: auto;
-  scrollbar-width: thin;
-  @media (min-width: 600px) {
-    max-height: 275px;
+
+@layer select {
+  .he-select-popover {
+    overflow: auto;
+    scrollbar-width: thin;
+    // Desktop
+    @media (min-width: 600px) {
+      max-height: 275px;
+      @include popover.anchor;
+    }
+    // Mobile
+    @media (max-width: 599px) {
+      position: fixed;
+      min-width: 80dvw;
+      max-width: 90dvw;
+      max-height: 80dvh;
+      &::backdrop {
+        background-color: var(--backdrop-color, black);
+        opacity: 0.32;
+      }
+      @supports not (transition-behavior: allow-discrete) {
+        animation: scalein 0.1s var(--ease-out);
+      }
+      @supports (transition-behavior: allow-discrete) {
+        @starting-style {
+          &:popover-open {
+            transform: scale(0.9);
+          }
+        }
+      }
+    }
   }
 }

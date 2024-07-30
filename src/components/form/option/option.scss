@@ -1,9 +1,8 @@
 @use '../../list' as list;
 @use '../../hue/hue' as hue;
 
-[role="option"] {
+.he-option {
   cursor: pointer;
-  display: flex;
   padding: var(--size-1) var(--size-2);
   border-radius: var(--border-radius);
   &:hover {

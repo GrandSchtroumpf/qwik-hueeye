@@ -1,5 +1,7 @@
 @use "../../list/index" as list;
 .he-listbox {
+  list-style: none;
+  margin-block: unset;
   padding: var(--size-0);
   &[aria-multiselectable="false"] {
     @include list.list-vertical-selectable(listbox);

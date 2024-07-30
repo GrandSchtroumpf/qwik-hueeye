@@ -1,16 +1,5 @@
-.he-popover {
-  position: absolute;
-  border: none;
-  background-color: var(--overlay);
-  backdrop-filter: var(--overlay-filter);
-  box-shadow: var(--overlay-shadow);
-  border-radius: 4px;
-  box-sizing: border-box;
-  &:popover-open {
-    opacity: 1;
-    transition-timing-function: var(--ease-out);
-  }
-
+@mixin anchor {
+  margin: 0;
   @supports (transition-behavior: allow-discrete) {
     transition-property: display, overlay, opacity, transform;
     transition-duration: 0.2s;
@@ -26,68 +15,57 @@
       transition-timing-function: var(--ease-in);
     }
   }
-
-
-  // Desktop
-  @media (min-width: 600px) {
-    margin: 0;
     
-    @supports not (transition-behavior: allow-discrete) {
-      &:not([data-ready="true"]) {
-        opacity: 0;
-      }
-      &[data-ready="true"] {
-        animation: slideup 0.1s var(--ease-out);
-      }
+  @supports not (transition-behavior: allow-discrete) {
+    &:not([data-ready="true"]) {
+      opacity: 0;
     }
-    @starting-style {
-      &:popover-open {
-        transform: scale(1) translateY(10px);
-      }
+    &[data-ready="true"] {
+      animation: slideup 0.1s var(--ease-out);
     }
-    @supports (anchor-name: --test) {
-      position-anchor: var(--anchor-popover);
-      &.position-block-start {
-        inset-block-end: anchor(start);
-        inset-inline-start: anchor(start);
-        min-width: anchor-size(width);
-      }
-      &.position-block-end {
-        inset-block-start: anchor(end);
-        inset-inline-start: anchor(start);
-        min-width: anchor-size(width);
-      }
-      &.position-inline-start {
-        inset-block-start: anchor(start);
-        inset-inline-end: anchor(start);
-      }
-      &.position-inline-end {
-        inset-block-start: anchor(start);
-        inset-inline-start: anchor(end);
-      }
-    }  
   }
+  @starting-style {
+    &:popover-open {
+      transform: scale(1) translateY(10px);
+    }
+  }
+  @supports (anchor-name: --test) {
+    position-anchor: var(--anchor-popover);
+    &.position-block-start {
+      inset-block-end: anchor(start);
+      inset-inline-start: anchor(start);
+      min-width: anchor-size(width);
+    }
+    &.position-block-end {
+      inset-block-start: anchor(end);
+      inset-inline-start: anchor(start);
+      min-width: anchor-size(width);
+    }
+    &.position-inline-start {
+      inset-block-start: anchor(start);
+      inset-inline-end: anchor(start);
+    }
+    &.position-inline-end {
+      inset-block-start: anchor(start);
+      inset-inline-start: anchor(end);
+    }
+  }
+}
 
-  // Mobile
-  @media (max-width: 599px) {
-    position: fixed;
-    min-width: 80dvw;
-    max-width: 90dvw;
-    max-height: 80dvh;
-    &::backdrop {
-      background-color: var(--backdrop-color, black);
-      opacity: 0.32;
-    }
-    @supports not (transition-behavior: allow-discrete) {
-      animation: scalein 0.1s var(--ease-out);
-    }
-    @supports (transition-behavior: allow-discrete) {
-      @starting-style {
-        &:popover-open {
-          transform: scale(0.9);
-        }
-      }
-    }
+@layer popover {
+  .he-popover {
+    position: absolute;
+    border: none;
+    background-color: var(--overlay);
+    backdrop-filter: var(--overlay-filter);
+    box-shadow: var(--overlay-shadow);
+    border-radius: 4px;
+    box-sizing: border-box;
+    
+    &:popover-open {
+      opacity: 1;
+      transition-timing-function: var(--ease-out);
+    }  
   }
 }
 

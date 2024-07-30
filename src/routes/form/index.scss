@@ -4,29 +4,28 @@
   gap: var(--size-2);
   width: 100%;
   max-width: fit-content;
-  margin: var(--size-2) auto;
+  margin: auto;
   padding: var(--size-2);
   background-color: var(--surface);
   border-radius: var(--size-0);
   box-sizing: border-box;
+  @media (max-width: 599px) {
+    max-width: unset;
+  }
   .date-inputs {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--size-1);
     padding: 0;
     border: none;
+    @media (max-width: 599px) {
+      flex-direction: column;
+    }
   }
   footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: var(--size-2);
-  }
-}
-@media (max-width: 599px) {
-  #form-page {
-    max-width: unset;
-    .date-inputs {
-      flex-direction: column;
-    }
   }
 }

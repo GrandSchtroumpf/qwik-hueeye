@@ -3,6 +3,7 @@
 
 .he-toggle-group {
   @include list.list-horizontal-selectable;
+  overflow: auto;
   position: relative;
   padding: var(--toggle-group-padding, var(--size-1));
   box-sizing: border-box;
@@ -25,6 +26,7 @@
 
   & .he-toggle {
     position: relative;
+    flex-shrink: 0;
   }
 
   & input {

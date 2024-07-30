@@ -1,18 +1,27 @@
 import { component$, Slot, $ } from "@builder.io/qwik";
-import type { JSXChildren, JSXOutput, QRL, PropsOf } from "@builder.io/qwik";
+import type { JSXNode, JSXChildren, JSXOutput, QRL, PropsOf } from "@builder.io/qwik";
 import { ControlProps, ControlListProps, extractControls, WithControl, WithControlList } from "../control";
 import type { Serializable } from '../types';
 import { Option } from "../option/option";
 import { isJSXNode } from "../../utils/jsx";
-import { BaseSelect } from "./base";
-import { BaseSelectProps } from "./base";
+import { BaseCombobox } from "./base";
+import { BaseComboboxProps } from "./base";
 import { ListController } from "../controller-list";
 import { Controller } from "../controller";
-import { getNodeText } from "../utils";
 
-export type SelectionItemProps = PropsOf<'li'> & {
+export type ComboboxionItemProps = PropsOf<'li'> & {
   value?: string;
   mode?: 'radio' | 'toggle';
+}
+
+
+/** Get the text content of the option */
+const getNodeText = (node: JSXNode | string | number): string => {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return node.toString();
+  if (node instanceof Array) return node.map(getNodeText).join('');
+  if (typeof node === 'object' && node) return getNodeText(node.props.children as any);
+  return '';
 }
 
 const toKey = (value: Serializable) => value?.toString() ?? '';
@@ -33,14 +42,6 @@ const getOptions = (node: JSXChildren) => {
   return options;
 }
 
-const displayMultiNodeContent = (children: JSXChildren) => {
-  const options = getOptions(children);
-  return $((values?: Serializable[]) => {
-    if (!values?.length) return;
-    return values.map(value => options[toKey(value)]).join(', ');
-  });
-}
-
 const displaySingleNodeContent = (children: JSXChildren) => {
   const options = getOptions(children);
   return $((value?: Serializable) => {
@@ -55,44 +56,43 @@ type Props<T extends Serializable> = PropsOf<'div'> & {
   placeholder?: string
 } & ((ControlListProps<T> & { multi: true; }) | ControlProps<T> & { multi?: false; });
 
-export function Select<T extends Serializable>({ multi, children, display$, ...base }: Props<T>) {
+export function Combobox<T extends Serializable>({ multi, children, display$, ...base }: Props<T>) {
   const selectChildren = children.filter(child => (isJSXNode(child) && child.type === Option));
+  const display = display$ ?? displaySingleNodeContent(selectChildren);
   if (multi) {
-    const display = display$ ?? displayMultiNodeContent(selectChildren);
     return (
-      <MultiSelectImpl {...base as any} display$={display as any}>
+      <MultiComboboxImpl {...base as any} display$={display as any}>
         {selectChildren}
-      </MultiSelectImpl>
+      </MultiComboboxImpl>
     );
   } else {
-    const display = display$ ?? displaySingleNodeContent(children);
     return (
-      <SelectImpl {...base as any} display$={display as any}>
+      <ComboboxImpl {...base as any} display$={display as any}>
         {children}
-      </SelectImpl>
+      </ComboboxImpl>
     ) 
   }
 }
 
 
-const MultiSelectImpl = component$<WithControlList<Serializable, BaseSelectProps>>((props) => {
+const MultiComboboxImpl = component$<WithControlList<Serializable, BaseComboboxProps>>((props) => {
   const { attr, controls } = extractControls(props);
   return (
     <ListController {...controls}>
-      <BaseSelect {...attr} multi={true}>
+      <BaseCombobox {...attr} multi={true}>
         <Slot />
-      </BaseSelect>
+      </BaseCombobox>
     </ListController>
   )
 });
 
-const SelectImpl = component$<WithControl<Serializable, BaseSelectProps>>((props) => {
+const ComboboxImpl = component$<WithControl<Serializable, BaseComboboxProps>>((props) => {
   const { attr, controls } = extractControls(props);
   return (
     <Controller {...controls}>
-      <BaseSelect {...attr} multi={false}>
+      <BaseCombobox {...attr} multi={false}>
         <Slot />
-      </BaseSelect>
+      </BaseCombobox>
     </Controller>
   )
 });

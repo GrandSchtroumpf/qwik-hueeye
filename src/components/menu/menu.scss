@@ -1,10 +1,11 @@
-@import '../popover/popover.scss';
-
+@use "../popover/popover.scss" as popover;
+@import "../popover/popover.scss";
 .popover.menu-overlay {
   margin: 0;
 }
 .he-menu {
   list-style: none;
+  @include popover.anchor;
   .he-menu-radio,
   [role="menuitem"],
   [role="menucheckbox"] {

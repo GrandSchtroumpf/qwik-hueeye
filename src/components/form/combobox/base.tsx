@@ -6,7 +6,8 @@ import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
 import { useControl, useListControl } from "../control";
 import { ListBox } from "../listbox/listbox";
-import styles from './select.scss?inline';
+import styles from './combobox.scss?inline';
+
 
 const preventKeyDown = sync$((e: KeyboardEvent) => {
   const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'Home', 'End'];
@@ -14,12 +15,12 @@ const preventKeyDown = sync$((e: KeyboardEvent) => {
   if (e.ctrlKey && e.key === 'a') return e.preventDefault();
 });
 
-export interface BaseSelectProps<T extends Serializable = Serializable> extends PropsOf<'button'> {
+export interface BaseComboboxProps<T extends Serializable = Serializable> extends PropsOf<'button'> {
   multi: boolean;
   placeholder?: string;
   display$: QRL<(value?: T) => string>;
 }
-export const BaseSelect = component$(function<T extends Serializable>(props: BaseSelectProps<T>) {
+export const BaseCombobox = component$(function<T extends Serializable>(props: BaseComboboxProps<T>) {
   useStyles$(styles);
   const { id: anchorId } = useFormFieldId(props.id);
   const { placeholder, display$, multi, ...buttonProps } = props;
@@ -33,23 +34,20 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   
   const onToggle$ = $((e: CorrectedToggleEvent) => {
     if (e.newState !== 'open') return;
-    const origin = document.getElementById(anchorId);
-    const base = '[role="option"]';
-    const selected = `${base}[aria-checked="true"], ${base}[aria-selected="true"]`;
-    const option = origin?.querySelector(selected) ?? origin?.querySelector(base);
+    const input = document.getElementById(anchorId)?.querySelector('input');
     // Wait for dialog to open
-    queueMicrotask(() => (option as HTMLElement)?.focus());
+    queueMicrotask(() => input?.focus());
   });
 
   const triggerProps = mergeProps<'button'>(trigger, buttonProps, {
     type: 'button',
-    class: 'he-select',
+    class: 'he-combobox',
     onKeyDown$: [preventKeyDown, onKeyDown],
     "aria-label": placeholder,
   });
 
-  const popoverProps = mergeProps<'ul'>(popover, {
-    class: 'he-select-popover',
+  const popoverProps = mergeProps<'div'>(popover, {
+    class: 'he-combobox-popover',
     onToggle$,
     onKeyDown$: $((e, el) => {
       if (e.key === 'Tab') el?.hidePopover();
@@ -69,9 +67,18 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
           <polygon stroke="none" fill="currentColor" points="7 10 12 15 17 10"></polygon>
         </svg>
       </button>
-      <ListBox multi={multi} {...popoverProps}>
-        <Slot />
-      </ListBox>
+      <div {...popoverProps}>
+        <input
+          type="text"
+          class="he-combobox-input"
+          role="combobox"
+          autocomplete="off"
+          autoCorrect="off"
+        />
+        <ListBox multi={multi}>
+          <Slot />
+        </ListBox>
+      </div>
     </>
   );
 });

@@ -50,7 +50,7 @@ export default () => {
         <meta charset="utf-8" />
         <RouterHead />
       </head>
-      <body class="blur-overlay">
+      <body class="">
         <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
           <PrefetchServiceWorker />

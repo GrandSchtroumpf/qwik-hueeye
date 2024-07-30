@@ -9,6 +9,7 @@ export * from './radio/radio';
 export * from './radio/toggle';
 export * from './form-field/form-field';
 export * from './select/select';
+export * from './combobox/combobox';
 export * from './listbox/listbox';
 export * from './option/option';
 export * from './checkbox/checkbox';

@@ -108,7 +108,7 @@
   grid-area: stack;
   position: relative;
   border-radius: 8px;
-  background-color: color-mix(in oklch, var(--he-track-background) 50%, var(--surface-0));
+  background-color: color-mix(in oklch, var(--he-track-background) 30%, var(--surface-0));
   &::after {
     content: "";
     position: absolute;

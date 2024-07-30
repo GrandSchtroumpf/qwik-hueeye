@@ -66,6 +66,9 @@ body {
   .hue-slider {
     width: 200px;
   }
+  @media (max-width: 599px) {
+    padding-block: var(--size-2);
+  }
 }
 
 main {

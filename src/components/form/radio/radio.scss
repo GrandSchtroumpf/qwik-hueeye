@@ -1,6 +1,6 @@
 .he-radio-group {
   display: flex;
-  flex-direction: row;
+  overflow: auto;
   border-radius: 4px;
   border: none;
   padding: var(--size-1) 0;
@@ -23,6 +23,7 @@
 }
 
 .he-radio {
+  flex-shrink: 0;
   padding: var(--size-1) 0;
   & input {
     opacity: 0;

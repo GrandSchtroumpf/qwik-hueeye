@@ -233,7 +233,7 @@
   /* Colors Utils */
   /****************/
   .blur-overlay {
-    --overlay: oklch(var(--lum-2) var(--chroma) var(--hue) / 60%);
+    --overlay: oklch(var(--lum-2) var(--chroma) var(--hue) / 80%);
     --overlay-filter: blur(10px) saturate(150%);
   }
   .primary {
@@ -367,6 +367,7 @@
   }
   
   button {
+    font-size: 1rem;
     font-family: var(--font-family);
     cursor: pointer;
   }

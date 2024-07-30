@@ -15,7 +15,7 @@ const toHTMLMonthString = (date: Date) => `${date.getFullYear()}-${fullMonth(dat
 const toHTMLDateString = (date: Date) => `${date.getFullYear()}-${fullMonth(date)}-${fullDay(date)}`;
 const toHTMLTimeString = (date: Date) => `${fullHour(date)}:${fullMin(date)}`;
 
-function toValueString(type: PropsOf<'input'>['type'], value?: InputValue) {
+export function toValueString(type: PropsOf<'input'>['type'], value?: InputValue) {
   if (!value) return '';
   if (typeof value === 'string') return value;
   if (typeof value === 'number') return value.toString();
