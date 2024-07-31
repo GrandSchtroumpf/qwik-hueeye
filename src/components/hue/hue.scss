@@ -185,16 +185,15 @@
       var(--gradient-start),
       var(--gradient-end)
     );
-  
+    --gradient-start: var(--surface-1);
+    --gradient-end: var(--surface-3);
     @supports (background: linear-gradient(in oklab, black, white)) {
       --gradient-direction: 160deg in oklab;
     }
     @supports not (background: linear-gradient(in oklab, black, white)) {
       --gradient-direction: 160deg;
     }
-    --gradient-start: var(--surface-1);
-    --gradient-end: var(--surface-3);
-    
+
     @media (prefers-color-scheme: dark) {
       --chroma: 0.02;
       --text: oklch(100% var(--chroma) var(--hue));

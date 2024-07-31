@@ -60,8 +60,8 @@
       display: block;
       padding: 8px 16px;
       text-align: center;
-      @include list.item-vertical-selectable;
       @include list.item-multi-selectable;
+      @include list.item-vertical-selectable;
       &:hover {
         @include hue.hover(var(--he-toggle-background), var(--text));
       }
