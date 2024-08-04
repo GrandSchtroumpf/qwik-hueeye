@@ -1,9 +1,9 @@
-import { $, PropsOf, Slot, component$, useComputed$, useStyles$ } from "@builder.io/qwik";
+import { $, PropsOf, Slot, component$, useComputed$, useId, useStyles$ } from "@builder.io/qwik";
 import { Serializable } from "../types";
 import { ControlItemProps, useControl, useListControl } from "../control";
 import { mergeProps } from "../../utils/attributes";
-import styles from './option.scss?inline';
 import { useListBoxContext } from "../listbox/listbox";
+import styles from './option.scss?inline';
 
 export const focusInOptionList = $((e: Event, el: HTMLElement) => {
   const active = document.activeElement;
@@ -38,11 +38,12 @@ type BaseOptionProps<T extends Serializable = Serializable> = ControlItemProps<T
 
 const MultiOption = component$<BaseOptionProps>((props) => {
   useStyles$(styles);
+  const id = useId();
   const { list, add, removeAt } = useListControl();
   const { value, ...otherProps } = props;
   const checked = useComputed$(() => list.value.includes(value));
 
-  const attr = mergeProps<'li'>(otherProps, {
+  const attr = mergeProps<'li'>({ id }, otherProps, {
     class: 'he-option',
     onClick$: $(() => {
       return checked.value
@@ -64,10 +65,11 @@ const MultiOption = component$<BaseOptionProps>((props) => {
 
 const SingleOption = component$<BaseOptionProps>((props) => {
   useStyles$(styles);
+  const id = useId();
   const { value, ...otherProps } = props;
   const { control, onChange } = useControl();
 
-  const attr = mergeProps<'li'>(otherProps, {
+  const attr = mergeProps<'li'>({ id }, otherProps, {
     class: 'he-option',
     onClick$: $(() => {
       return control.value === value

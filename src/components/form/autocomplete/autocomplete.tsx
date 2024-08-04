@@ -5,44 +5,11 @@ import { useFormFieldId } from "../form-field/form-field";
 import { isServer } from "@builder.io/qwik/build";
 import { usePopoverProvider } from "../../popover/popover";
 import style from './autocomplete.scss?inline';
+import { flipListbox } from "../listbox/listbox";
 
 interface AutocompleteProps extends WithControl<string, PropsOf<'input'>> {
   datalist: string[];
 }
-
-const flip$ = $((listbox: HTMLElement) => {
-  const items: Record<string, number> = {};
-  const { height } = listbox.getBoundingClientRect();
-  for (const option of listbox.querySelectorAll('[role="option"]:not([hidden])')) {
-    items[option.id] = option.getBoundingClientRect().top;
-  }
-  const run = () => {
-    const options = listbox.querySelectorAll('[role="option"]:not([hidden])');
-    if (options.length === Object.keys(items).length) return requestAnimationFrame(run);
-    
-    const { height: newHeight } = listbox.getBoundingClientRect();
-    for (const option of options) {
-      if (option.id in items) {
-        const delta = items[option.id] - option.getBoundingClientRect().top;
-        option.animate([
-          { transform: `translateY(${delta}px)` },
-          { transform: 'translateY(0)' }
-        ], { duration: 100 });
-      } else {
-        option.animate([
-          { opacity: 0, transform: 'scale(0.9)' },
-          { opacity: 1, transform: 'scale(1)' }
-        ], { duration: 100 });
-      }
-    }
-    if (height === newHeight) return;
-    listbox.animate([
-      { height: `${height}px` },
-      { height: `${newHeight}px` }
-    ], { duration: 100 });
-  }
-  requestAnimationFrame(run);
-});
 
 export const Autocomplete = component$<AutocompleteProps>((props) => {
   useStyles$(style);
@@ -64,11 +31,11 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
 
   const setActive = $((input: HTMLInputElement, option?: Element) => {
     document.getElementById(popoverId)
-      ?.querySelectorAll('[data-active]')
-      .forEach(option => option.removeAttribute('data-active'));
+      ?.querySelectorAll('[data-focus]')
+      .forEach(option => option.removeAttribute('data-focus'));
     if (option) {
       input.setAttribute('aria-activedescendant', option.id);
-      option.setAttribute('data-active', '');
+      option.setAttribute('data-focus', '');
       option.scrollIntoView({ block: 'nearest' });
     } else {
       input.removeAttribute('aria-activedescendant');
@@ -118,15 +85,17 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
   });
 
   const filter$ = $(async (e: Event, input: HTMLInputElement) => {
-    flip$(document.getElementById(popoverId)!);
-    const options = document.getElementById(popoverId)?.querySelectorAll('[role="option"]');
+    const listbox = document.getElementById(popoverId);
+    if (!listbox) return;
+    flipListbox(listbox);
+    const options = listbox.querySelectorAll('[role="option"]');
     const value = input.value.toLowerCase();
-    for (const option of options ?? []) {
+    for (const option of options) {
       const hasText = option.textContent?.toLowerCase().includes(value);
       if (hasText) {
         option.removeAttribute('hidden');
       } else {
-        option.removeAttribute('data-active');
+        option.removeAttribute('data-focus');
         option.setAttribute('hidden', 'hidden');
         if (input.getAttribute('aria-activedescendant') === option.id) {
           input.removeAttribute('aria-activedescendant');
@@ -150,6 +119,7 @@ export const Autocomplete = component$<AutocompleteProps>((props) => {
     value: control.value,
     'aria-label': hasFormField ? undefined : (props['aria-label'] || props['placeholder']),
     'aria-autocomplete': 'list',
+    'aria-controls': popoverId
   });
 
   const listboxAttrs: PropsOf<'ul'> = mergeProps<'ul'>(popover, {

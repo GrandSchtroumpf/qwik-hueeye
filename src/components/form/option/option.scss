@@ -11,6 +11,9 @@
   &:active {
     @include hue.focus(transparent, var(--text));
   }
+  &:focus-visible, &[data-focus] {
+    outline: solid 1px var(--color, var(--divider));
+  }
 
   @include list.item-horizontal-selectable;
 

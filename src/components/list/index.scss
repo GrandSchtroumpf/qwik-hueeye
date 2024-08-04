@@ -40,9 +40,6 @@
 }
 
 @mixin item-selectable {
-  &:focus-visible {
-    outline: solid 1px var(--color, var(--divider));
-  }
   @supports not (anchor-name: --myanchor) {
     position: relative;
     &::before {

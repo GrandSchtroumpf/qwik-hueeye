@@ -1,5 +1,5 @@
 import { component$, useId, useStyles$ } from "@builder.io/qwik";
-import { MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger } from "qwik-hueeye-lib";
+import { MenuItemBtn, Menu, MenuTrigger, MenuItemTrigger, MatIcon } from "qwik-hueeye-lib";
 import styles from './index.scss?inline';
 
 export default component$(() => {
@@ -13,7 +13,10 @@ export default component$(() => {
     <Menu id={menuId}>
       <MenuItemBtn>Item 1</MenuItemBtn>
       <MenuItemBtn>Item 2</MenuItemBtn>
-      <MenuItemTrigger id="radio" menuId={nestedMenuId}>Menu Radio</MenuItemTrigger>
+      <MenuItemTrigger id="radio" menuId={nestedMenuId}>
+        Menu Radio
+        <MatIcon name="chevron_right" />
+      </MenuItemTrigger>
     </Menu>
     <Menu id={nestedMenuId} class="position-inline">
       <MenuItemBtn>Nested Item 1</MenuItemBtn>

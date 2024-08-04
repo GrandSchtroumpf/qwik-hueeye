@@ -22,7 +22,7 @@
   &:active {
     @include hue.focus(transparent, var(--text));
   }
-  &[data-active] {
+  &[data-focus] {
     outline: solid 1px var(--color, var(--divider));
   }
 }

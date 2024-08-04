@@ -1,8 +1,8 @@
 import { $, PropsOf, Slot, component$, createContextId, sync$, useContext, useContextProvider, useStyles$ } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
-import styles from './listbox.scss?inline';
 import { focusList } from "../../list/utils";
 import { focusInOptionList, focusOutOptionList } from "../option/option";
+import styles from './listbox.scss?inline';
 
 const ListBoxContext = createContextId<{ multi: boolean }>('ListBox');
 export const useListBoxContext = () => useContext(ListBoxContext);
@@ -10,6 +10,40 @@ export const useListBoxContext = () => useContext(ListBoxContext);
 interface BaseListBoxProps extends PropsOf<'ul'> {
   multi?: boolean;
 }
+
+export const flipListbox = $((listbox: HTMLElement) => {
+  const items: Record<string, number> = {};
+  const { height } = listbox.getBoundingClientRect();
+  for (const option of listbox.querySelectorAll('[role="option"]:not([hidden])')) {
+    items[option.id] = option.getBoundingClientRect().top;
+  }
+  const run = () => {
+    const options = listbox.querySelectorAll('[role="option"]:not([hidden])');
+    if (options.length === Object.keys(items).length) return requestAnimationFrame(run);
+    
+    const { height: newHeight } = listbox.getBoundingClientRect();
+    for (const option of options) {
+      if (option.id in items) {
+        const delta = items[option.id] - option.getBoundingClientRect().top;
+        option.animate([
+          { transform: `translateY(${delta}px)` },
+          { transform: 'translateY(0)' }
+        ], { duration: 100 });
+      } else {
+        option.animate([
+          { opacity: 0, transform: 'scale(0.9)' },
+          { opacity: 1, transform: 'scale(1)' }
+        ], { duration: 100 });
+      }
+    }
+    if (height === newHeight) return;
+    listbox.animate([
+      { height: `${height}px` },
+      { height: `${newHeight}px` }
+    ], { duration: 100 });
+  }
+  requestAnimationFrame(run);
+});
 
 const preventKeyDown = sync$((e: KeyboardEvent) => {
   const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'Home', 'End'];

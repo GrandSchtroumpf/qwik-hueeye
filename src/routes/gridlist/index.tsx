@@ -12,7 +12,7 @@ const ItemButton = component$(({ item }: { item: Item }) => {
   const open = useSignal(false);
   return <>
     <ButtonItem onClick$={() => open.value = true}>
-      <img width="150" height="150" src={item.img} alt={item.name} />
+      <img loading="lazy" fetchPriority="low" width="150" height="150" src={item.img} alt={item.name} />
       <h3>{item.name}</h3>
     </ButtonItem>
     <Dialog bind:open={open}>
@@ -32,7 +32,7 @@ export default component$(() => {
       <NavGrid>
         {pokemons.slice(0, 20).map(p => (
           <LinkItem key={p.name} href={p.name}>
-          <img width="150" height="150" src={p.img} alt={p.name} />
+          <img loading="lazy" fetchPriority="low" width="150" height="150" src={p.img} alt={p.name} />
           <h3>{p.name}</h3>
         </LinkItem>
         ))}
