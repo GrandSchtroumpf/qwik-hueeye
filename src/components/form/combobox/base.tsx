@@ -16,9 +16,13 @@ export const filterCombobox = $((e: InputEvent, input: HTMLInputElement) => {
   const options = listbox.querySelectorAll<HTMLElement>('[role="option"]');
   const value = input.value.toLowerCase();
   flipListbox(listbox);
+  const result = {
+    empty: true,
+  }
   for (const option of options) {
     const hasText = !value || option.textContent?.toLowerCase().includes(value);
     if (hasText) {
+      result.empty = false;
       option.removeAttribute('hidden');
     } else {
       option.removeAttribute('data-focus');
@@ -28,6 +32,7 @@ export const filterCombobox = $((e: InputEvent, input: HTMLInputElement) => {
       }
     }
   }
+  return result;
 });
 
 export const comboboxNavigation = $((e: KeyboardEvent, element: HTMLElement) => {

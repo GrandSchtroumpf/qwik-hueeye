@@ -181,7 +181,7 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
 export const RangeStart = component$<WithControl<number, PropsOf<'button'>>>((props) => {
   const { min, step, range, endName, vertical, disabled } = useContext(RangeContext);
   const { attr, controls } = extractControls(props);
-  const { control, onChange } = useControlProvider({
+  const { control, change } = useControlProvider({
     name: 'start',
     ...controls
   });
@@ -189,15 +189,15 @@ export const RangeStart = component$<WithControl<number, PropsOf<'button'>>>((pr
   const onKeydown$ = $((e: KeyboardEvent) => {
     const current = control.value ?? min;
     const end = range[endName];
-    if (e.key === 'Home') onChange(min);
+    if (e.key === 'Home') change(min);
     if (vertical) {
-      if (e.key === 'ArrowUp') onChange(Math.max(current - step, min));
-      if (e.key === 'ArrowDown') onChange(Math.min(current + step, end));
+      if (e.key === 'ArrowUp') change(Math.max(current - step, min));
+      if (e.key === 'ArrowDown') change(Math.min(current + step, end));
     } else {
-      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, min));
-      if (e.key === 'ArrowRight') onChange(Math.min(current + step, end));
+      if (e.key === 'ArrowLeft') change(Math.max(current - step, min));
+      if (e.key === 'ArrowRight') change(Math.min(current + step, end));
     }
-    if (e.key === 'End') onChange(end);
+    if (e.key === 'End') change(end);
   });
 
   const end = range[endName];
@@ -222,22 +222,22 @@ export const RangeStart = component$<WithControl<number, PropsOf<'button'>>>((pr
 export const RangeEnd = component$<WithControl<number, PropsOf<'button'>>>((props) => {
   const { max, step, range, startName, vertical, disabled } = useContext(RangeContext);
   const { attr, controls } = extractControls(props);
-  const { control, onChange } = useControlProvider({
+  const { control, change } = useControlProvider({
     name: 'end',
     ...controls
   });
 
   const onKeydown$ = $((e: KeyboardEvent) => {
     const current = control.value ?? max;
-    if (e.key === 'Home') onChange(start);
+    if (e.key === 'Home') change(start);
     if (vertical) {
-      if (e.key === 'ArrowUp') onChange(Math.max(current - step, start));
-      if (e.key === 'ArrowDown') onChange(Math.min(current + step, max));
+      if (e.key === 'ArrowUp') change(Math.max(current - step, start));
+      if (e.key === 'ArrowDown') change(Math.min(current + step, max));
     } else {
-      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, start));
-      if (e.key === 'ArrowRight') onChange(Math.min(current + step, max));
+      if (e.key === 'ArrowLeft') change(Math.max(current - step, start));
+      if (e.key === 'ArrowRight') change(Math.min(current + step, max));
     }
-    if (e.key === 'End') onChange(max);
+    if (e.key === 'End') change(max);
   });
 
   const start = range[startName];

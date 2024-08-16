@@ -26,7 +26,7 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
   useStyles$(style);
 
   const { attr, controls } = extractControls(props);
-  const { control, onChange } = useControlProvider(controls);
+  const { control, change } = useControlProvider(controls);
   const {
     min = 0,
     max = 100,
@@ -49,15 +49,15 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
 
   const onKeydown$ = $((e: KeyboardEvent) => {
     const current = control.value ?? min;
-    if (e.key === 'Home') onChange(min);
+    if (e.key === 'Home') change(min);
     if (vertical) {
-      if (e.key === 'ArrowUp') onChange(Math.max(current - step, min));
-      if (e.key === 'ArrowDown') onChange(Math.min(current + step, max));
+      if (e.key === 'ArrowUp') change(Math.max(current - step, min));
+      if (e.key === 'ArrowDown') change(Math.min(current + step, max));
     } else {
-      if (e.key === 'ArrowLeft') onChange(Math.max(current - step, min));
-      if (e.key === 'ArrowRight') onChange(Math.min(current + step, max));
+      if (e.key === 'ArrowLeft') change(Math.max(current - step, min));
+      if (e.key === 'ArrowRight') change(Math.min(current + step, max));
     }
-    if (e.key === 'End') onChange(max);
+    if (e.key === 'End') change(max);
   });
 
   const start$ = $((e: TouchEvent | MouseEvent, el: HTMLElement) => {
@@ -78,7 +78,7 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
       }
     }
     const setValue = (percent: number) => {
-      onChange(round(min + percent * (max - min)));
+      change(round(min + percent * (max - min)));
     }
     
     const move = (event: TouchEvent | MouseEvent) => {
@@ -109,8 +109,8 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
 
   const wheel$ = $((e: WheelEvent) => {
     const current = control.value ?? min;
-    if (e.deltaY < 0) onChange(Math.max(current - step, min));
-    else onChange(Math.min(current + step, max));
+    if (e.deltaY < 0) change(Math.max(current - step, min));
+    else change(Math.min(current + step, max));
   })
 
   const containerProps = mergeProps<'div'>(rest, {

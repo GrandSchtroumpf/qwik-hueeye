@@ -67,15 +67,11 @@ const SingleOption = component$<BaseOptionProps>((props) => {
   useStyles$(styles);
   const id = useId();
   const { value, ...otherProps } = props;
-  const { control, onChange } = useControl();
+  const { control, change } = useControl();
 
   const attr = mergeProps<'li'>({ id }, otherProps, {
     class: 'he-option',
-    onClick$: $(() => {
-      return control.value === value
-        ? onChange(undefined)
-        : onChange(value);
-    }),
+    onClick$: $(() => change(control.value === value ? undefined : value)),
   });
 
   return <li

@@ -3,12 +3,32 @@
 @import "../../popover/popover.scss";
 @import "../input/input.scss";
 
+.he-autocomplete-root {
+  
+}
+
+.he-autocomplete-selection-list {
+
+}
+
+.he-autocomplete-selection-item {
+
+}
+
 .he-autocomplete-popover {
   max-height: 275px;
   overflow: auto;
   scrollbar-width: thin;
   list-style: none;
   @include popover.anchor;
+}
+
+.he-autocomplete-input {
+  
+}
+
+.he-autocomplete-listbox {
+
 }
 
 .he-autocomplete-option {

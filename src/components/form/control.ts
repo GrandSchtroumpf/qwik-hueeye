@@ -40,8 +40,8 @@ export function useFormProvider<T extends ControlGroup>(props: FormControlProps<
       form[key] = value[key];
     }
   });
-  useContextProvider(GroupContext, { control: form, onChange: change });
-  return { form, onChange: change };
+  useContextProvider(GroupContext, { control: form, change });
+  return { form, change };
 }
 
 export interface ControlProps<T> {
@@ -75,7 +75,7 @@ function isProxy<T>(parent: T) {
 
 type GroupControlCtx<T extends Serializable> = {
   control: ControlGroup<T>;
-  onChange: (value: Partial<T>) => void;
+  change: (value: Partial<T>) => void;
   name?: string | number;
 };
 export interface ControlGroupProps<T = ControlGroup> {
@@ -96,14 +96,14 @@ export function useGroupControlProvider<T extends ControlGroup>(
     if (parent && name) parent[name] ||= initial;
   });
 
-  const onChange = $((value: Partial<T>) => {
+  const change = $((value: Partial<T>) => {
     const group = bindValue ?? fromParentStore<ControlGroup>(parent, name) ?? store;
     if (!group) return;
     for (const key in value) {
       group[key] = value[key];
     }
   });
-  const ctx = { control, onChange, name };
+  const ctx = { control, change, name };
   useContextProvider(GroupContext, ctx);
   return ctx;
 }
@@ -176,10 +176,10 @@ export function useListControl<T extends Serializable>() {
 // CONTROL
 const ControlContext = createContextId<ControlCtx<any>>('ControlContext');
 type ControlCtx<T extends Serializable> = ReturnType<typeof useControlProvider<T>>;
-export function useControlProvider<T extends Serializable>(props: ControlProps<T>) {
+export function useControlProvider<T extends Serializable>(props: ControlProps<T>, fallback?: T) {
   const { name, 'bind:value': bindValue, value } = props;
   const { control: parent } = useGroupControl<T | undefined>();
-  const initial = untrack(() => fromParent<T>(parent, name) ?? value);
+  const initial = untrack(() => fromParent<T>(parent, name) ?? value ?? fallback);
   const signal = useSignal<T | undefined>(initial);
 
   useTask$(() => {
@@ -192,13 +192,13 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
   });
 
   // Output
-  const onChange = $((value: T | undefined) => {
+  const change = $((value: T | undefined) => {
     if (bindValue) bindValue.value = value;
     else if (isProxy(parent) && exists(name)) parent[name] = value;
     else signal.value = value;
   });
 
-  const ctx = { parent, control, onChange, name };
+  const ctx = { parent, control, change, name };
   useContextProvider<ControlCtx<T>>(ControlContext, ctx);
   return ctx;
 }

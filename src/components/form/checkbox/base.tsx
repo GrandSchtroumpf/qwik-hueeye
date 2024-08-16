@@ -174,14 +174,14 @@ export const BaseCheckbox = component$<WithControl<boolean, InputAttributes>>((p
   const id = useWithId(props.id);
   const { class: className, ...rest } = props;
   const { attr, controls } = extractControls(rest);
-  const { control, onChange, name } = useControlProvider(controls);
+  const { control, change, name } = useControlProvider(controls);
   const merged = mergeProps<'input'>(attr as any, {
     id,
     type: "checkbox",
     class: "he-checkbox-input",
     name: name?.toString(),
     checked: !!control.value,
-    onChange$: $((e, el) => onChange(el.checked)),
+    onChange$: $((e, el) => change(el.checked)),
   });
   return <>
     <input {...merged} />

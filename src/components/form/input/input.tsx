@@ -31,7 +31,7 @@ export const Input = component$<WithControl<InputValue, PropsOf<'input'>>>((prop
   useStyles$(style);
   const { id, hasFormField } = useFormFieldId(props.id);
   const { attr, controls } = extractControls(props);
-  const { control, onChange, name } = useControlProvider(controls);
+  const { control, change, name } = useControlProvider(controls);
   const type = props.type ?? 'text';
   const merged = mergeProps<'input'>(attr, {
     id,
@@ -40,10 +40,10 @@ export const Input = component$<WithControl<InputValue, PropsOf<'input'>>>((prop
     value: toValueString(type, control.value),
     type,
     onInput$: $((e, i) => {
-      if (type === 'number') onChange(i.valueAsNumber);
-      else if (type === 'date' && i.valueAsDate) onChange(i.valueAsDate);
-      else if (type === 'datetime-local' && i.value) onChange(new Date(i.value));
-      else onChange(i.value);
+      if (type === 'number') change(i.valueAsNumber);
+      else if (type === 'date' && i.valueAsDate) change(i.valueAsDate);
+      else if (type === 'datetime-local' && i.value) change(new Date(i.value));
+      else change(i.value);
     }),
     'aria-label': hasFormField ? undefined : (props['aria-label'] || props['placeholder']),
   });

@@ -43,7 +43,7 @@ export const BaseRadio = component$<BaseRadioProps>((props) => {
   const id = useWithId(props.id);
   const { value, ...attr } = props;
   const { toggle } = useContext(RadioGroupContext);
-  const { control, onChange, name } = useControl();
+  const { control, change, name } = useControl();
   const merged = mergeProps<'input'>(attr as any, {
     id,
     type: "radio",
@@ -52,10 +52,10 @@ export const BaseRadio = component$<BaseRadioProps>((props) => {
     checked: control.value === value,
     value: value?.toString(),
     onClick$: $(() => {
-      if (toggle && control.value === value) onChange(undefined);
+      if (toggle && control.value === value) change(undefined);
     }),
     onChange$: $((e: any, el: HTMLInputElement) => {
-      if (el.checked) onChange(value);
+      if (el.checked) change(value);
     })
   });
   return <>
