@@ -88,6 +88,12 @@ export const Panel = component$<PropsOf<'div'>>((props) => {
   </Popover.Panel>;
 });
 
+const preventKeyDown = sync$((e: KeyboardEvent, input: HTMLInputElement) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') e.preventDefault();
+  if (e.key === 'Enter') {
+    if (input.hasAttribute('aria-activedescendant')) e.preventDefault();
+  }
+});
 
 export const Input = component$<PropsOf<'input'>>((props) => {
   const { popoverId } = useContext(Popover.Context);
@@ -106,13 +112,6 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     }
   })
 
-  const preventKeydown = sync$((e: KeyboardEvent, input: HTMLInputElement) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') e.preventDefault();
-    if (e.key === 'Enter') {
-      if (input.hasAttribute('aria-activedescendant')) e.preventDefault();
-    }
-  });
-
   const filter = $(async (e: InputEvent, input: HTMLInputElement) => {
     const { empty } = await filterCombobox(e, input);
     const popover = document.getElementById(popoverId)!;
@@ -129,7 +128,7 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     class: 'he-autocomplete-input',
     onBlur$: blur,
     onInput$: filter,
-    onKeyDown$: [preventKeydown, onKeyDown],
+    onKeyDown$: [preventKeyDown, onKeyDown],
     autocomplete: 'off',
     'aria-autocomplete': 'list',
     'aria-haspopup': 'listbox',

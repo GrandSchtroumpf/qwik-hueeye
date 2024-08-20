@@ -1,4 +1,4 @@
-import { $, CorrectedToggleEvent, PropsOf, Signal, Slot, component$, useId } from "@builder.io/qwik";
+import { $, CorrectedToggleEvent, PropsOf, Slot, component$, useId } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
 import { flipListbox } from "../listbox/listbox";
 import { ListController } from "../controller-list";

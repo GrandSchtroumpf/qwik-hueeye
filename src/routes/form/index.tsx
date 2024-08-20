@@ -8,8 +8,8 @@ import { useToaster } from "qwik-hueeye-lib";
 import { RadioGroup, Radio } from "qwik-hueeye-lib";
 import { CheckAll, CheckList, CheckItem } from "qwik-hueeye-lib";
 import { SwitchGroup, Switch } from "qwik-hueeye-lib";
+import { HeAutocomplete } from "../../components/form/autocomplete";
 import styles from './index.scss?inline';
-import { Autocomplete } from "../../components/form/autocomplete/autocomplete";
 
 
 const MOVIES = {
@@ -69,7 +69,7 @@ export default component$(() => {
     </FormField>
     <FormField>
       <Label>Autocomplete</Label>
-      <Autocomplete placeholder="Select movie" name="movie" class="outline" datalist={Object.values(MOVIES)} />
+      <HeAutocomplete placeholder="Select movie" name="movie" class="outline" datalist={Object.values(MOVIES)} />
     </FormField>
     <fieldset class="date-inputs">
       <FormField>

@@ -43,12 +43,12 @@ export const TabGroupImpl = component$((props: TabGroupProps) => {
 });
 
 
+const preventKeyDown = sync$((e: KeyboardEvent) => {
+  const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', ' ', 'Home', 'End'];
+  if (keys.includes(e.key)) e.preventDefault();
+});
 
 export const TabListImpl = component$(() => {
-  const preventKeyDown = sync$((e: KeyboardEvent) => {
-    const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', ' ', 'Home', 'End'];
-    if (keys.includes(e.key)) e.preventDefault();
-  });
   const onKeyDown = $((e: KeyboardEvent, el: HTMLElement) => focusList('[role="tab"]', e, el));
   return <div
     class="tab-list"

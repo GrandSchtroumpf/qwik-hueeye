@@ -29,8 +29,8 @@ export const HeAutocomplete = component$<WithControl<string, AutocompleteProps>>
 
 export const HeMultiAutocomplete = component$<WithControl<string[], AutocompleteProps>>((props) => {
   useStyles$(style);
-  const { attr, controls } = extractControls(props);
-  const { datalist, ...inputProps } = attr;
+  const { attr } = extractControls(props);
+  const { datalist } = attr;
   return (
     <Autocomplete.Root class={attr.class}>
       <Autocomplete.Input />
