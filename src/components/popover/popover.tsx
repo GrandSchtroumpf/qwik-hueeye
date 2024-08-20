@@ -110,7 +110,6 @@ export const usePopoverProvider = (props: Props) => {
       id: popoverId,
       popover: 'auto' as const,
       class: 'he-popover',
-      'data-position': 'block',
       'data-anchor': anchorId,
       'data-anchored': anchored.value.toString(),
       onToggle$: [setPopoverPosition, setOpen],
@@ -160,7 +159,6 @@ export const Panel = component$<PropsOf<'div'>>((props) => {
     onToggle$: [setOpen],
     style: style.value,
     ['data-anchor' as any]: anchorId,
-    ['data-position' as any]: 'block',
     ['data-anchored' as any]: anchored.value.toString(),
   }, props);
 

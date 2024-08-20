@@ -44,6 +44,8 @@
   "devDependencies": {
     "@builder.io/qwik": "1.8.0",
     "@builder.io/qwik-city": "1.8.0",
+    "@builder.io/qwik-worker": "^0.0.1",
+    "@oddbird/popover-polyfill": "^0.4.4",
     "@types/eslint": "9.6.0",
     "@types/node": "20.11.30",
     "@typescript-eslint/eslint-plugin": "7.18.0",
@@ -61,9 +63,5 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-dts": "3.9.1",
     "vite-tsconfig-paths": "4.3.2"
-  },
-  "dependencies": {
-    "@builder.io/qwik-worker": "^0.0.1",
-    "@oddbird/popover-polyfill": "^0.4.4"
   }
 }

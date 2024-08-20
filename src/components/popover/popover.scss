@@ -1,7 +1,7 @@
 @mixin anchor {
   @supports (anchor-name: --test) {
     position-anchor: var(--anchor-popover);
-    &[data-position="block"] {
+    &:not([data-position="inline"]) {
       inset-area: bottom span-right;
       min-width: anchor-size(width);
       position-try-options: flip-block;
