@@ -1,5 +1,4 @@
 @mixin anchor {
-  margin: 0;
   @supports (anchor-name: --test) {
     position-anchor: var(--anchor-popover);
     &[data-position="block"] {
@@ -24,6 +23,7 @@
 
 @layer popover {
   .he-popover {
+    margin: 0;
     position: absolute;
     border: none;
     background-color: var(--overlay);
