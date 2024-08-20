@@ -7,13 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@builder.io/qwik-worker':
-        specifier: ^0.0.1
-        version: 0.0.1(@builder.io/qwik@1.8.0(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))
-      '@oddbird/popover-polyfill':
-        specifier: ^0.4.4
-        version: 0.4.4
     devDependencies:
       '@builder.io/qwik':
         specifier: 1.8.0
@@ -21,6 +14,12 @@ importers:
       '@builder.io/qwik-city':
         specifier: 1.8.0
         version: 1.8.0(@types/node@20.11.30)(lightningcss@1.26.0)(rollup@4.13.0)(sass@1.77.8)
+      '@builder.io/qwik-worker':
+        specifier: ^0.0.1
+        version: 0.0.1(@builder.io/qwik@1.8.0(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))
+      '@oddbird/popover-polyfill':
+        specifier: ^0.4.4
+        version: 0.4.4
       '@types/eslint':
         specifier: 9.6.0
         version: 9.6.0
