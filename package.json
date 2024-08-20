@@ -38,19 +38,19 @@
     "qwik": "qwik"
   },
   "peerDependencies": {
-    "@builder.io/qwik": ">1.1.0",
-    "@builder.io/qwik-city": ">1.1.0"
+    "@builder.io/qwik": ">1.5.0",
+    "@builder.io/qwik-city": ">1.5.0"
   },
   "devDependencies": {
-    "@builder.io/qwik": "1.7.3",
-    "@builder.io/qwik-city": "1.7.3",
+    "@builder.io/qwik": "1.8.0",
+    "@builder.io/qwik-city": "1.8.0",
     "@types/eslint": "9.6.0",
     "@types/node": "20.11.30",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "eslint": "8.57.0",
     "eslint-plugin-qwik": "1.7.3",
-    "lightningcss": "1.25.1",
+    "lightningcss": "1.26.0",
     "np": "10.0.7",
     "prettier": "3.3.3",
     "sass": "1.77.8",

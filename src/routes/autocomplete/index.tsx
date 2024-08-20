@@ -13,7 +13,7 @@ export default component$(() => {
       <h1 id="select-title">Select</h1>
       <article>
         <h2>Prebuilt</h2>
-        <HeAutocomplete datalist={options} />
+        <HeAutocomplete class="outline" datalist={options} />
       </article>
       <article>
         <h2>Select one option</h2>
@@ -21,7 +21,8 @@ export default component$(() => {
           <Label>Meal Options</Label>
           <Autocomplete.Root>
             <Autocomplete.Input/>
-            <Autocomplete.Popover>
+            <Autocomplete.Panel>
+              <p>Some description</p>
               <Autocomplete.Listbox>
                 {options.map(option => (
                   <Autocomplete.Option key={option} value={option}>
@@ -29,7 +30,7 @@ export default component$(() => {
                   </Autocomplete.Option>
                 ))}
               </Autocomplete.Listbox>
-            </Autocomplete.Popover>
+            </Autocomplete.Panel>
           </Autocomplete.Root>
         </FormField>
       </article>
@@ -46,7 +47,7 @@ export default component$(() => {
               ))}
             </Autocomplete.SelectionList>
             <Autocomplete.Input/>
-            <Autocomplete.Popover>
+            <Autocomplete.Panel>
               <Autocomplete.Listbox>
                 {options.map(option => (
                   <Autocomplete.Option key={option} value={option}>
@@ -54,7 +55,7 @@ export default component$(() => {
                   </Autocomplete.Option>
                 ))}
               </Autocomplete.Listbox>
-            </Autocomplete.Popover>
+            </Autocomplete.Panel>
           </Autocomplete.Root>
         </FormField>
       </article>

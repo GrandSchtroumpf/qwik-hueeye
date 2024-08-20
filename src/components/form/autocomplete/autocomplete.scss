@@ -1,34 +1,27 @@
 @use '../../hue/hue' as hue;
-@use "../../popover/popover.scss" as popover;
-@import "../../popover/popover.scss";
 @import "../input/input.scss";
 
-.he-autocomplete-root {
-  
-}
-
-.he-autocomplete-selection-list {
-
-}
-
-.he-autocomplete-selection-item {
-
-}
-
-.he-autocomplete-popover {
-  max-height: 275px;
-  overflow: auto;
-  scrollbar-width: thin;
-  list-style: none;
-  @include popover.anchor;
-}
-
+ 
 .he-autocomplete-input {
-  
+  grid-area: input;
+  background-color: transparent;
+  border: none;
+  &:focus-visible {
+    outline: none;
+  }
+  &::placeholder {
+    color: color-mix(in oklch, transparent 70%, var(--text));
+  }
 }
 
 .he-autocomplete-listbox {
-
+  margin-block: 0;
+  list-style: none;
+  padding-inline-start: 0;
+  padding: var(--size-0);
+  max-height: 275px;
+  overflow: auto;
+  scrollbar-width: thin;
 }
 
 .he-autocomplete-option {
@@ -47,3 +40,20 @@
   }
 }
 
+.he-autocomplete-selection-list {
+  margin: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  grid-area: prefix;
+  display: flex;
+  gap: var(--size-1);
+}
+
+.he-autocomplete-selection-item {
+  padding: var(--size-0) var(--size-1);
+  border: 1px solid var(--outline);
+  border-radius: var(--size-1);
+}
+.he-autocomplete-selection-item:last-child {
+  margin-inline-end: var(--size-1);
+}

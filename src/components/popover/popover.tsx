@@ -1,8 +1,9 @@
-import type { CorrectedToggleEvent, PropsOf, QRL, Signal } from "@builder.io/qwik";
-import { createContextId, useContext, useContextProvider, useId } from "@builder.io/qwik";
+import type { CorrectedToggleEvent, JSXChildren, PropsOf, QRL, Signal } from "@builder.io/qwik";
+import { createContextId, useContext, useContextProvider } from "@builder.io/qwik";
 import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
 import { mergeProps } from "../utils/attributes";
 import { useWithId } from "../hooks/useWithId";
+import { findNode } from "../utils/jsx";
 
 
 export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
@@ -74,12 +75,12 @@ export const setPopoverPosition = $(async (
   })
 });
 
-
-interface PopoverRootProps {
-  popoverId?: string;
+export interface ContextProps {
+  anchorId: string;
+  popoverId: string;
   open: Signal<boolean>;
 }
-export const PopoverContext = createContextId<PopoverRootProps>('PopoverContext');
+export const Context = createContextId<ContextProps>('PopoverContext');
 
 interface Props {
   anchorId?: string;
@@ -89,7 +90,7 @@ export const usePopoverProvider = (props: Props) => {
   const popoverId = useWithId(props.popoverId);
   const anchorId = useWithId(props.anchorId);
   const open = useSignal(false);
-  const ready = useSignal(false);
+  const anchored = useSignal(false);
   const style = useSignal<Record<string, string>>({
     '--anchor-popover': `--${anchorId}`,
   });
@@ -98,18 +99,20 @@ export const usePopoverProvider = (props: Props) => {
     open.value = e.newState === 'open';
     const nextStyle = await setPopoverPosition(e, el);
     if (nextStyle) style.value = nextStyle;
-    ready.value = true;
+    anchored.value = true;
   });
 
-  const ctx = {
+  useContextProvider(Context, { popoverId, anchorId, open });
+
+  return {
     open,
     popover: {
       id: popoverId,
       popover: 'auto' as const,
-      class: 'he-popover position-block',
+      class: 'he-popover',
       'data-position': 'block',
       'data-anchor': anchorId,
-      'data-ready': ready.value.toString(),
+      'data-anchored': anchored.value.toString(),
       onToggle$: [setPopoverPosition, setOpen],
       style: style.value
     },
@@ -123,30 +126,44 @@ export const usePopoverProvider = (props: Props) => {
       }
     }
   };
-  useContextProvider(PopoverContext, ctx);
-  return ctx;
 }
 
 
-
-export const PopoverRoot = component$<Partial<PopoverRootProps>>((props) => {
-  const popoverId = useId();
-  const open = useSignal(false);
-  useContextProvider(PopoverContext, {
-    popoverId,
-    open,
-    ...props
-  });
+export type RootProps = Partial<ContextProps>;
+export const RootImpl = component$<RootProps>((props) => {
+  const popoverId = useWithId(props.popoverId);
+  const anchorId = useWithId(props.anchorId);
+  const baseOpen = useSignal(false);
+  const open = props.open ?? baseOpen;
+  useContextProvider(Context, { anchorId, popoverId, open });
   return <Slot />
 })
 
-export const Popover = component$<PropsOf<'div'>>((props) => {
-  const { popoverId, open } = useContext(PopoverContext);
-  const merged = mergeProps<'div'>(props, {
-    id: popoverId,
-    popover: "auto",
-    onToggle$: $((e) => open.value = e.newState === 'open')
+export const Panel = component$<PropsOf<'div'>>((props) => {
+  const { popoverId, anchorId, open } = useContext(Context);
+  const anchored = useSignal(false);
+  const style = useSignal<Record<string, string>>({
+    '--anchor-popover': `--${anchorId}`,
   });
+
+  const setOpen = $(async (e: CorrectedToggleEvent, el: HTMLElement) => {
+    open.value = e.newState === 'open';
+    const nextStyle = await setPopoverPosition(e, el);
+    if (nextStyle) style.value = nextStyle;
+    anchored.value = true;
+  });
+
+  const merged = mergeProps<'div'>({
+    id: popoverId,
+    class: 'he-popover',
+    popover: props.popover ?? 'auto',
+    onToggle$: [setOpen],
+    style: style.value,
+    ['data-anchor' as any]: anchorId,
+    ['data-position' as any]: 'block',
+    ['data-anchored' as any]: anchored.value.toString(),
+  }, props);
+
   return (
     <div {...merged}>
       <Slot />
@@ -154,21 +171,25 @@ export const Popover = component$<PropsOf<'div'>>((props) => {
   )
 })
 
-export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
-  const id = useId();
-  const { popoverId, open } = useContext(PopoverContext);
+export const Trigger = component$<PropsOf<'button'>>((props) => {
+  const { popoverId, anchorId, open } = useContext(Context);
+  const attributes = mergeProps<'button'>(props, {
+    id: anchorId,
+    type: 'button',
+    role: 'combobox',
+    style: {
+      ['anchor-name' as any]: `--${anchorId}`,
+    }
+  });
   return (
     <button 
-      id={id}
-      {...props}
-      type="button"
-      role="combobox"
+      {...attributes}
       aria-disabled="false"
       aria-invalid="false"
       aria-autocomplete="none"
       aria-expanded={open.value}
       aria-controls={popoverId}
-      aria-labelledby={'label-' + id}
+      aria-labelledby={'label-' + anchorId}
     >
       <Slot />
       <svg viewBox="7 10 10 5" class={open.value ? 'opened' : 'closed'} aria-hidden="true" focusable="false">
@@ -177,3 +198,12 @@ export const PopoverTrigger = component$<PropsOf<'button'>>((props) => {
     </button>
   )
 })
+
+
+export const Root = (props: RootProps & { children: JSXChildren }) => {
+  const { children, ...baseRootProps } = props;
+  const anchorId = props.anchorId ?? findNode(children, Trigger)?.props.id;
+  const popoverId = props.popoverId ?? findNode(children, Panel)?.props.id;
+  const rootProps = { ...baseRootProps, anchorId, popoverId };
+  return <RootImpl {...rootProps}>{children}</RootImpl>;
+}

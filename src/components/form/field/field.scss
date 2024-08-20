@@ -1,49 +1,51 @@
-.field {
+@use '../../hue/hue' as hue;
+
+.he-field {
+  --he-field-radius: var(--size-0);
+  --he-field-border-color: var(--outline);
+  --he-field-background: transparent;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "prefix input suffix";
+  
   box-sizing: border-box;
   padding: var(--size-1) var(--size-2);
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border: none;
-  background-color: transparent;
-  display: inline-flex;
+  border-radius: var(--he-field-radius);
+  background-color: var(--he-field-background);
   border: none;
   
-  &.round {
-    border-radius: var(--size-4);
-    &:not(.outline) {
-      border: none;
-    }
+
+  &:hover {
+    @include hue.hover(var(--he-field-background), var(--text));
   }
-  &.outline {
-    border: solid 1px var(--outline);
-    &:not(.round) {
-      border-radius: var(--size-0);
-    }
-    &:hover {
-      background-color: var(--surface);
-    }
-    &:focus-visible {
-      outline: none;
-      border-color: var(--primary);
-      background-color: var(--surface-higher);
-    }
+  &:has(:focus-visible), &:has(:active) {
+    --he-field-border-color: var(--color, var(--primary));
+    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-field-background));
   }
-  &.fill {
-    background-color: var(--surface);
-    &:hover {
-      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--surface));
-    }
-    &:focus-visible {
-      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--surface));
-    }
-  }
-  &.underline {
+  &:focus-visible {
     outline: none;
-    border-bottom: solid 2px var(--outline);
-    &:has(:focus-visible) {
-      border-bottom-color: var(--primary);
-    }
   }
 
+  &.underline {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: solid 2px var(--he-field-border-color);
+  }
+  &.flat {
+    --he-field-radius: 0;
+  }
+  &.round {
+    --he-field-radius: var(--size-3);
+  }
+  &.outline {
+    border: solid 1px var(--he-field-border-color);
+  }
+  &.fill {
+    --he-field-background: color-mix(in oklch, var(--text) 10%, transparent);
+  }
+  &.round.underline {
+    --he-field-radius: var(--size-2);
+  }
 }
 

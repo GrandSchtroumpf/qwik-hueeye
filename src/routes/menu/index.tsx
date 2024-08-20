@@ -18,7 +18,7 @@ export default component$(() => {
         <MatIcon name="chevron_right" />
       </MenuItemTrigger>
     </Menu>
-    <Menu id={nestedMenuId} class="position-inline">
+    <Menu id={nestedMenuId} data-position="inline">
       <MenuItemBtn>Nested Item 1</MenuItemBtn>
       <MenuItemBtn>Nested Item 2</MenuItemBtn>
     </Menu>

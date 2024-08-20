@@ -1,34 +1,45 @@
-import { $, CorrectedToggleEvent, JSXChildren, PropsOf, Slot, component$, createContextId, sync$, useComputed$, useContext, useContextProvider } from "@builder.io/qwik";
+import { $, CorrectedToggleEvent, JSXChildren, PropsOf, Slot, component$, createContextId, sync$, useComputed$, useContext, useContextProvider, useStyles$ } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
 import { findNode } from "../../utils/jsx";
 import { useWithId } from "../../hooks/useWithId";
 import { WithControl, extractControls, useControl, useControlProvider } from "../control";
 import { comboboxNavigation, filterCombobox } from "../combobox/base";
+import { Field } from "../field/field";
+import * as Popover from "../../popover/popover";
+import style from './autocomplete.scss?inline';
 
 interface AutocompleteCxt {
   multi: boolean;
-  popoverId: string;
   inputId: string;
+  listboxId: string;
 }
 
 const AutocompleteContext = createContextId<AutocompleteCxt>('AutocompleteContext');
 
-interface RootProps extends PropsOf<'div'>, Partial<AutocompleteCxt> {}
+interface RootProps extends PropsOf<'div'>, Partial<AutocompleteCxt>, Popover.RootProps {}
 export const RootImpl = component$<WithControl<string | string[], RootProps>>((props) => {
+  useStyles$(style);
+  const id = useWithId(props.id);
   const { controls, attr } = extractControls(props);
-  const { multi, popoverId, inputId, ...rest } = attr;
+  const { multi, popoverId, open, inputId, listboxId, ...rest } = attr;
   useControlProvider(controls, multi ? [] : '');
   useContextProvider(AutocompleteContext, {
     multi: !!multi,
-    popoverId: useWithId(popoverId),
     inputId: useWithId(inputId),
+    listboxId: useWithId(listboxId),
   });
   const attributes = mergeProps<'div'>(rest, {
-    class: 'he-autocomplete-root'
+    id,
+    class: 'he-autocomplete',
+    style: {
+      ['anchor-name' as any]: `--${id}`,
+    },
   });
-  return <div {...attributes}>
-    <Slot />
-  </div>
+  return <Popover.Root popoverId={popoverId} anchorId={id} open={open}>
+    <Field {...attributes}>
+      <Slot />
+    </Field>
+  </Popover.Root>
 });
 
 export const SelectionList = component$<PropsOf<'ul'>>((props) => {
@@ -52,8 +63,8 @@ export const SelectionItem = component$<PropsOf<'li'>>((props) => {
 });
 
 
-export const Popover = component$<PropsOf<'div'>>((props) => {
-  const { inputId, popoverId } = useContext(AutocompleteContext);
+export const Panel = component$<PropsOf<'div'>>((props) => {
+  const { inputId } = useContext(AutocompleteContext);
   const toggle = $((e: CorrectedToggleEvent, el: HTMLElement) => {
     const input = document.getElementById(inputId) as HTMLInputElement;
     if (!input) return;
@@ -69,26 +80,26 @@ export const Popover = component$<PropsOf<'div'>>((props) => {
   });
 
   const attributes = mergeProps<'div'>(props, {
-    id: popoverId,
-    class: 'he-autocomplete-popover',
-    popover: 'auto',
-    onToggle$: toggle
+    onToggle$: toggle,
+    popover: "manual",
   });
-  return <div {...attributes}>
+  return <Popover.Panel {...attributes}>
     <Slot />
-  </div>;
+  </Popover.Panel>;
 });
 
 
 export const Input = component$<PropsOf<'input'>>((props) => {
-  const { multi, inputId, popoverId } = useContext(AutocompleteContext);
+  const { popoverId } = useContext(Popover.Context);
+  const { multi, inputId, listboxId } = useContext(AutocompleteContext);
   const { control } = useControl<string>();
 
   const onKeyDown = $((e: KeyboardEvent, input: HTMLElement) => {
+    if (e.key === 'Escape') document.getElementById(popoverId)?.hidePopover();
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       document.getElementById(popoverId)?.showPopover();
+      comboboxNavigation(e, input);
     }
-    comboboxNavigation(e, input);
     if (e.key === 'Enter') {
       const activeId = input.getAttribute('aria-activedescendant');
       if (activeId) document.getElementById(activeId)?.click();
@@ -106,7 +117,7 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     const { empty } = await filterCombobox(e, input);
     const popover = document.getElementById(popoverId)!;
     empty ? popover.hidePopover() : popover.showPopover();
-  })
+  });
 
 
   const blur = $(() => {
@@ -121,19 +132,21 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     onKeyDown$: [preventKeydown, onKeyDown],
     autocomplete: 'off',
     'aria-autocomplete': 'list',
-    'aria-controls': popoverId
+    'aria-haspopup': 'listbox',
+    'aria-controls': listboxId
   });
   if (!multi) attributes.value = control.value;
   return <input {...attributes} />
 })
 
 export const Listbox = component$<PropsOf<'ul'>>((props) => {
-  const { multi } = useContext(AutocompleteContext);
+  const { multi, listboxId } = useContext(AutocompleteContext);
   const attributes = mergeProps<'ul'>(props, {
+    id: listboxId,
     class: 'he-autocomplete-listbox',
     role: 'listbox',
     "aria-multiselectable": multi,
-  })
+  });
   return <ul {...attributes}>
     <Slot />
   </ul>
@@ -160,6 +173,7 @@ const toggleItem = $(function<T>(list: T[], item: T) {
   }
 })
 export const Option = component$<OptionProps>((props) => {
+  const id = useWithId(props.id);
   const { value, ...rest } = props;
   const { multi } = useContext(AutocompleteContext);
   const { control, change } = useControl();
@@ -179,11 +193,12 @@ export const Option = component$<OptionProps>((props) => {
     }
   });
   const attributes = mergeProps<'li'>(rest, {
+    id,
     class: 'he-autocomplete-option',
     role: 'option',
+    onClick$: select,
     'aria-selected': !multi && selected.value,
     'aria-checked': multi && selected.value,
-    onClick$: select,
     'preventdefault:mousedown': true,
   });
   return <li {...attributes}>
@@ -196,7 +211,8 @@ type RootFnProps = Omit<RootProps & { children: JSXChildren }, 'popoverId' | 'in
 export const Root = (props: WithControl<string | string[], RootFnProps>) => {
   const { children, ...baseRootProps } = props;
   const inputId = findNode(children, Input)?.props.id;
-  const popoverId = findNode(children, Popover)?.props.id;
-  const rootProps = { ...baseRootProps, inputId, popoverId };
+  const popoverId = findNode(children, Panel)?.props.id;
+  const listboxId = findNode(children, Listbox)?.props.id;
+  const rootProps = { ...baseRootProps, inputId, popoverId, listboxId };
   return <RootImpl {...rootProps}>{children}</RootImpl>;
 }

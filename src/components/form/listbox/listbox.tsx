@@ -17,7 +17,7 @@ export const flipListbox = $((listbox: HTMLElement) => {
   for (const option of listbox.querySelectorAll('[role="option"]:not([hidden])')) {
     items[option.id] = option.getBoundingClientRect().top;
   }
-  const run = () => {
+  const run = async () => {
     const options = listbox.querySelectorAll('[role="option"]:not([hidden])');
     if (options.length === Object.keys(items).length) return requestAnimationFrame(run);
     
@@ -37,10 +37,13 @@ export const flipListbox = $((listbox: HTMLElement) => {
       }
     }
     if (height === newHeight) return;
-    listbox.animate([
+    const animate = listbox.animate([
       { height: `${height}px` },
       { height: `${newHeight}px` }
     ], { duration: 100 });
+    listbox.style.setProperty('overflow', 'hidden');
+    await animate.finished;
+    listbox.style.removeProperty('overflow');
   }
   requestAnimationFrame(run);
 });
