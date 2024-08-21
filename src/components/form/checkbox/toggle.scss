@@ -1,5 +1,5 @@
 @use '../../list/index' as list;
-@use '../../hue/hue' as hue;
+@use '../../hue/utils' as hue;
 
 .he-toggle-list {
   --he-toggle-background: transparent;

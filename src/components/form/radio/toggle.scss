@@ -1,5 +1,5 @@
 @use '../../list/index' as list;
-@use '../../hue/hue' as hue;
+@use '../../hue/utils' as hue;
 
 .he-toggle-group {
   overflow: auto;

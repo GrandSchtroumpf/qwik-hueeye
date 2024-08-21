@@ -1,33 +1,4 @@
-@mixin primary {
-  --primary: oklch(var(--color-lightness) var(--color-chroma) var(--primary-hue));
-  --on-primary: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--primary-hue));
-}
-@mixin secondary {
-  --secondary: oklch(var(--color-lightness) var(--color-chroma) var(--secondary-hue));
-  --on-secondary: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--secondary-hue));
-}
-@mixin warn {
-  --warn: oklch(var(--color-lightness) var(--color-chroma) var(--warn-hue));
-  --on-warn: oklch(var(--on-color-lightness) var(--on-color-chroma) var(--warn-hue));
-}
-
-@mixin surface($lightness) {
-  background-color: oklch($lightness var(--chroma) var(--hue));
-}
-@mixin hover($background, $on-background) {
-  background-color: color-mix(
-    in oklch shorter hue,
-    $on-background var(--alpha-hover),
-    $background
-  );
-}
-@mixin focus($background, $on-background) {
-  background-color: color-mix(
-    in oklch shorter hue,
-    $on-background var(--alpha-focus),
-    $background
-  );
-}
+@use './utils.scss' as hue;
 
 @layer {
   :root {
@@ -202,30 +173,30 @@
     }
   }
   body {
-    @include primary;
-    @include secondary;
-    @include warn;
+    @include hue.primary;
+    @include hue.secondary;
+    @include hue.warn;
   }
   .analog {
     --primary-hue: var(--hue);
     --secondary-hue: calc(var(--hue) - 45);
     --tertiary-hue: calc(var(--hue) + 45);
-    @include primary;
-    @include secondary;
+    @include hue.primary;
+    @include hue.secondary;
   }
   .triad {
     --primary-hue: var(--hue);
     --secondary-hue: calc(var(--hue) - 120);
     --tertiary-hue: calc(var(--hue) + 120);
-    @include primary;
-    @include secondary;
+    @include hue.primary;
+    @include hue.secondary;
   }
   .complementary {
     --primary-hue: calc(var(--hue) + 180);
     --secondary-hue: calc(var(--hue) - 30);
     --tertiary-hue: calc(var(--hue) + 30);
-    @include primary;
-    @include secondary;
+    @include hue.primary;
+    @include hue.secondary;
   }
   
   /****************/
