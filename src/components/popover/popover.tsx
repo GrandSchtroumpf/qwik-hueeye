@@ -1,9 +1,10 @@
 import type { CorrectedToggleEvent, JSXChildren, PropsOf, QRL, Signal } from "@builder.io/qwik";
-import { createContextId, useContext, useContextProvider } from "@builder.io/qwik";
+import { createContextId, useContext, useContextProvider, useStyles$ } from "@builder.io/qwik";
 import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
 import { mergeProps } from "../utils/attributes";
 import { useWithId } from "../hooks/useWithId";
 import { findNode } from "../utils/jsx";
+import style from './popover.scss?inline';
 
 
 export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
@@ -130,6 +131,7 @@ export const usePopoverProvider = (props: Props) => {
 
 export type RootProps = Partial<ContextProps>;
 export const RootImpl = component$<RootProps>((props) => {
+  useStyles$(style);
   const popoverId = useWithId(props.popoverId);
   const anchorId = useWithId(props.anchorId);
   const baseOpen = useSignal(false);
