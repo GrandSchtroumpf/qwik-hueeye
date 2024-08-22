@@ -1,9 +1,19 @@
-import { PrefetchGraph, PrefetchServiceWorker, component$ } from '@builder.io/qwik';
+import {
+  PrefetchGraph,
+  PrefetchServiceWorker,
+  component$,
+} from "@builder.io/qwik";
 import { HueEyeProvider } from "./components/hue/hue";
-import { IconConfig } from './components/icons/useIcon';
-import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
+import { IconConfig } from "./components/icons/useIcon";
+import {
+  QwikCityProvider,
+  RouterOutlet,
+  useDocumentHead,
+  useLocation,
+} from "@builder.io/qwik-city";
 
-import './root.scss';
+import "./root.scss";
+import { HueEyeSpeculativeRulesProvider } from "./components/hue/speculative-rules-provider";
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -14,7 +24,7 @@ export const RouterHead = component$(() => {
 
   return (
     <>
-      <title>{head.title ?? 'Qwik Hueeye Playground'}</title>
+      <title>{head.title ?? "Qwik Hueeye Playground"}</title>
       <link rel="canonical" href={loc.url.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -30,9 +40,13 @@ export const RouterHead = component$(() => {
       {head.styles.map((s) => (
         <style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
       ))}
-    
+
       {head.scripts.map((s) => (
-        <scripts key={s.key} {...s.props} dangerouslySetInnerHTML={s.script}></scripts>
+        <scripts
+          key={s.key}
+          {...s.props}
+          dangerouslySetInnerHTML={s.script}
+        ></scripts>
       ))}
     </>
   );
@@ -40,9 +54,9 @@ export const RouterHead = component$(() => {
 
 export default () => {
   const iconConfig: IconConfig = {
-    baseUrl: '/lib/icons/material',
+    baseUrl: "/lib/icons/material",
     defaultParams: { fill: false, weight: 100 },
-  }
+  };
 
   return (
     <QwikCityProvider>
@@ -52,9 +66,11 @@ export default () => {
       </head>
       <body class="">
         <HueEyeProvider icon={iconConfig} storage>
-          <RouterOutlet />
-          <PrefetchServiceWorker />
-          <PrefetchGraph />
+          <HueEyeSpeculativeRulesProvider>
+            <RouterOutlet />
+            <PrefetchServiceWorker />
+            <PrefetchGraph />
+          </HueEyeSpeculativeRulesProvider>
         </HueEyeProvider>
       </body>
     </QwikCityProvider>
