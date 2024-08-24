@@ -1,5 +1,5 @@
 import { component$, Slot, useSignal, useStyles$ } from "@builder.io/qwik";
-import { AnchorItem, Form, MatIcon, Slider, useHueEye } from "qwik-hueeye-lib";
+import { Form, LinkItem, MatIcon, Slider, useHueEye } from "qwik-hueeye-lib";
 import { NavList } from "qwik-hueeye-lib";
 import { SvgGradient } from "qwik-hueeye-lib";
 import { Toaster, useToasterProvider } from "qwik-hueeye-lib";
@@ -17,28 +17,28 @@ export default component$(() => {
         <MatIcon name="close" weight="500" />
       </button>
       <NavList aria-label="primary" vertical>
-        <AnchorItem href="/">Theme</AnchorItem>
-        <AnchorItem href="/form">Form</AnchorItem>
-        <AnchorItem href="/search-form">Search Form</AnchorItem>
-        <AnchorItem href="/autocomplete">Autocomplete</AnchorItem>
-        <AnchorItem href="/input">Input</AnchorItem>
-        <AnchorItem href="/select">Select</AnchorItem>
-        <AnchorItem href="/combobox">Combobox</AnchorItem>
-        <AnchorItem href="/checkbox">Checkbox</AnchorItem>
-        <AnchorItem href="/radio">Radio</AnchorItem>
-        <AnchorItem href="/switch">Switch</AnchorItem>
-        <AnchorItem href="/toggle">Toggle</AnchorItem>
-        <AnchorItem href="/slider">Slider</AnchorItem>
-        <AnchorItem href="/accordion">Accordion</AnchorItem>
-        <AnchorItem href="/menu">Menu</AnchorItem>
-        <AnchorItem href="/tabs">Tabs</AnchorItem>
-        <AnchorItem href="/button">Button</AnchorItem>
-        <AnchorItem href="/dialog">Dialog</AnchorItem>
-        <AnchorItem href="/icons">Icons</AnchorItem>
-        <AnchorItem href="/tooltip">Tooltip</AnchorItem>
-        <AnchorItem href="/toaster">Toaster</AnchorItem>
-        <AnchorItem href="/gridlist">Grid List</AnchorItem>
-        <AnchorItem href="/listbox">Listbox</AnchorItem>
+        <LinkItem href="/">Theme</LinkItem>
+        <LinkItem href="/form">Form</LinkItem>
+        <LinkItem href="/search-form">Search Form</LinkItem>
+        <LinkItem href="/autocomplete">Autocomplete</LinkItem>
+        <LinkItem href="/input">Input</LinkItem>
+        <LinkItem href="/select">Select</LinkItem>
+        <LinkItem href="/combobox">Combobox</LinkItem>
+        <LinkItem href="/checkbox">Checkbox</LinkItem>
+        <LinkItem href="/radio">Radio</LinkItem>
+        <LinkItem href="/switch">Switch</LinkItem>
+        <LinkItem href="/toggle">Toggle</LinkItem>
+        <LinkItem href="/slider">Slider</LinkItem>
+        <LinkItem href="/accordion">Accordion</LinkItem>
+        <LinkItem href="/menu">Menu</LinkItem>
+        <LinkItem href="/tabs">Tabs</LinkItem>
+        <LinkItem href="/button">Button</LinkItem>
+        <LinkItem href="/dialog">Dialog</LinkItem>
+        <LinkItem href="/icons">Icons</LinkItem>
+        <LinkItem href="/tooltip">Tooltip</LinkItem>
+        <LinkItem href="/toaster">Toaster</LinkItem>
+        <LinkItem href="/gridlist">Grid List</LinkItem>
+        <LinkItem href="/listbox">Listbox</LinkItem>
       </NavList>
     </div>
     <header class="page-header">
