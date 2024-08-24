@@ -13,7 +13,7 @@ export const LinkItem = component$((props: LinkProps) => {
     class: "he-item he-item-link",
     'aria-current': isSamePathname(url.pathname, href) ? 'page' : null as any
   });
-  return <Link {...attributes}>
+  return <Link prefetch="js" {...attributes}>
     <Slot/>
   </Link>
 });
