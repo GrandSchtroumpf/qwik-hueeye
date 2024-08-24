@@ -1,5 +1,6 @@
 import { component$, createContextId, useContext, useContextProvider, useStore } from "@builder.io/qwik";
 import { Script } from "../script/script";
+import { isDev } from "@builder.io/qwik/build";
 
 type RuleType = 'prefetch' | 'prerender';
 type RuleSource = 'list' | 'document';
@@ -94,6 +95,7 @@ export const useSpeculativeRules = () => useContext(SpeculativeRuleContext);
 
 export const HueEyeSpeculativeRules = component$(() => {
   const state = useSpeculativeRules();
+  if (isDev) return <></>;
   const rules: SpeculativeRules = {};
   const map: SpeculativeRuleMap = {
     prerender: { list: {}, document: {} },

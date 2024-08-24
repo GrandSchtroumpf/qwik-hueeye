@@ -1,9 +1,10 @@
-import { PrefetchGraph, PrefetchServiceWorker, component$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
 import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
 
 import './root.scss';
+import { Offline } from './components/hue/offline';
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -53,9 +54,8 @@ export default () => {
       <body class="">
         <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
-          <PrefetchServiceWorker />
-          <PrefetchGraph />
         </HueEyeProvider>
+        <Offline />
       </body>
     </QwikCityProvider>
   );

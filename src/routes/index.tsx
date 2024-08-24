@@ -1,11 +1,13 @@
 import { component$, event$, useSignal, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from './index.scss?inline';
+import { useOffline } from "../components/hue/offline";
 
 // type Movie = typeof MOVIES[number];
 
 export default component$(() => {
   useStyles$(styles);
+  const { preload } = useOffline();
   const localTheme = useSignal<HTMLElement>();
   const random = event$(() => {
     const rand = Math.floor(Math.random() * 360);
@@ -45,6 +47,11 @@ export default component$(() => {
       <code class="block">
         background-color: color-mix(in oklch)
       </code>
+    </article>
+
+    <article>
+      <h3>Offline</h3>
+      <button class="btn fill" onClick$={preload}>Download the app</button>
     </article>
   </section>;
 });
