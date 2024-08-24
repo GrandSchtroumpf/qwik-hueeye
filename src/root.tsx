@@ -4,7 +4,6 @@ import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
 
 import './root.scss';
-import { Offline } from './components/hue/offline';
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -55,7 +54,6 @@ export default () => {
         <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
         </HueEyeProvider>
-        <Offline />
       </body>
     </QwikCityProvider>
   );
