@@ -19,6 +19,7 @@ export default function (opts: RenderToStreamOptions) {
     manifest,
     prefetchStrategy: {
       implementation: {
+        linkInsert: 'html-append',
         linkRel: 'modulepreload'
       },
     },
