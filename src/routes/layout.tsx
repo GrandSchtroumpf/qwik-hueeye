@@ -3,12 +3,14 @@ import { Form, LinkItem, MatIcon, Slider, useHueEye } from "qwik-hueeye-lib";
 import { NavList } from "qwik-hueeye-lib";
 import { SvgGradient } from "qwik-hueeye-lib";
 import { Toaster, useToasterProvider } from "qwik-hueeye-lib";
+import { useModulePreloadCache } from "../root";
 import styles from "./layout.scss?inline";
 
 
 export default component$(() => {
   useStyles$(styles);
   useToasterProvider();
+  useModulePreloadCache();
   const state = useHueEye();
   const open = useSignal(false);
   return <>

@@ -1,8 +1,8 @@
-import { PrefetchGraph, PrefetchServiceWorker, component$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
 import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
-
+import { ModulePreload } from './components/ModulePreload';
 import './root.scss';
 
 /**
@@ -43,18 +43,16 @@ export default () => {
     baseUrl: '/lib/icons/material',
     defaultParams: { fill: false, weight: 100 },
   }
-
   return (
     <QwikCityProvider>
       <head>
         <meta charset="utf-8" />
         <RouterHead />
+        <ModulePreload />
       </head>
       <body class="">
         <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
-          <PrefetchServiceWorker />
-          <PrefetchGraph />
         </HueEyeProvider>
       </body>
     </QwikCityProvider>
