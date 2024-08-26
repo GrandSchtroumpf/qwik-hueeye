@@ -17,17 +17,20 @@ import Root from './root';
 export default function (opts: RenderToStreamOptions) {
   return renderToStream(<Root />, {
     manifest,
-    prefetchStrategy: {
-      implementation: {
-        linkInsert: 'html-append',
-        linkRel: 'modulepreload'
-      }
-    },
     ...opts,
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
       lang: 'en-us',
       ...opts.containerAttributes,
     },
+    prefetchStrategy: {
+      implementation: {
+        linkInsert: 'html-append',
+        linkRel: 'modulepreload'
+      }
+    },
+    qwikPrefetchServiceWorker: {
+      include: false,
+    }
   });
 }
