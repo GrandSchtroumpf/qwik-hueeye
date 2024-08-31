@@ -24,9 +24,11 @@ export default function (opts: RenderToStreamOptions) {
       ...opts.containerAttributes,
     },
     prefetchStrategy: {
+      symbolsToPrefetch: 'auto',
       implementation: {
         linkInsert: 'html-append',
-        linkRel: 'modulepreload'
+        linkRel: 'modulepreload',
+        linkFetchPriority: 'low'
       }
     },
     qwikPrefetchServiceWorker: {

@@ -1,12 +1,11 @@
-import { component$, sync$, useOnWindow } from "@builder.io/qwik";
+import { sync$, useOnDocument, useOnWindow } from "@builder.io/qwik";
 
-export const ModulePreload = component$(() => {
+export const useModulePreload = () => {
+  // Initialize SW & cache
   useOnWindow(
     "DOMContentLoaded",
     sync$(async () => {
-      const base = document.documentElement.getAttribute("q:base") ?? "/";
       const isDev = document.documentElement.getAttribute('q:render') === "ssr-dev";
-      // Initialize SW & cache
       if ("serviceWorker" in navigator && !isDev) {
         await navigator.serviceWorker.register("/sw.js");
         await navigator.serviceWorker.ready;
@@ -17,40 +16,32 @@ export const ModulePreload = component$(() => {
         );
         controller?.postMessage({ type: "init", value: hrefs });
       }
-
-      const getHref = (bundle: string) => {
-        if (isDev) return bundle;
-        return `${base}${bundle}`.replace(/\/\./g, "");
-      }
-
-      // Listen on prefetch event
-      document.addEventListener("qprefetch", (event) => {
-        const { bundles } = (event as CustomEvent).detail;
-        if (!Array.isArray(bundles)) return;
-        for (const bundle of bundles) {
-          if ((window as any).supportsModulePreload) {
-            const link = document.createElement("link");
-            link.rel = "modulepreload";
-            link.href = getHref(bundle);
-            // TODO: use fetchpriority to priorize some bundles if needed
-            document.body.appendChild(link);
-          } else {
-            // triggers the sw
-            fetch(getHref(bundle));
-          }
-        }
-      });
     })
   );
 
-  const support = sync$(() => {
-    (window as any).supportsModulePreload = true;
-  })
-
-  return <link
-    rel="modulepreload"
-    href="/modulepreload-support.js"
-    fetchPriority="high"
-    onLoad$={support}
-  />
-})
+  // Listen on prefetch event
+  useOnDocument('qprefetch', sync$((event: CustomEvent<{ bundles: string[] }>) => {
+    const { bundles } = (event as CustomEvent).detail;
+    if (!Array.isArray(bundles)) return;
+    const base = document.documentElement.getAttribute("q:base") ?? "/";
+    const isDev = document.documentElement.getAttribute('q:render') === "ssr-dev";
+    const getHref = (bundle: string) => {
+      if (isDev) return bundle;
+      return `${base}${bundle}`.replace(/\/\./g, "");
+    }
+    const supportsModulePreload = document.querySelector('link')?.relList.supports('modulepreload');
+    for (const bundle of bundles) {
+      if (supportsModulePreload) {
+        const link = document.createElement("link");
+        link.rel = 'modulepreload';
+        link.fetchPriority = 'low';
+        link.href = getHref(bundle);
+        // link.fetchPriority = "low";
+        document.head.appendChild(link);
+      } else {
+        // triggers the sw
+        fetch(getHref(bundle));
+      }
+    }
+  }));
+};
