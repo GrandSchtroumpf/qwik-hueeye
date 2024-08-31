@@ -1,19 +1,14 @@
 const main = async () => {
   let cache;
 
-  const fetchResponse = async (event) => {
-    const req = event.request;
+  const fetchResponse = async (req) => {
     // Check cache
     const cachedResponse = await caches.match(req);
     if (cachedResponse) return cachedResponse;
 
-    // Check preload response
-    const response = await event.preloadResponse;
-    if (response) return response;
-
     // Cache and return reponse
     return fetch(req).then((res) => {
-      if (req.url.includes("q-")) {
+      if (req.url.includes("q-") && req.url.endsWith('.js')) {
         cache.put(req, res.clone());
       }
       return res;
@@ -21,18 +16,20 @@ const main = async () => {
   }
 
   self.addEventListener("activate", async (event) => {
-    event.waitUntil(self.registration.navigationPreload?.enable());
+    // event.waitUntil(self.registration.navigationPreload?.enable());
     cache ||= await caches.open("QwikModulePreload");
   });
   self.addEventListener("message", async (message) => {
     cache ||= await caches.open("QwikModulePreload");
     if (message.data.type === "init") {
-      const bundles = Array.from(new Set(message.data.value));
-      cache.addAll(bundles);
+      new Set(message.data.value).forEach(url => {
+        // force-cache to use disk cache if modulepreload was already executed
+        return fetchResponse(new Request(url, { cache: 'force-cache' }));
+      });
     }
   });
   self.addEventListener("fetch", async (event) => {
-    event.respondWith(fetchResponse(event));
+    event.respondWith(fetchResponse(event.request));
   });
 };
 main();

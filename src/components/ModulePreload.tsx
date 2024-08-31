@@ -9,11 +9,9 @@ export const useModulePreload = () => {
       if ("serviceWorker" in navigator && !isDev) {
         await navigator.serviceWorker.register("/sw.js");
         await navigator.serviceWorker.ready;
-        const modules = document.querySelectorAll('link[rel="modulepreload"]');
+        const modules = document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"]');
         const controller = navigator.serviceWorker.controller;
-        const hrefs = Array.from(modules).map(
-          (link) => (link as HTMLLinkElement).href
-        );
+        const hrefs = Array.from(modules).map((link) => link.href);
         controller?.postMessage({ type: "init", value: hrefs });
       }
     })
@@ -36,7 +34,6 @@ export const useModulePreload = () => {
         link.rel = 'modulepreload';
         link.fetchPriority = 'low';
         link.href = getHref(bundle);
-        // link.fetchPriority = "low";
         document.head.appendChild(link);
       } else {
         // triggers the sw
