@@ -16,12 +16,12 @@ const main = async () => {
   }
 
   self.addEventListener("activate", async (event) => {
+    event.waitUntil(caches.open("QwikModulePreload"));
     // event.waitUntil(self.registration.navigationPreload?.enable());
-    cache ||= await caches.open("QwikModulePreload");
   });
   self.addEventListener("message", async (message) => {
-    cache ||= await caches.open("QwikModulePreload");
     if (message.data.type === "init") {
+      cache ||= await caches.open("QwikModulePreload");
       new Set(message.data.value).forEach(url => {
         // force-cache to use disk cache if modulepreload was already executed
         return fetchResponse(new Request(url, { cache: 'force-cache' }));
@@ -29,6 +29,7 @@ const main = async () => {
     }
   });
   self.addEventListener("fetch", async (event) => {
+    cache ||= await caches.open("QwikModulePreload");
     event.respondWith(fetchResponse(event.request));
   });
 };

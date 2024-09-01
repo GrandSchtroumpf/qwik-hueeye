@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
 import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
-import { useModulePreload } from './components/ModulePreload';
+import { useModulePreload } from './components/useModulePreload';
 import './root.scss';
 
 /**
