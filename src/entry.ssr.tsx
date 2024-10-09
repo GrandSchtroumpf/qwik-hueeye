@@ -28,7 +28,6 @@ export default function (opts: RenderToStreamOptions) {
       implementation: {
         linkInsert: 'html-append',
         linkRel: 'modulepreload',
-        linkFetchPriority: 'low'
       }
     },
     qwikPrefetchServiceWorker: {

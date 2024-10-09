@@ -9,14 +9,14 @@ importers:
   .:
     devDependencies:
       '@builder.io/qwik':
-        specifier: https://pkg.pr.new/@builder.io/qwik@4b936ac
-        version: https://pkg.pr.new/@builder.io/qwik@4b936ac(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
+        specifier: 1.9.1
+        version: 1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
       '@builder.io/qwik-city':
-        specifier: https://pkg.pr.new/@builder.io/qwik-city@6824
-        version: https://pkg.pr.new/@builder.io/qwik-city@6824(@types/node@20.11.30)(lightningcss@1.26.0)(rollup@4.13.0)(sass@1.77.8)
+        specifier: 1.9.1
+        version: 1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(rollup@4.13.0)(sass@1.77.8)(typescript@5.5.4)
       '@builder.io/qwik-worker':
         specifier: ^0.0.1
-        version: 0.0.1(@builder.io/qwik@https://pkg.pr.new/@builder.io/qwik@4b936ac(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))
+        version: 0.0.1(@builder.io/qwik@1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))
       '@oddbird/popover-polyfill':
         specifier: ^0.4.4
         version: 0.4.4
@@ -36,8 +36,8 @@ importers:
         specifier: 8.57.0
         version: 8.57.0
       eslint-plugin-qwik:
-        specifier: https://pkg.pr.new/eslint-plugin-qwik@6824
-        version: https://pkg.pr.new/eslint-plugin-qwik@6824(eslint@8.57.0)
+        specifier: 1.9.1
+        version: 1.9.1(eslint@8.57.0)
       lightningcss:
         specifier: 1.26.0
         version: 1.26.0
@@ -103,21 +103,18 @@ packages:
     resolution: {integrity: sha512-+j7a5c253RfKh8iABBhywc8NSfP5LURe7Uh4qpsh6jc+aLJguvmIUBdjSdEMQv2bENrCR5MfRdjGo7vzS/ob7w==}
     engines: {node: '>=6.9.0'}
 
-  '@builder.io/qwik-city@https://pkg.pr.new/@builder.io/qwik-city@6824':
-    resolution: {tarball: https://pkg.pr.new/@builder.io/qwik-city@6824}
-    version: 1.8.0
+  '@builder.io/qwik-city@1.9.1':
+    resolution: {integrity: sha512-GEM4Ybjg9edSWzAtp38mAyb2lIeuQYlcpyrDJ9W/KhXPoIQ7CAjhE2w1XaYXrtfg4iJOgCkiCXjL3JxobxNLxw==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
 
   '@builder.io/qwik-worker@0.0.1':
     resolution: {integrity: sha512-DJy0F1sHA3cAYyAGXKEbkBR/PvYJPFQHPU8E3HVag7o/yMcL1r7PCXMZZs+2Kiga+szXiI3ZczElLji+RG8JnA==}
-    version: 0.0.1
     engines: {node: '>=16'}
     peerDependencies:
       '@builder.io/qwik': '>=0.107.0'
 
-  '@builder.io/qwik@https://pkg.pr.new/@builder.io/qwik@4b936ac':
-    resolution: {tarball: https://pkg.pr.new/@builder.io/qwik@4b936ac}
-    version: 1.8.0
+  '@builder.io/qwik@1.9.1':
+    resolution: {integrity: sha512-7Dqty4625BJFDcPSy52M2ZS/CpI9yimMFjFyuhyOLjS8BbHVBFtiGIQ0nL133S447K+oU5T2QZzdvjBKsSPlsg==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
 
@@ -1260,9 +1257,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-qwik@https://pkg.pr.new/eslint-plugin-qwik@6824:
-    resolution: {tarball: https://pkg.pr.new/eslint-plugin-qwik@6824}
-    version: 1.8.0
+  eslint-plugin-qwik@1.9.1:
+    resolution: {integrity: sha512-H8WKYfFsubQh4rcAGYuZh6gX1pReHZGBwCi3l4bJ+7Oa1XqqBr6E8O70+Jv9RoXg9dH99zfWSdWjap9/N/4Pqw==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       eslint: ^8.57.0
@@ -3059,6 +3055,14 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  valibot@0.42.1:
+    resolution: {integrity: sha512-3keXV29Ar5b//Hqi4MbSdV7lfVp6zuYLZuA9V1PvQUsXqogr+u5lvLPLk3A4f74VUXDnf/JfWMN6sB+koJ/FFw==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
@@ -3251,13 +3255,14 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@builder.io/qwik-city@https://pkg.pr.new/@builder.io/qwik-city@6824(@types/node@20.11.30)(lightningcss@1.26.0)(rollup@4.13.0)(sass@1.77.8)':
+  '@builder.io/qwik-city@1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(rollup@4.13.0)(sass@1.77.8)(typescript@5.5.4)':
     dependencies:
       '@mdx-js/mdx': 3.0.1
       '@types/mdx': 2.0.13
       source-map: 0.7.4
       svgo: 3.3.2
       undici: 6.19.0
+      valibot: 0.42.1(typescript@5.5.4)
       vfile: 6.0.1
       vite: 5.3.5(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
       vite-imagetools: 7.0.4(rollup@4.13.0)
@@ -3272,12 +3277,13 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+      - typescript
 
-  '@builder.io/qwik-worker@0.0.1(@builder.io/qwik@https://pkg.pr.new/@builder.io/qwik@4b936ac(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))':
+  '@builder.io/qwik-worker@0.0.1(@builder.io/qwik@1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8))':
     dependencies:
-      '@builder.io/qwik': https://pkg.pr.new/@builder.io/qwik@4b936ac(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
+      '@builder.io/qwik': 1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
 
-  '@builder.io/qwik@https://pkg.pr.new/@builder.io/qwik@4b936ac(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)':
+  '@builder.io/qwik@1.9.1(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)':
     dependencies:
       csstype: 3.1.3
       vite: 5.3.5(@types/node@20.11.30)(lightningcss@1.26.0)(sass@1.77.8)
@@ -4453,7 +4459,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-qwik@https://pkg.pr.new/eslint-plugin-qwik@6824(eslint@8.57.0):
+  eslint-plugin-qwik@1.9.1(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       jsx-ast-utils: 3.3.5
@@ -6584,6 +6590,10 @@ snapshots:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  valibot@0.42.1(typescript@5.5.4):
+    optionalDependencies:
+      typescript: 5.5.4
 
   validate-npm-package-license@3.0.4:
     dependencies:
