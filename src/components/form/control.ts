@@ -27,11 +27,11 @@ const copyStore = <T>(store: T): T => {
 
 // FORM
 
-export interface FormControlProps<T extends ControlGroup> {
+export interface FormControlProps<T extends object> {
   value?: T;
   'bind:value'?: T;
 }
-export function useFormProvider<T extends ControlGroup>(props: FormControlProps<T>) {
+export function useFormProvider<T extends object>(props: FormControlProps<T>) {
   const { 'bind:value': bindValue, value: initial } = props;
   const store = useStore(initial ?? {} as T, { deep: true });
   const form = bindValue ?? store;
@@ -74,7 +74,7 @@ function isProxy<T>(parent: T) {
 
 
 type GroupControlCtx<T extends Serializable> = {
-  control: ControlGroup<T>;
+  control: ControlGroup;
   change: (value: Partial<T>) => void;
   name?: string | number;
 };
@@ -143,15 +143,19 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
       bindValue.push(item);
     } else if (isProxy(parent) && exists(name)) {
       parent[name] ||= [];
-      parent[name].push(item);
+      (parent[name] as T[])!.push(item);
     } else {
       store.push(item);
     }
   });
   const removeAt = $(async (index: number) => {
-    if (bindValue) bindValue.splice(index, 1);
-    else if (isProxy(parent) && exists(name)) parent[name].splice(index, 1);
-    else store.splice(index, 1);
+    if (bindValue) {
+      bindValue.splice(index, 1);
+    } else if (isProxy(parent) && exists(name)) {
+      (parent[name] as T[])!.splice(index, 1);
+    } else {
+      store.splice(index, 1);
+    }
   });
   const remove = $((item: T) => {
     const index = list.value.indexOf(item);

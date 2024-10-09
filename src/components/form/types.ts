@@ -10,7 +10,8 @@ export type Serializable =
   | Set<Serializable>
   | undefined;
 
-export type ControlGroup<T extends Serializable = Serializable> = Record<GroupKeys, T>;
+export type ControlGroup = Record<GroupKeys, Serializable>;
+export type ControlRecord<T extends Serializable = Serializable> = Record<GroupKeys, T>;
 
 export type OmitControlsAttributes = 'name' | 'children' | 'value' | 'bind:value' | 'bind:checked';
 export type InputAttributes = Omit<PropsOf<'input'>, OmitControlsAttributes>;
