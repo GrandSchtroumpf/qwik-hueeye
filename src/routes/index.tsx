@@ -30,7 +30,7 @@ export default component$(() => {
         The trick is to use the <a href="https://oklch.com" target="_blank">oklch</a> space (lch would work too), and split into three variables (lightness, hue, chroma).
       </p>
       <footer>
-        <button class="btn-fill primary" onClick$={random}>Shuffle Local Theme</button>
+        <button class="he-btn-fill primary" onClick$={random}>Shuffle Local Theme</button>
       </footer>
     </article>
 

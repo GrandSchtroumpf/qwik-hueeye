@@ -28,87 +28,87 @@ export default component$(() => {
       </thead>
       <tbody>
         <tr>
-          <th>btn</th>
+          <th>he-btn</th>
           <td>
-            <button class="btn">Basic</button>
+            <button class="he-btn">Basic</button>
           </td>
           <td>
-            <button class="btn primary">Primary</button>
+            <button class="he-btn primary">Primary</button>
           </td>
           <td>
-            <button class="btn secondary">Secondary</button>
+            <button class="he-btn secondary">Secondary</button>
           </td>
           <td>
-            <button class="btn warn">Warn</button>
+            <button class="he-btn warn">Warn</button>
           </td>
           <td>
-            <button class="btn disabled">Diabled</button>
+            <button class="he-btn disabled">Diabled</button>
           </td>
           <td>
-            <button class="btn gradient">Gradient</button>
-          </td>
-        </tr>
-        <tr>
-          <th>btn-fill</th>
-          <td>
-            <button class="btn-fill">Basic</button>
-          </td>
-          <td>
-            <button class="btn-fill primary">Primary</button>
-          </td>
-          <td>
-            <button class="btn-fill secondary">Secondary</button>
-          </td>
-          <td>
-            <button class="btn-fill warn">Warn</button>
-          </td>
-          <td>
-            <button class="btn-fill disabled">Diabled</button>
-          </td>
-          <td>
-            <button class="btn-fill gradient">Gradient</button>
+            <button class="he-btn gradient">Gradient</button>
           </td>
         </tr>
         <tr>
-          <th>btn-outline</th>
+          <th>he-btn-fill</th>
           <td>
-            <button class="btn-outline">Basic</button>
+            <button class="he-btn-fill">Basic</button>
           </td>
           <td>
-            <button class="btn-outline primary">Primary</button>
+            <button class="he-btn-fill primary">Primary</button>
           </td>
           <td>
-            <button class="btn-outline secondary">Secondary</button>
+            <button class="he-btn-fill secondary">Secondary</button>
           </td>
           <td>
-            <button class="btn-outline warn">Warn</button>
+            <button class="he-btn-fill warn">Warn</button>
           </td>
           <td>
-            <button class="btn-outline disabled">Diabled</button>
+            <button class="he-btn-fill disabled">Diabled</button>
           </td>
           <td>
-            <button class="btn-outline gradient">Gradient</button>
+            <button class="he-btn-fill gradient">Gradient</button>
           </td>
         </tr>
         <tr>
-          <th>btn-icon</th>
+          <th>he-btn-outline</th>
           <td>
-            <button class="btn-icon"><Icon/></button>
+            <button class="he-btn-outline">Basic</button>
           </td>
           <td>
-            <button class="btn-icon primary"><Icon/></button>
+            <button class="he-btn-outline primary">Primary</button>
           </td>
           <td>
-            <button class="btn-icon secondary"><Icon/></button>
+            <button class="he-btn-outline secondary">Secondary</button>
           </td>
           <td>
-            <button class="btn-icon warn"><Icon/></button>
+            <button class="he-btn-outline warn">Warn</button>
           </td>
           <td>
-            <button class="btn-icon disabled"><Icon/></button>
+            <button class="he-btn-outline disabled">Diabled</button>
           </td>
           <td>
-            <button class="btn-icon gradient"><Icon/></button>
+            <button class="he-btn-outline gradient">Gradient</button>
+          </td>
+        </tr>
+        <tr>
+          <th>he-btn-icon</th>
+          <td>
+            <button class="he-btn-icon"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn-icon primary"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn-icon secondary"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn-icon warn"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn-icon disabled"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn-icon gradient"><Icon/></button>
           </td>
         </tr>
       </tbody>

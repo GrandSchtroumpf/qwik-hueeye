@@ -358,19 +358,19 @@
   //////////////
   
   
-  a[class*="btn"] {
+  a[class*="he-btn"] {
     text-decoration: none;
     color: inherit;
   }
   
-  .btn, .btn-fill, .btn-outline, .btn-expand {
+  .he-btn, .he-btn-fill, .he-btn-outline, .he-btn-expand {
     display: inline-flex;
     align-items: center;
     gap: var(--size-1);
     box-sizing: border-box;
   }
   
-  .btn, .btn-fill, .btn-icon, .btn-outline, .btn-expand {
+  .he-btn, .he-btn-fill, .he-btn-icon, .he-btn-outline, .he-btn-expand {
     display: flex;
     gap: var(--size-1);
     font-size: 0.9rem;
@@ -400,7 +400,7 @@
   }
 
   // transparent background
-  .btn, .btn-outline, .btn-icon, .btn-expand:not(.fill) {
+  .he-btn, .he-btn-outline, .he-btn-icon, .he-btn-expand:not(.fill) {
     background-color: transparent;
     &:hover {
       // Use on-color with transparency to create a nice effect
@@ -420,7 +420,7 @@
   }
   
   
-  .btn {
+  .he-btn {
     border: none;
     padding: 8px 16px;
     border: none;
@@ -458,7 +458,7 @@
     }
   }
   
-  .btn-outline {
+  .he-btn-outline {
     transition: background-color 0.1s ease-in-out;
     border: var(--border-width, 1px) solid var(--color, var(--outline));
     padding: 8px 16px;
@@ -486,7 +486,7 @@
     }
   }
   
-  .btn-icon {
+  .he-btn-icon {
     border: none;
     line-height: 0;
     padding: 8px;
@@ -497,26 +497,26 @@
     } 
   }
   
-  .btn, .btn-icon, .btn-outline, .btn-fill, .btn-expand {
+  .he-btn, .he-btn-icon, .he-btn-outline, .he-btn-fill, .he-btn-expand {
     svg {
       height: var(--icon-size, 24px);
       width: var(--icon-size, 24px);
       flex-shrink: 0;
     }
   }
-  .btn, .btn-icon, .btn-outline, .btn-expand:not(.fill) {
+  .he-btn, .he-btn-icon, .he-btn-outline, .he-btn-expand:not(.fill) {
     svg {
       fill: var(--color, currentColor);
     }
   }
-  .btn-fill, .btn-expand.fill {
+  .he-btn-fill, .he-btn-expand.fill {
     svg {
       fill: var(--on-color, currentColor);
     }
   }
   
   
-  .btn-expand {
+  .he-btn-expand {
     border: none;
     border-radius: var(--size-1);
     height: 48px;
@@ -566,7 +566,7 @@
   }
 
     
-  .btn-fill {
+  .he-btn-fill {
     border: none;
     padding: 8px 16px;
     background-color: var(--color, var(--surface));

@@ -10,13 +10,13 @@ export default component$(() => {
   return <section id="dialog-page" aria-labelledby="dialog-title">
     <h2 id="dialog-title">Dialogs</h2>
     <div class="buttons">
-      <button class="btn-fill primary" onClick$={() => openModal.value = true}>
+      <button class="he-btn-fill primary" onClick$={() => openModal.value = true}>
         Open Modal
       </button>
-      <button class="btn-fill secondary" onClick$={() => openBottomSheet.value = true}>
+      <button class="he-btn-fill secondary" onClick$={() => openBottomSheet.value = true}>
         Open Bottom Sheet
       </button>
-      <button class="btn-fill gradient" onClick$={() => openSidenav.value = true}>
+      <button class="he-btn-fill gradient" onClick$={() => openSidenav.value = true}>
         Open Sidenav
       </button>
     </div>
@@ -26,7 +26,7 @@ export default component$(() => {
         <p>This is a modal</p>  
       </article>
       <footer class="he-dialog-actions">
-        <button class="btn" onClick$={() => openModal.value = false}>Close</button>
+        <button class="he-btn" onClick$={() => openModal.value = false}>Close</button>
       </footer>
     </Dialog>
     <Dialog class="container" bind:open={openBottomSheet} type="bottom-sheet">
@@ -35,7 +35,7 @@ export default component$(() => {
         <p>This is a bottom sheet</p>  
       </article>
       <footer class="he-dialog-actions">
-        <button class="btn" onClick$={() => openBottomSheet.value = false}>Close</button>
+        <button class="he-btn" onClick$={() => openBottomSheet.value = false}>Close</button>
       </footer>
     </Dialog>
     <Dialog class="container" bind:open={openSidenav} type="sidenav">
@@ -45,7 +45,7 @@ export default component$(() => {
           <p>This is a sidenav</p>  
         </article>
         <footer class="he-dialog-actions">
-          <button class="btn" onClick$={() => openSidenav.value = false}>Close</button>
+          <button class="he-btn" onClick$={() => openSidenav.value = false}>Close</button>
         </footer>
       </section>
     </Dialog>

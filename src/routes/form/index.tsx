@@ -135,8 +135,8 @@ export default component$(() => {
       <CheckItem value="c">Checkbox 3</CheckItem>
     </CheckList>
     <footer class="form-actions">
-      <button class="btn" type="reset">Cancel</button>
-      <button class="btn-fill primary" type="submit">Save</button>
+      <button class="he-btn" type="reset">Cancel</button>
+      <button class="he-btn-fill primary" type="submit">Save</button>
     </footer>
   </Form>;
 });

@@ -47,7 +47,7 @@ export default component$(() => {
       </Form>
       <ActionGrid class="icon-list">
         {icons.value.slice(0, limit.value).map(icon => (
-        <ButtonItem key={icon.name} class="btn vertical" onClick$={() => copy({ name: icon.name })}>
+        <ButtonItem key={icon.name} class="he-btn vertical" onClick$={() => copy({ name: icon.name })}>
           <MatIcon name={icon.name as any} width="48" height="48" weight={weight.value} filled={filled.value} />
           <p>{icon.name}</p>
         </ButtonItem>
