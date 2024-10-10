@@ -91,7 +91,7 @@ export function useGroupControlProvider<T extends ControlGroup>(
   const initial = untrack(() => fromParent<T>(parent, name) ?? value ?? {} as T);
   const store = useStore(copyStore(initial));
   const control = bindValue ?? fromParentStore<T>(parent, name) ?? store;
-
+  
   useTask$(() => {
     if (parent && name) parent[name] ||= initial;
   });
@@ -126,7 +126,8 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   const { name, 'bind:value': bindValue, value } = props;
   const { control: parent } = useGroupControl<T[]>();
   const initial = untrack(() => fromParent<T[]>(parent, name) ?? value ?? [] as T[]);
-  const store = useStore(copyStore(initial));
+  const initStore = useStore(copyStore(initial));
+  const store = fromParent<T[]>(parent, name) ?? initStore;
   const list = useComputed$(() => bindValue ?? fromParentStore<T[]>(parent, name) ?? store);
 
   useTask$(() => {
@@ -143,7 +144,7 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
       bindValue.push(item);
     } else if (isProxy(parent) && exists(name)) {
       parent[name] ||= [];
-      (parent[name] as T[])!.push(item);
+      (parent[name] as T[]).push(item);
     } else {
       store.push(item);
     }
@@ -169,7 +170,7 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
 
   const ctx = { list, add, remove, removeAt, clear, set, name };
   
-  useContextProvider(GroupContext, list);
+  useContextProvider(GroupContext, { control: store, name });
   useContextProvider(ListControlContext, ctx);
   return ctx;
 }
@@ -231,8 +232,8 @@ export function extractControls<V, Attr>(props: WithControlProps<V, Attr>) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { value, 'bind:value': bindValue, name, ...attr } = props;
   const controls: any = {};
-  if (value) controls.value = value;
+  if (exists(value)) controls.value = value;
   if (bindValue) controls['bind:value'] = bindValue;
-  if (name) controls.name = name;
+  if (exists(name)) controls.name = name;
   return { attr, controls } as any;
 }

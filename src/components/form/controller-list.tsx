@@ -34,7 +34,7 @@ export const AddControl = component$(function <T extends Serializable>(props: Ad
   const { add } = useListControl<T>();
   const { item, ...otherProps } = props;
   const attr = mergeProps<'button'>(otherProps, {
-    onClick$: $(() => add(item)),
+    onClick$: $(() => add(structuredClone(item))),
   });
   return <button type="button" {...attr}>
     <Slot />
@@ -44,10 +44,10 @@ interface RemoveControlProps extends PropsOf<'button'> {
   index: number;
 }
 export const RemoveControl = component$(function(props: RemoveControlProps) {
-  const { remove } = useListControl();
+  const { removeAt } = useListControl();
   const { index, ...otherProps } = props;
   const attr = mergeProps<'button'>(otherProps, {
-    onClick$: $(() => remove(index)),
+    onClick$: $(() => removeAt(index)),
   });
   return <button type="button" {...attr}>
     <Slot />

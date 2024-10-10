@@ -1,6 +1,6 @@
 import { component$, event$, useStore, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { Form, Input, Option, RangeEnd, RangeStart, Select } from "qwik-hueeye-lib";
+import { AddControl, Form, GroupController, Input, ListController, MatIcon, Option, RangeEnd, RangeStart, RemoveControl, Select } from "qwik-hueeye-lib";
 import { Range, Slider } from "qwik-hueeye-lib";
 import { FormField, Label } from "qwik-hueeye-lib";
 import { ToggleGroup, Toggle } from "qwik-hueeye-lib";
@@ -40,7 +40,7 @@ export default component$(() => {
     console.log(value);
   });
 
-  const initial = useStore({
+  const control = useStore({
     title: 'Hello World',
     movie: '',
     date: new Date(),
@@ -59,10 +59,12 @@ export default component$(() => {
     },
     radio: 'c',
     checkbox: ['a', 'c'],
-    toggle: 'medium'
+    toggle: 'medium',
+    list: [],
+    listObject: [],
   });
 
-  return <Form id="form-page" bind:value={initial} onFormSubmit$={save}>
+  return <Form id="form-page" bind:value={control} onFormSubmit$={save}>
     <FormField class="overlay">
       <Label>Some Text here</Label>
       <Input name="title" placeholder="Some Text here" class="outline"/>
@@ -134,6 +136,41 @@ export default component$(() => {
       <CheckItem value="b">Checkbox 2</CheckItem>
       <CheckItem value="c">Checkbox 3</CheckItem>
     </CheckList>
+    <h3>List of string</h3>
+    <div>
+      <ListController name="list">
+        <AddControl class="he-btn" item="">Add Item</AddControl>
+        <ul>
+          {control.list.map((_, i) => (
+            <li key={i}>
+              <Input name={i} placeholder="Content"/>
+              <RemoveControl index={i} class="he-btn-icon">
+                <MatIcon name="close" />
+              </RemoveControl>
+            </li>
+          ))}
+        </ul>
+      </ListController>
+    </div>
+    <h3>List of Object</h3>
+    <div>
+      <ListController name="listObject">
+        <AddControl class="he-btn" item={{ key: '', value: '' }}>Add object</AddControl>
+        <ul>
+          {control.listObject.map((_, i) => (
+            <GroupController key={i} name={i}>
+              <li>
+                <Input name="key" placeholder="Key"/>
+                <Input name="value" placeholder="Value"/>
+                <RemoveControl index={i} class="he-btn-icon">
+                  <MatIcon name="close" />
+                </RemoveControl>
+              </li>
+            </GroupController>
+          ))}
+        </ul>
+      </ListController>
+    </div>
     <footer class="form-actions">
       <button class="he-btn" type="reset">Cancel</button>
       <button class="he-btn-fill primary" type="submit">Save</button>
