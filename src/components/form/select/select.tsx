@@ -1,5 +1,5 @@
 import { component$, Slot, $ } from "@builder.io/qwik";
-import type { JSXChildren, JSXOutput, QRL, PropsOf } from "@builder.io/qwik";
+import type { JSXChildren, QRL, PropsOf } from "@builder.io/qwik";
 import { ControlProps, ControlListProps, extractControls, WithControl, WithControlList } from "../control";
 import type { Serializable } from '../types';
 import { Option } from "../option/option";
@@ -50,13 +50,14 @@ const displaySingleNodeContent = (children: JSXChildren) => {
 }
 
 type Props<T extends Serializable> = PropsOf<'div'> & {
-  children: JSXOutput[];
+  children: JSXChildren;
   display$?: QRL<(value: T) => string>;
   placeholder?: string
 } & ((ControlListProps<T> & { multi: true; }) | ControlProps<T> & { multi?: false; });
 
 export function Select<T extends Serializable>({ multi, children, display$, ...base }: Props<T>) {
-  const selectChildren = children.filter(child => (isJSXNode(child) && child.type === Option));
+  const options = Array.isArray(children) ? children : [children];
+  const selectChildren = options.filter(child => (isJSXNode(child) && child.type === Option));
   if (multi) {
     const display = display$ ?? displayMultiNodeContent(selectChildren);
     return (

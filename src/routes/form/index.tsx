@@ -61,7 +61,7 @@ export default component$(() => {
     checkbox: ['a', 'c'],
     toggle: 'medium',
     list: [],
-    listObject: [],
+    listObject: [] as { key: string, value: string }[],
   });
 
   return <Form id="form-page" bind:value={control} onFormSubmit$={save}>
@@ -158,15 +158,15 @@ export default component$(() => {
         <AddControl class="he-btn" item={{ key: '', value: '' }}>Add object</AddControl>
         <ul>
           {control.listObject.map((_, i) => (
-            <GroupController key={i} name={i}>
-              <li>
+            <li key={JSON.stringify(_)}>
+              <GroupController name={i}>
                 <Input name="key" placeholder="Key"/>
                 <Input name="value" placeholder="Value"/>
                 <RemoveControl index={i} class="he-btn-icon">
                   <MatIcon name="close" />
                 </RemoveControl>
-              </li>
-            </GroupController>
+              </GroupController>
+            </li>
           ))}
         </ul>
       </ListController>

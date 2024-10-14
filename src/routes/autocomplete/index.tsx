@@ -8,6 +8,9 @@ const options = ['Pickles', 'Tomatoes', 'Lettuce', 'Cheese'];
 export default component$(() => {
   useStyles$(style);
   const selection = useSignal([]);
+
+  const options = useSignal(['Pickles', 'Tomatoes', 'Lettuce', 'Cheese']);
+
   return (
     <section id="select-page" aria-labelledby="select-title">
       <h1 id="select-title">Select</h1>

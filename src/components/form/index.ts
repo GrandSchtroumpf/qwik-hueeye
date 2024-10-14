@@ -17,3 +17,4 @@ export * from './checkbox/switch';
 export * from './checkbox/toggle';
 export * from './slider/slider';
 export * from './slider/range';
+export * from './autocomplete';

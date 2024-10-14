@@ -126,9 +126,9 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   const { name, 'bind:value': bindValue, value } = props;
   const { control: parent } = useGroupControl<T[]>();
   const initial = untrack(() => fromParent<T[]>(parent, name) ?? value ?? [] as T[]);
-  const initStore = useStore(copyStore(initial));
-  const store = fromParent<T[]>(parent, name) ?? initStore;
-  const list = useComputed$(() => bindValue ?? fromParentStore<T[]>(parent, name) ?? store);
+  const store = useStore(copyStore(initial));
+  const control = bindValue ?? fromParent<T[]>(parent, name) ?? store;
+  const list = useComputed$(() => control);
 
   useTask$(() => {
     if (parent && name) parent[name] ||= initial;
@@ -153,7 +153,7 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
     if (bindValue) {
       bindValue.splice(index, 1);
     } else if (isProxy(parent) && exists(name)) {
-      (parent[name] as T[])!.splice(index, 1);
+      (parent[name] as T[]).splice(index, 1);
     } else {
       store.splice(index, 1);
     }
@@ -170,7 +170,7 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
 
   const ctx = { list, add, remove, removeAt, clear, set, name };
   
-  useContextProvider(GroupContext, { control: store, name });
+  useContextProvider(GroupContext, { control, name });
   useContextProvider(ListControlContext, ctx);
   return ctx;
 }
