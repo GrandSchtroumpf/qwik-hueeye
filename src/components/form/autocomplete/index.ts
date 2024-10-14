@@ -1,2 +1,3 @@
-export * as Autocomplete from './common';
+import * as Autocomplete from './common';
 export * from './autocomplete';
+export { Autocomplete };
