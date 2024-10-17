@@ -77,7 +77,6 @@ export const TabImpl = component$((props: TabProps) => {
     state.leaving = state.active;
     state.active = id;
     el.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
-    console.log(el);
   });
 
   return <button id={id} 

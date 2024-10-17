@@ -126,7 +126,6 @@ export const BaseCheckItem = component$<BaseCheckItemProps>((props) => {
   const { value, class: className, ...attr } = props;
   const { list, add, remove, name } = useListControl();
   const checked = useComputed$(() => list.value.includes(value));
-  console.log({ value, checked: list.value.includes(value) })
   const merged = mergeProps<'input'>(attr as any, {
     id,
     type: "checkbox",
