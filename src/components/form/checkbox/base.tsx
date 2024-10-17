@@ -1,4 +1,4 @@
-import { $, component$, Slot, PropsOf, createContextId, useContextProvider, useSignal, useContext, useTask$, Signal, QRL, sync$ } from "@builder.io/qwik";
+import { $, component$, Slot, PropsOf, createContextId, useContextProvider, useSignal, useContext, useTask$, Signal, QRL, sync$, useComputed$ } from "@builder.io/qwik";
 import {  WithControl, WithControlGroup, WithControlList, extractControls, useControlProvider, useGroupControlProvider, useListControl, useListControlProvider } from "../control";
 import type { InputAttributes, Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
@@ -125,13 +125,15 @@ export const BaseCheckItem = component$<BaseCheckItemProps>((props) => {
   const id = useWithId(props.id);
   const { value, class: className, ...attr } = props;
   const { list, add, remove, name } = useListControl();
+  const checked = useComputed$(() => list.value.includes(value));
+  console.log({ value, checked: list.value.includes(value) })
   const merged = mergeProps<'input'>(attr as any, {
     id,
     type: "checkbox",
     class: "he-checkbox-input",
     name: name?.toString(),
     value: value?.toString(),
-    checked: list.value.includes(value),
+    checked: checked.value,
     onChange$: $((e, el) => el.checked ? add(value) : remove(value))
   });
   return <>

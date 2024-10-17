@@ -6,7 +6,7 @@ import style from './index.scss?inline';
 export default component$(() => {
   useStyles$(style);
   const accepted = useSignal(false);
-  const meal = useStore(['tomatoes'])
+  const meal = useStore(['tomatoes']);
   return <section id="checkbox-page" aria-labelledby="checkbox-title">
     <h1 id="checkbox-title">Checkbox</h1>
     <article>

@@ -135,9 +135,14 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   });
 
   const set = $((value: T[]) => {
-    if (bindValue) bindValue.splice(0, bindValue.length, ...value);
-    else if (isProxy(parent) && exists(name)) parent[name] = [...value];
-    else store.splice(0, store.length, ...value);
+    if (bindValue) {
+      bindValue.splice(0, bindValue.length, ...value);
+    } else if (isProxy(parent) && exists(name)) {
+      parent[name] ||= [];
+      (parent[name] as T[]).splice(0, (parent[name] as T[]).length, ...value);
+    } else {
+      store.splice(0, store.length, ...value);
+    }
   })
   const add = $((item: T) => {
     if (bindValue) {
@@ -163,9 +168,13 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
     removeAt(index);
   });
   const clear = $(() => {
-    if (bindValue) bindValue.splice(0, bindValue.length);
-    else if (isProxy(parent) && exists(name)) parent[name] = [];
-    else store.splice(0, store.length);
+    if (bindValue) {
+      bindValue.splice(0, bindValue.length);
+    } else if (isProxy(parent) && exists(name)) {
+      (parent[name] as T[]).splice(0, (parent[name] as T[]).length);
+    } else {
+      store.splice(0, store.length);
+    }
   });
 
   const ctx = { list, add, remove, removeAt, clear, set, name };
