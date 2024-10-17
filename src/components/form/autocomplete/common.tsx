@@ -6,6 +6,7 @@ import { WithControl, extractControls, useControl, useControlProvider } from "..
 import { comboboxNavigation, filterCombobox } from "../combobox/base";
 import { Field } from "../field/field";
 import * as Popover from "../../popover/popover";
+import { Serializable } from "../types";
 import style from './autocomplete.scss?inline';
 
 interface AutocompleteCxt {
@@ -154,8 +155,8 @@ export const Listbox = component$<PropsOf<'ul'>>((props) => {
 
 
 
-interface OptionProps extends PropsOf<'li'> {
-  value?: string;
+interface OptionProps extends Omit<PropsOf<'li'>, 'value'> {
+  value?: Serializable;
 }
 const addItem = $(function<T>(list: T[], item: T): T[] {
   return [...list, item];
@@ -178,7 +179,7 @@ export const Option = component$<OptionProps>((props) => {
   const { control, change } = useControl();
   const selected = useComputed$(() => {
     if (multi) {
-      return (control.value as string[]).includes(value ?? '');
+      return (control.value as Serializable[]).includes(value ?? '');
     } else {
       return control.value === value;
     }
