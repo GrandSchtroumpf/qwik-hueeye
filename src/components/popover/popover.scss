@@ -2,12 +2,12 @@
   @supports (anchor-name: --test) {
     position-anchor: var(--anchor-popover);
     &:not([data-position="inline"]) {
-      inset-area: bottom span-right;
+      position-area: bottom span-right;
       min-width: anchor-size(width);
       position-try-options: flip-block;
     }
     &[data-position="inline"] {
-      inset-area: right span-bottom;
+      position-area: right span-bottom;
       position-try-options: flip-inline;
     }
   }

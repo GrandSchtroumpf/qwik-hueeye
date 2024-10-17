@@ -42,11 +42,12 @@ const getOptions = (node: JSXChildren) => {
   return options;
 }
 
-const displaySingleNodeContent = (children: JSXChildren) => {
+const displayNodeTextContent = (children: JSXChildren) => {
   const options = getOptions(children);
-  return $((value?: Serializable) => {
-    if (!value) return;
-    return options[toKey(value)];
+  return $((values?: Serializable) => {
+    if (!Array.isArray(values)) return options[toKey(values)];
+    if (!values?.length) return '';
+    return values.map(value => options[toKey(value)]).join(', ');
   });
 }
 
@@ -58,16 +59,16 @@ type Props<T extends Serializable> = PropsOf<'div'> & {
 
 export function Combobox<T extends Serializable>({ multi, children, display$, ...base }: Props<T>) {
   const selectChildren = children.filter(child => (isJSXNode(child) && child.type === Option));
-  const display = display$ ?? displaySingleNodeContent(selectChildren);
+  const display = display$ ?? displayNodeTextContent(selectChildren);
   if (multi) {
     return (
-      <MultiComboboxImpl {...base as any} display$={display as any}>
+      <MultiComboboxImpl {...base as any} display$={display}>
         {selectChildren}
       </MultiComboboxImpl>
     );
   } else {
     return (
-      <ComboboxImpl {...base as any} display$={display as any}>
+      <ComboboxImpl {...base as any} display$={display}>
         {children}
       </ComboboxImpl>
     ) 
