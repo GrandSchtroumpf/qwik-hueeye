@@ -4,11 +4,11 @@
     &:not([data-position="inline"]) {
       position-area: bottom span-right;
       min-width: anchor-size(width);
-      position-try-options: flip-block;
+      position-try-fallbacks: flip-block;
     }
     &[data-position="inline"] {
       position-area: right span-bottom;
-      position-try-options: flip-inline;
+      position-try-fallbacks: flip-inline;
     }
   }
         

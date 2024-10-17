@@ -140,7 +140,7 @@ export default component$(() => {
     <div>
       <ListController name="list">
         <AddControl class="he-btn" item="">Add Item</AddControl>
-        <ul>
+        <ul class="control-list">
           {control.list.map((_, i) => (
             <li key={i}>
               <Input name={i} placeholder="Content"/>
@@ -156,7 +156,7 @@ export default component$(() => {
     <div>
       <ListController name="listObject">
         <AddControl class="he-btn" item={{ key: '', value: '' }}>Add object</AddControl>
-        <ul>
+        <ul class="control-list">
           {control.listObject.map((_, i) => (
             <li key={JSON.stringify(_)}>
               <GroupController name={i}>

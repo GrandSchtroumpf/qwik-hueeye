@@ -135,46 +135,20 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   });
 
   const set = $((value: T[]) => {
-    if (bindValue) {
-      bindValue.splice(0, bindValue.length, ...value);
-    } else if (isProxy(parent) && exists(name)) {
-      parent[name] ||= [];
-      (parent[name] as T[]).splice(0, (parent[name] as T[]).length, ...value);
-    } else {
-      store.splice(0, store.length, ...value);
-    }
+    control.splice(0, control.length, ...value);
   })
   const add = $((item: T) => {
-    if (bindValue) {
-      bindValue.push(item);
-    } else if (isProxy(parent) && exists(name)) {
-      parent[name] ||= [];
-      (parent[name] as T[]).push(item);
-    } else {
-      store.push(item);
-    }
+    control.push(item);
   });
   const removeAt = $(async (index: number) => {
-    if (bindValue) {
-      bindValue.splice(index, 1);
-    } else if (isProxy(parent) && exists(name)) {
-      (parent[name] as T[]).splice(index, 1);
-    } else {
-      store.splice(index, 1);
-    }
+    control.splice(index, 1);
   });
   const remove = $((item: T) => {
     const index = list.value.indexOf(item);
     removeAt(index);
   });
   const clear = $(() => {
-    if (bindValue) {
-      bindValue.splice(0, bindValue.length);
-    } else if (isProxy(parent) && exists(name)) {
-      (parent[name] as T[]).splice(0, (parent[name] as T[]).length);
-    } else {
-      store.splice(0, store.length);
-    }
+    control.splice(0, control.length);
   });
 
   const ctx = { list, add, remove, removeAt, clear, set, name };
