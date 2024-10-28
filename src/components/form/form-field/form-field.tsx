@@ -23,7 +23,6 @@ export const FormField = component$((props: PropsOf<'div'>) => {
   const id = useWithId(props.id);
   useContextProvider(FormFieldContext, { id });
   const merged = mergeProps<'div'>(props, {
-    id,
     class: 'he-form-field'
   });
   return <div {...merged}>

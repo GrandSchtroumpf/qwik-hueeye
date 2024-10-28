@@ -7,6 +7,7 @@ const options = ['Pickles', 'Tomatoes', 'Lettuce', 'Cheese'];
 
 export default component$(() => {
   useStyles$(style);
+
   const selection = useSignal([]);
   return (
     <section id="select-page" aria-labelledby="select-title">
@@ -20,7 +21,7 @@ export default component$(() => {
         <FormField>
           <Label>Meal Options</Label>
           <Autocomplete.Root>
-            <Autocomplete.Input/>
+            <Autocomplete.Input />
             <Autocomplete.Panel>
               <p>Some description</p>
               <Autocomplete.Listbox>

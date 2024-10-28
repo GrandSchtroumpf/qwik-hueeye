@@ -8,6 +8,7 @@ import { Field } from "../field/field";
 import * as Popover from "../../popover/popover";
 import { Serializable } from "../types";
 import style from './autocomplete.scss?inline';
+import { useFormFieldId } from "../form-field/form-field";
 
 interface AutocompleteCxt {
   multi: boolean;
@@ -23,10 +24,11 @@ export const RootImpl = component$<WithControl<string | string[], RootProps>>((p
   const id = useWithId(props.id);
   const { controls, attr } = extractControls(props);
   const { multi, popoverId, open, inputId, listboxId, ...rest } = attr;
+  const { id: fieldId } = useFormFieldId()
   useControlProvider(controls, multi ? [] : '');
   useContextProvider(AutocompleteContext, {
     multi: !!multi,
-    inputId: useWithId(inputId),
+    inputId: useWithId(inputId ?? fieldId),
     listboxId: useWithId(listboxId),
   });
   const attributes = mergeProps<'div'>(rest, {
@@ -119,7 +121,6 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     empty ? popover.hidePopover() : popover.showPopover();
   });
 
-
   const blur = $(() => {
     document.getElementById(popoverId)?.hidePopover();
   });
@@ -135,7 +136,7 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     'aria-haspopup': 'listbox',
     'aria-controls': listboxId
   });
-  if (!multi) attributes.value = control.value;
+  if (!multi && control.value) attributes.value = control.value;
   return <input {...attributes} />
 })
 

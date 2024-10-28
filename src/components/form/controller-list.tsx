@@ -23,6 +23,7 @@ export const ListControl = component$((props: ControlListProps<Serializable>) =>
 
 export const ListController = component$(function <T extends Serializable>(props: ControlListProps<T>) {
   useListControlProvider(props);
+  useListControl(); // Make sure it's not tree shaken in the server
   return <Slot />;
 });
 
