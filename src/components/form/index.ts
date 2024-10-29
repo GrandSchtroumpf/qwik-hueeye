@@ -5,6 +5,7 @@ export * from './controller-list';
 export * from './form';
 export * from './search-form';
 export * from './input/input';
+export * from './textarea/textarea';
 export * from './radio/radio';
 export * from './radio/toggle';
 export * from './form-field/form-field';

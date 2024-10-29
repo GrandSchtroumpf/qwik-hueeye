@@ -1,6 +1,6 @@
 import { component$, event$, useStore, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { AddControl, Form, GroupController, Input, ListController, MatIcon, Option, RangeEnd, RangeStart, RemoveControl, Select } from "qwik-hueeye-lib";
+import { AddControl, Form, GroupController, Input, ListController, MatIcon, Option, RangeEnd, RangeStart, RemoveControl, Select, Textarea } from "qwik-hueeye-lib";
 import { Range, Slider } from "qwik-hueeye-lib";
 import { FormField, Label } from "qwik-hueeye-lib";
 import { ToggleGroup, Toggle } from "qwik-hueeye-lib";
@@ -42,6 +42,7 @@ export default component$(() => {
 
   const control = useStore({
     title: 'Hello World',
+    description: 'Some description',
     movie: '',
     date: new Date(),
     time: new Date(),
@@ -68,6 +69,10 @@ export default component$(() => {
     <FormField class="overlay">
       <Label>Some Text here</Label>
       <Input name="title" placeholder="Some Text here" class="outline"/>
+    </FormField>
+    <FormField>
+      <Label>Some Text here</Label>
+      <Textarea name="description" placeholder="Some long text here" class="outline" />
     </FormField>
     <FormField>
       <Label>Autocomplete</Label>
