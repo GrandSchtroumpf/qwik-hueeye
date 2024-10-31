@@ -3,8 +3,7 @@
   list-style: none;
   margin-block: 0;
   padding-left: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   border-radius: 4px;
   li {
     display: flex;
@@ -20,11 +19,16 @@
       border-bottom-right-radius: 4px;
     }
   }
-  button {
+  .he-summary {
+    display: flex;
+    gap: var(--size-1);
+    padding: var(--size-1) var(--size-2);
+    text-align: start;
     width: 100%;
     min-height: 48px;
     border: none;
     background-color: transparent;
+    overflow: hidden;
     &:focus-visible {
       // We use border, else outline is hidden by next button
       outline: none;
@@ -35,6 +39,13 @@
     }
     &:active {
       @include hue.focus(transparent, var(--text));
+    }
+    .he-summary-prefix {
+      transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
+    }
+    .he-summary-title {
+      transform-origin: left;
+      transition: transform 0.2s var(--ease-out);
     }
   }
   
@@ -51,11 +62,24 @@
     }
     &:last-child {
       margin-bottom: 0;
-    }  
+    } 
+    .he-summary {
+      .he-summary-prefix {
+        opacity: 0;
+        transform: scale(0.2);
+        pointer-events: none;
+      }
+      .he-summary-title {
+        transform: scale(1.4);
+      }
+      .he-summary-prefix + .he-summary-title {
+        transform: translateX(calc(-24px - var(--size-1))) scale(1.4);
+      }
+    }
+    .he-details-panel {
+      display: block;
+      height: auto;
+    }
   }
   
-  li.open .he-details-panel {
-    display: block;
-    height: auto;
-  }
 }

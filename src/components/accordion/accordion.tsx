@@ -163,8 +163,10 @@ export const Summary = component$(() => {
     if (event.key === 'Enter' || event.key === ' ') toggle(id);
   });
 
-  return <button ref={ref} type="button"
-    class="he-details-controller"
+  return <button
+    ref={ref}
+    type="button"
+    class="he-summary"
     aria-expanded={opened.value}
     aria-controls={panelId}
     onClick$={() => toggle(id)}
