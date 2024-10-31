@@ -73,8 +73,8 @@ function isProxy<T>(parent: T) {
 }
 
 
-type GroupControlCtx<T extends Serializable> = {
-  control: ControlGroup;
+type GroupControlCtx<T> = {
+  control: T;
   change: (value: Partial<T>) => void;
   name?: string | number;
 };
@@ -87,7 +87,7 @@ export function useGroupControlProvider<T extends ControlGroup>(
   props: ControlGroupProps<T>
 ) {
   const { name, 'bind:value': bindValue, value } = props;
-  const { control: parent } = useGroupControl<T>();
+  const { control: parent } = useGroupControl();
   const initial = untrack(() => fromParent<T>(parent, name) ?? value ?? {} as T);
   const store = useStore(copyStore(initial));
   const control = bindValue ?? fromParentStore<T>(parent, name) ?? store;
@@ -108,7 +108,7 @@ export function useGroupControlProvider<T extends ControlGroup>(
   return ctx;
 }
 
-export function useGroupControl<T extends Serializable>(): GroupControlCtx<T> {
+export function useGroupControl<T = ControlGroup>(): GroupControlCtx<T> {
   return useContext(GroupContext, {});
 }
 
@@ -124,7 +124,7 @@ export interface ControlListProps<T> {
 }
 export function useListControlProvider<T extends Serializable>(props: ControlListProps<T>) {
   const { name, 'bind:value': bindValue, value } = props;
-  const { control: parent } = useGroupControl<T[]>();
+  const { control: parent } = useGroupControl();
   const initial = untrack(() => fromParent<T[]>(parent, name) ?? value ?? [] as T[]);
   const store = useStore(copyStore(initial));
   const control = bindValue ?? fromParent<T[]>(parent, name) ?? store;
@@ -166,7 +166,7 @@ const ControlContext = createContextId<ControlCtx<any>>('ControlContext');
 type ControlCtx<T extends Serializable> = ReturnType<typeof useControlProvider<T>>;
 export function useControlProvider<T extends Serializable>(props: ControlProps<T>, fallback?: T) {
   const { name, 'bind:value': bindValue, value } = props;
-  const { control: parent } = useGroupControl<T | undefined>();
+  const { control: parent } = useGroupControl();
   const initial = untrack(() => fromParent<T>(parent, name) ?? value ?? fallback);
   const signal = useSignal<T | undefined>(initial);
 

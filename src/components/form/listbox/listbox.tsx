@@ -57,6 +57,7 @@ const preventKeyDown = sync$((e: KeyboardEvent) => {
 export const ListBox = component$<BaseListBoxProps>(({ multi, ...props }) => {
   useStyles$(styles);
   useContextProvider(ListBoxContext, { multi });
+  useContext(ListBoxContext);
 
   const toggleAll = $((root: HTMLElement) => {
     const options = Array.from(root.querySelectorAll<HTMLElement>('[role="option"]'));
