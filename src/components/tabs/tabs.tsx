@@ -33,6 +33,9 @@ export const TabGroupImpl = component$((props: TabGroupProps) => {
     tabPanelTransitionName
   });
   useContextProvider(TabsContext, state);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(TabsContext);
+  
   const merged = mergeProps<'div'>(props, {
     class: ['tab-group', props.vertical ? 'vertical' : ''],
   });

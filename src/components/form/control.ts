@@ -41,6 +41,8 @@ export function useFormProvider<T extends object>(props: FormControlProps<T>) {
     }
   });
   useContextProvider(GroupContext, { control: form, change });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(GroupContext);
   return { form, change };
 }
 
@@ -105,6 +107,8 @@ export function useGroupControlProvider<T extends ControlGroup>(
   });
   const ctx = { control, change, name };
   useContextProvider(GroupContext, ctx);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(GroupContext);
   return ctx;
 }
 
@@ -155,6 +159,9 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
   
   useContextProvider(GroupContext, { control, name });
   useContextProvider(ListControlContext, ctx);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(GroupContext);
+  useContext(ListControlContext);
   return ctx;
 }
 export function useListControl<T extends Serializable>() {

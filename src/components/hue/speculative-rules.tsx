@@ -87,6 +87,8 @@ const SpeculativeRuleContext = createContextId<SpeculativeRuleConfig[]>('Specula
 export const useSpeculativeRulesProvider = () => {
   const state = useStore<SpeculativeRuleConfig[]>([]);
   useContextProvider(SpeculativeRuleContext, state);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(SpeculativeRuleContext);
   return state; 
 }
 

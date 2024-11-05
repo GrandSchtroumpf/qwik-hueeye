@@ -75,6 +75,8 @@ export const RangeImpl = component$<WithControlGroup<RangeType, PropsImpl>>((pro
     vertical,
     disabled
   });
+  // TODO: remove after useContext is fixed in v2.0s
+  useContext(RangeContext);
 
   const start = control[startName];
   const end = control[endName];

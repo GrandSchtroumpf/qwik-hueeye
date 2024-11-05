@@ -15,6 +15,8 @@ export const Carousel = component$(() => {
     nextVisible: true,
   })
   useContextProvider(CarouselContext, { ids });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(CarouselContext);
   useVisibleTask$(({ track }) => {
     track(() => ids.value);
     const obs = new IntersectionObserver((entries) => {

@@ -23,6 +23,8 @@ export const BaseRadioGroup = component$<WithControl<Primitive, BaseRadioGroupPr
   const { attr } = extractControls(props);
   const { toggle, ...rest } = attr;
   useContextProvider(RadioGroupContext, { toggle: !!toggle, groupId: id });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(RadioGroupContext);
   const merged = mergeProps<'div'>(rest, {
     id,
     role: 'radiogroup',

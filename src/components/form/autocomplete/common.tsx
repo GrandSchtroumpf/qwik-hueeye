@@ -31,6 +31,7 @@ export const RootImpl = component$<WithControl<string | string[], RootProps>>((p
     inputId: useWithId(inputId ?? fieldId),
     listboxId: useWithId(listboxId),
   });
+  useContext(AutocompleteContext);
   const attributes = mergeProps<'div'>(rest, {
     id,
     class: 'he-autocomplete',
@@ -99,7 +100,7 @@ const preventKeyDown = sync$((e: KeyboardEvent, input: HTMLInputElement) => {
 });
 
 export const Input = component$<PropsOf<'input'>>((props) => {
-  const { popoverId } = useContext(Popover.Context);
+  const { popoverId } = useContext(Popover.PopoverContext);
   const { multi, inputId, listboxId } = useContext(AutocompleteContext);
   const { control } = useControl<string>();
 

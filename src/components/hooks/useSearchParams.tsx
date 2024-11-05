@@ -111,7 +111,8 @@ export function useSearchParamsProvider<S extends ParamSchema>(schema?: S) {
   };
 
   useContextProvider(SearchParamsContext, ctx as any);
-
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(SearchParamsContext);
   return ctx;
 }
 

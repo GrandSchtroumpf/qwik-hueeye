@@ -36,6 +36,8 @@ export const BaseCheckList = component$<WithControlList<Serializable, LocalCheck
   })
 
   useContextProvider(CheckListContext, { allValues, toggleAll });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(CheckListContext);
 
   const onKeyDown = $(async (e: KeyboardEvent, el: HTMLElement) => {
     if (e.ctrlKey) {

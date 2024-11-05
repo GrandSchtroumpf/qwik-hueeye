@@ -22,6 +22,8 @@ export const FormField = component$((props: PropsOf<'div'>) => {
   useStyles$(styles);
   const id = useWithId(props.id);
   useContextProvider(FormFieldContext, { id });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(FormFieldContext);
   const merged = mergeProps<'div'>(props, {
     class: 'he-form-field'
   });

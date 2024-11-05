@@ -45,6 +45,8 @@ export const useToasterProvider = () => {
     }),
   }
   useContextProvider(ToasterContext, service);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(ToasterContext);
   return service;
 }
 

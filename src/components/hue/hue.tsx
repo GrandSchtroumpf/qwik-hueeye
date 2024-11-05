@@ -32,6 +32,8 @@ export const HueEyeProvider = component$(({ storage, icon }: HueEyeProps) => {
     document.documentElement.style.setProperty('--hue', change.toString());
   });
   useContextProvider(HueEyeContext, state);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(HueEyeContext);
   useSpeculativeRulesProvider();
   useIconProvider(icon);
   return <>

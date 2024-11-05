@@ -43,7 +43,8 @@ export const Slider = component$<WithControl<number, Props>>((props) => {
     vertical,
     disabled
   });
-
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(SliderContext);
 
   const thumb = useComputed$(() => ((control.value ?? min) - min) / (max - min));
 

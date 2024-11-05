@@ -81,7 +81,7 @@ export interface ContextProps {
   popoverId: string;
   open: Signal<boolean>;
 }
-export const Context = createContextId<ContextProps>('PopoverContext');
+export const PopoverContext = createContextId<ContextProps>('PopoverContext');
 
 interface Props {
   anchorId?: string;
@@ -103,7 +103,9 @@ export const usePopoverProvider = (props: Props) => {
     anchored.value = true;
   });
 
-  useContextProvider(Context, { popoverId, anchorId, open });
+  useContextProvider(PopoverContext, { popoverId, anchorId, open });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(PopoverContext);
 
   return {
     open,
@@ -136,12 +138,14 @@ export const RootImpl = component$<RootProps>((props) => {
   const anchorId = useWithId(props.anchorId);
   const baseOpen = useSignal(false);
   const open = props.open ?? baseOpen;
-  useContextProvider(Context, { anchorId, popoverId, open });
+  useContextProvider(PopoverContext, { anchorId, popoverId, open });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(PopoverContext);
   return <Slot />
 })
 
 export const Panel = component$<PropsOf<'div'>>((props) => {
-  const { popoverId, anchorId, open } = useContext(Context);
+  const { popoverId, anchorId, open } = useContext(PopoverContext);
   const anchored = useSignal(false);
   const style = useSignal<Record<string, string>>({
     '--anchor-popover': `--${anchorId}`,
@@ -172,7 +176,7 @@ export const Panel = component$<PropsOf<'div'>>((props) => {
 })
 
 export const Trigger = component$<PropsOf<'button'>>((props) => {
-  const { popoverId, anchorId, open } = useContext(Context);
+  const { popoverId, anchorId, open } = useContext(PopoverContext);
   const attributes = mergeProps<'button'>(props, {
     id: anchorId,
     type: 'button',

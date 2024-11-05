@@ -57,6 +57,7 @@ const preventKeyDown = sync$((e: KeyboardEvent) => {
 export const ListBox = component$<BaseListBoxProps>(({ multi, ...props }) => {
   useStyles$(styles);
   useContextProvider(ListBoxContext, { multi });
+  // TODO: remove after useContext is fixed in v2.0
   useContext(ListBoxContext);
 
   const toggleAll = $((root: HTMLElement) => {

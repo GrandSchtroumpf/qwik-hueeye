@@ -128,6 +128,8 @@ export const Accordion = component$((props: AccordionProps) => {
       }
     })
   });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(AccordionContext);
   return <ul class="he-accordion" {...ulProps} ref={ref}>
     <Slot/>
   </ul>
@@ -141,6 +143,8 @@ export const Details = component$(() => {
   const opened = useComputed$(() => state.opened.includes(id));
   
   useContextProvider(DetailsContext, { id, opened });
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(DetailsContext);
   return <li id={id} class="he-details">
     <Slot/>
   </li>

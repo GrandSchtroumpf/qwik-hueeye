@@ -96,6 +96,8 @@ export const useIconProvider = (config: IconConfig = {}) => {
   });
   const ctx = { icons, defaultParams, register, get };
   useContextProvider(IconContext, ctx);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(IconContext);
   return ctx;
 }
 
