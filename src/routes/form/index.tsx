@@ -163,7 +163,7 @@ export default component$(() => {
         <AddControl class="he-btn" item={{ key: '', value: '' }}>Add object</AddControl>
         <ul class="control-list">
           {control.listObject.map((_, i) => (
-            <li key={JSON.stringify(_)}>
+            <li key={i}>
               <GroupController name={i}>
                 <Input name="key" placeholder="Key"/>
                 <Input name="value" placeholder="Value"/>
