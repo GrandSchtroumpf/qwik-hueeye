@@ -138,24 +138,16 @@ export function useListControlProvider<T extends Serializable>(props: ControlLis
     if (parent && name) parent[name] ||= initial;
   });
 
-  const set = $((value: T[]) => {
-    control.splice(0, control.length, ...value);
-  })
-  const add = $((item: T) => {
-    control.push(item);
-  });
-  const removeAt = $(async (index: number) => {
-    control.splice(index, 1);
-  });
+  const set = $((value: T[]) => control.splice(0, control.length, ...value))
+  const add = $((item: T) => control.push(item));
+  const removeAt = $((index: number, deleteCount: number = 1) => control.splice(index, deleteCount));
   const remove = $((item: T) => {
     const index = list.value.indexOf(item);
     removeAt(index);
   });
-  const clear = $(() => {
-    control.splice(0, control.length);
-  });
+  const clear = $(() => control.splice(0, control.length));
 
-  const ctx = { list, add, remove, removeAt, clear, set, name };
+  const ctx = { list, add, removeAt, remove, clear, set, name };
   
   useContextProvider(GroupContext, { control, name });
   useContextProvider(ListControlContext, ctx);
