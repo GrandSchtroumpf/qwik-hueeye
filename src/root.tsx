@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
 import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
-import { useModulePreload } from './components/useModulePreload';
+import { Offline } from './components/hue/offline';
 import './root.scss';
 
 /**
@@ -11,8 +11,6 @@ import './root.scss';
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
-
-  useModulePreload();
   return (
     <>
       <title>{head.title ?? 'Qwik Hueeye Playground'}</title>
@@ -54,6 +52,7 @@ export default () => {
         <HueEyeProvider icon={iconConfig} storage>
           <RouterOutlet />
         </HueEyeProvider>
+        <Offline />
         {/* <PrefetchServiceWorker />
         <PrefetchGraph /> */}
       </body>

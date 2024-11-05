@@ -26,8 +26,8 @@ export default function (opts: RenderToStreamOptions) {
     prefetchStrategy: {
       symbolsToPrefetch: 'auto',
       implementation: {
-        linkInsert: 'html-append',
-        linkRel: 'modulepreload',
+        // We prefetch everything from the start
+        prefetchEvent: null
       }
     },
     qwikPrefetchServiceWorker: {
