@@ -1,54 +1,70 @@
 @use '../../hue/utils' as hue;
 
 .he-field {
-  --he-field-radius: var(--size-0);
-  --he-field-border-color: var(--outline);
-  --he-field-background: transparent;
-
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "prefix input suffix";
+  --he-radius: var(--size-0);
+  --he-border-color: var(--outline);
+  --he-background: transparent;
   
+  display: grid;
+  grid-template-areas: "input";
+  align-items: center;
+  gap: var(--size-1);
+
   box-sizing: border-box;
   padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-field-radius);
-  background-color: var(--he-field-background);
+  border-radius: var(--he-radius);
+  background-color: var(--he-background);
   border: none;
-  
+
+  // Workaround to prevent gap when .he-field-prefix/.he-field-suffix is not used
+  &:has(.he-field-prefix):not(:has(.he-field-suffix)) {
+    grid-template-areas: "prefix input";
+  }
+  &:not(:has(.he-field-prefix)):has(.he-field-suffix) {
+    grid-template-areas: "input suffix";
+  }
+  &:has(.he-field-prefix):has(.he-field-suffix) {
+    grid-template-areas: "prefix input suffix";
+  }
 
   &:hover {
-    @include hue.hover(var(--he-field-background), var(--text));
+    @include hue.hover(var(--he-background), var(--text));
   }
-  &:has(:focus-visible), &:has(:active) {
-    --he-field-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-field-background));
+  &:has(:focus-visible) {
+    --he-border-color: var(--color, var(--primary));
+    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
   }
-  &:focus-visible {
-    outline: none;
-  }
-
   &.underline {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-field-border-color);
+    border-bottom: solid 2px var(--he-border-color);
   }
   &.flat {
-    --he-field-radius: 0;
+    --he-radius: 0;
   }
   &.round {
-    --he-field-radius: var(--size-3);
+    --he-radius: var(--size-3);
   }
   &.outline {
-    border: solid 1px var(--he-field-border-color);
+    border: solid 1px var(--he-border-color);
   }
   &.fill {
-    --he-field-background: color-mix(in oklch, var(--text) 10%, transparent);
+    --he-background: color-mix(in oklch, var(--text) 10%, transparent);
   }
   &.round.underline {
-    --he-field-radius: var(--size-2);
+    --he-radius: var(--size-2);
   }
 }
 
+.he-field-prefix,
+.he-field-suffix {
+  --icon-size: 1rem;
+  padding: 2px;
+  line-height: 1rem;
+  &:focus-visible {
+    outline-color: var(--color, var(--primary));
+  }
+}
 .he-field-prefix {
   grid-area: prefix;
 }

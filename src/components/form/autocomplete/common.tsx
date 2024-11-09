@@ -7,8 +7,8 @@ import { comboboxNavigation, filterCombobox } from "../combobox/base";
 import { Field } from "../field/field";
 import * as Popover from "../../popover/popover";
 import { Serializable } from "../types";
-import style from './autocomplete.scss?inline';
 import { useFormFieldId } from "../form-field/form-field";
+import style from './autocomplete.scss?inline';
 
 interface AutocompleteCxt {
   multi: boolean;
@@ -19,7 +19,7 @@ interface AutocompleteCxt {
 const AutocompleteContext = createContextId<AutocompleteCxt>('AutocompleteContext');
 
 interface RootProps extends PropsOf<'div'>, Partial<AutocompleteCxt>, Popover.RootProps {}
-export const RootImpl = component$<WithControl<string | string[], RootProps>>((props) => {
+const RootImpl = component$<WithControl<string | string[], RootProps>>((props) => {
   useStyles$(style);
   const id = useWithId(props.id);
   const { controls, attr } = extractControls(props);
@@ -50,7 +50,7 @@ export const SelectionList = component$<PropsOf<'ul'>>((props) => {
   const { multi } = useContext(AutocompleteContext);
   if (!multi) return <></>;
   const attributes = mergeProps<'ul'>(props, {
-    class: 'he-autocomplete-selection-list',
+    class: 'he-autocomplete-selection-list he-field-prefix',
   });
   return <ul {...attributes}>
     <Slot />
@@ -137,8 +137,7 @@ export const Input = component$<PropsOf<'input'>>((props) => {
     'aria-haspopup': 'listbox',
     'aria-controls': listboxId
   });
-  if (!multi && control.value) attributes.value = control.value;
-  return <input {...attributes} />
+  return <input {...attributes} value={!multi ? control.value : undefined} />
 })
 
 export const Listbox = component$<PropsOf<'ul'>>((props) => {

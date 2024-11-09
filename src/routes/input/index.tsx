@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { FormField, Input, Label } from "qwik-hueeye-lib";
+import { Field, FormField, Input, Label, MatIcon } from "qwik-hueeye-lib";
 import style from './index.scss?inline';
 
 
@@ -94,5 +94,29 @@ export default component$(() => {
       </section>
     </article>
 
+    <article>
+      <h3>Form Field</h3>
+      <section>
+        <FormField>
+          <Label>Field with prefix & suffix</Label>
+          <Field class="outline fill">
+            <Input placeholder="No prefix/suffix" />
+            <span class="he-field-suffix">Suffix</span>
+          </Field>
+        </FormField>
+
+        <FormField>
+          <Label>Field with prefix & suffix actions</Label>
+          <Field class="outline fill">
+            <button type="button" class="he-btn he-field-prefix">Prefix</button>
+            <Input placeholder="No prefix/suffix" />
+            <button type="button" class="he-btn round he-field-suffix">
+              <MatIcon name="add" />
+            </button>
+          </Field>
+        </FormField>
+
+      </section>
+    </article>
   </div>
 })

@@ -11,10 +11,10 @@ export const Icon = component$(() => {
 
 export default component$(() => {
   useStyles$(styles);
-  const btnRadius = useSignal('var(--size-1)');
+  const heRadius = useSignal('var(--size-1)');
   return <section id="button-page" aria-labelledby="button-title">
     <h2 id="button-title">Buttons</h2>
-    <table {...cssvar({ btnRadius })}>
+    <table {...cssvar({ heRadius })}>
       <thead>
         <tr>
           <th></th>
@@ -49,72 +49,72 @@ export default component$(() => {
           </td>
         </tr>
         <tr>
-          <th>he-btn-fill</th>
+          <th>he-btn fill</th>
           <td>
-            <button class="he-btn-fill">Basic</button>
+            <button class="he-btn fill">Basic</button>
           </td>
           <td>
-            <button class="he-btn-fill primary">Primary</button>
+            <button class="he-btn fill primary">Primary</button>
           </td>
           <td>
-            <button class="he-btn-fill secondary">Secondary</button>
+            <button class="he-btn fill secondary">Secondary</button>
           </td>
           <td>
-            <button class="he-btn-fill warn">Warn</button>
+            <button class="he-btn fill warn">Warn</button>
           </td>
           <td>
-            <button class="he-btn-fill disabled">Diabled</button>
+            <button class="he-btn fill disabled">Diabled</button>
           </td>
           <td>
-            <button class="he-btn-fill gradient">Gradient</button>
-          </td>
-        </tr>
-        <tr>
-          <th>he-btn-outline</th>
-          <td>
-            <button class="he-btn-outline">Basic</button>
-          </td>
-          <td>
-            <button class="he-btn-outline primary">Primary</button>
-          </td>
-          <td>
-            <button class="he-btn-outline secondary">Secondary</button>
-          </td>
-          <td>
-            <button class="he-btn-outline warn">Warn</button>
-          </td>
-          <td>
-            <button class="he-btn-outline disabled">Diabled</button>
-          </td>
-          <td>
-            <button class="he-btn-outline gradient">Gradient</button>
+            <button class="he-btn fill gradient">Gradient</button>
           </td>
         </tr>
         <tr>
-          <th>he-btn-icon</th>
+          <th>he-btn outline</th>
           <td>
-            <button class="he-btn-icon"><Icon/></button>
+            <button class="he-btn outline">Basic</button>
           </td>
           <td>
-            <button class="he-btn-icon primary"><Icon/></button>
+            <button class="he-btn outline primary">Primary</button>
           </td>
           <td>
-            <button class="he-btn-icon secondary"><Icon/></button>
+            <button class="he-btn outline secondary">Secondary</button>
           </td>
           <td>
-            <button class="he-btn-icon warn"><Icon/></button>
+            <button class="he-btn outline warn">Warn</button>
           </td>
           <td>
-            <button class="he-btn-icon disabled"><Icon/></button>
+            <button class="he-btn outline disabled">Diabled</button>
           </td>
           <td>
-            <button class="he-btn-icon gradient"><Icon/></button>
+            <button class="he-btn outline gradient">Gradient</button>
+          </td>
+        </tr>
+        <tr>
+          <th>he-btn icon</th>
+          <td>
+            <button class="he-btn icon"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn icon primary"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn icon secondary"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn icon warn"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn icon disabled"><Icon/></button>
+          </td>
+          <td>
+            <button class="he-btn icon gradient"><Icon/></button>
           </td>
         </tr>
       </tbody>
     </table>
     {/* Use a radio group instead */}
-    <RadioGroup name="toggle" class="outline primary" bind:value={btnRadius}>
+    <RadioGroup name="toggle" class="outline primary" bind:value={heRadius}>
       <legend>Select radius</legend>
       <Radio value="0px">Flat</Radio>
       <Radio value="var(--size-1)">Normal</Radio>

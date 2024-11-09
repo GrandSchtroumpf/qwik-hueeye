@@ -7,7 +7,7 @@ export default component$(() => {
   const menuId = useId();
   const nestedMenuId = useId();
   return <section class="menus">
-    <MenuTrigger menuId={menuId} class="he-btn-fill primary">
+    <MenuTrigger menuId={menuId} class="he-btn fill primary">
       Open a menu
     </MenuTrigger>
     <Menu id={menuId}>

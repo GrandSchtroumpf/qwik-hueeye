@@ -362,28 +362,24 @@
     text-decoration: none;
     color: inherit;
   }
+
   
-  .he-btn, .he-btn-fill, .he-btn-outline, .he-btn-expand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--size-1);
-    box-sizing: border-box;
-  }
-  
-  .he-btn, .he-btn-fill, .he-btn-icon, .he-btn-outline, .he-btn-expand {
+  .he-btn {
     display: flex;
     gap: var(--size-1);
     font-size: 0.9rem;
-    border-radius: var(--btn-radius, var(--size-1));
+    border-radius: var(--he-radius, var(--size-1));
     box-sizing: border-box;
+    border: none;
+    padding: var(--size-1) var(--size-2);
     &.vertical {
       flex-direction: column;
     }
     &.flat {
-      --btn-radius: 0;
+      --he-radius: 0;
     }
     &.round {
-      --btn-radius: 20px;
+      --he-radius: 20px;
     }
     // Use :disabled for buttons & .disabled for anchors
     &:disabled, &.disabled {
@@ -391,16 +387,19 @@
       cursor: default;
       pointer-events: none;
     }
-    & svg {
-      fill: currentColor;
-      width: 24px;
-      height: 24px;
+    svg {
+      height: var(--icon-size, 24px);
+      width: var(--icon-size, 24px);
       flex-shrink: 0;
     }
   }
 
+  .he-btn:not(.fill, .outline, .icon) {
+    color: var(--color, currentColor);
+  }
+
   // transparent background
-  .he-btn, .he-btn-outline, .he-btn-icon, .he-btn-expand:not(.fill) {
+  .he-btn:not(.fill) {
     background-color: transparent;
     &:hover {
       // Use on-color with transparency to create a nice effect
@@ -417,48 +416,45 @@
         var(--on-color, transparent) var(--alpha-focus)
       );
     }
-  }
-  
-  
-  .he-btn {
-    border: none;
-    padding: 8px 16px;
-    border: none;
-    color: var(--color, currentColor);
-    &.gradient {
-      font-weight: 500;
-      background-image: linear-gradient(
-        var(--gradient-direction),
-        var(--gradient-start) 30%,
-        var(--gradient-end) 80%
-      );
-      position: relative;
-      isolation: isolate;
-      -webkit-background-clip: text;  // webkit required for android
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        z-index: -1;
-      }
-      &:hover::before {
-        background-color: var(--gradient-start, var(--surface));
-        opacity: var(--alpha-hover);
-      }
-      &:active::before {
-        background-color: var(--gradient-start, var(--surface));
-        opacity: var(--alpha-focus);
-      }
-      svg {
-        fill: url(#svg-gradient);
-      }
+    svg {
+      fill: var(--color, currentColor);
     }
   }
+
+  .he-btn.gradient:not(.fill, .outline) {
+    font-weight: 500;
+    background-image: linear-gradient(
+      var(--gradient-direction),
+      var(--gradient-start) 30%,
+      var(--gradient-end) 80%
+    );
+    position: relative;
+    isolation: isolate;
+    -webkit-background-clip: text;  // webkit required for android
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: -1;
+    }
+    &:hover::before {
+      background-color: var(--gradient-start, var(--surface));
+      opacity: var(--alpha-hover);
+    }
+    &:active::before {
+      background-color: var(--gradient-start, var(--surface));
+      opacity: var(--alpha-focus);
+    }
+    svg {
+      fill: url(#svg-gradient);
+    }
+  }
+
   
-  .he-btn-outline {
+  .he-btn.outline {
     transition: background-color 0.1s ease-in-out;
     border: var(--border-width, 1px) solid var(--color, var(--outline));
     padding: 8px 16px;
@@ -486,7 +482,7 @@
     }
   }
   
-  .he-btn-icon {
+  .he-btn.icon {
     border: none;
     line-height: 0;
     padding: 8px;
@@ -496,27 +492,15 @@
       }
     } 
   }
-  
-  .he-btn, .he-btn-icon, .he-btn-outline, .he-btn-fill, .he-btn-expand {
-    svg {
-      height: var(--icon-size, 24px);
-      width: var(--icon-size, 24px);
-      flex-shrink: 0;
-    }
-  }
-  .he-btn, .he-btn-icon, .he-btn-outline, .he-btn-expand:not(.fill) {
-    svg {
-      fill: var(--color, currentColor);
-    }
-  }
-  .he-btn-fill, .he-btn-expand.fill {
-    svg {
-      fill: var(--on-color, currentColor);
-    }
+      
+  .he-btn:not(.icon) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-1);
+    box-sizing: border-box;
   }
   
-  
-  .he-btn-expand {
+  .he-btn.expand {
     border: none;
     border-radius: var(--size-1);
     height: 48px;
@@ -566,7 +550,7 @@
   }
 
     
-  .he-btn-fill {
+  .he-btn.fill {
     border: none;
     padding: 8px 16px;
     background-color: var(--color, var(--surface));
@@ -605,6 +589,9 @@
           color-mix(in oklch, var(--on-gradient) var(--alpha-focus), var(--gradient-end))
         );
       }
+    }
+    svg {
+      fill: var(--on-color, currentColor);
     }
   }
   

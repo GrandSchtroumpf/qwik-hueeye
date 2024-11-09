@@ -1,5 +1,5 @@
 import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { Label, FormField } from "qwik-hueeye-lib";
+import { Label, FormField, MatIcon } from "qwik-hueeye-lib";
 import { Autocomplete, HeAutocomplete } from "../../components/form/autocomplete";
 import style from './index.scss?inline';
 
@@ -8,7 +8,8 @@ const options = ['Pickles', 'Tomatoes', 'Lettuce', 'Cheese'];
 export default component$(() => {
   useStyles$(style);
 
-  const selection = useSignal([]);
+  const selection = useSignal<string>('Tomatoes');
+  const muiltiSelection = useSignal([]);
   return (
     <section id="select-page" aria-labelledby="select-title">
       <h1 id="select-title">Select</h1>
@@ -20,8 +21,11 @@ export default component$(() => {
         <h2>Select one option</h2>
         <FormField>
           <Label>Meal Options</Label>
-          <Autocomplete.Root>
+          <Autocomplete.Root bind:value={selection}>
             <Autocomplete.Input />
+            <button type="button" class="he-btn icon round he-field-suffix" onClick$={() => selection.value = ''}>
+              <MatIcon name="cancel" />
+            </button>
             <Autocomplete.Panel>
               <p>Some description</p>
               <Autocomplete.Listbox>
@@ -39,9 +43,9 @@ export default component$(() => {
         <h2>Select multiple options</h2>
         <FormField>
           <Label>Meal Options</Label>
-          <Autocomplete.Root multi bind:value={selection}>
+          <Autocomplete.Root multi bind:value={muiltiSelection}>
             <Autocomplete.SelectionList>
-              {selection.value.map(item => (
+              {muiltiSelection.value.map(item => (
                 <Autocomplete.SelectionItem key={item}>
                   {item}
                 </Autocomplete.SelectionItem>

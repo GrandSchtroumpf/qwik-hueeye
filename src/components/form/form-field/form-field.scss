@@ -1,6 +1,5 @@
 .he-form-field {
-  display: inline-flex;
-  flex-direction: column;
+  display: inline-grid;
   gap: var(--size-1);
 
   .he-input-field {
@@ -10,7 +9,7 @@
   @supports selector(:has(input)) {
     &.overlap {
       position: relative;
-      label {
+      .he-label {
         position: absolute;
         inset: var(--size-1) var(--size-2);
         opacity: 0.5;
@@ -23,17 +22,17 @@
         opacity: 0;
       }
       &:has(input:placeholder-shown) {
-        label {
+        .he-label {
           transform: translateY(0) scale(1);
         }
       }
       .he-input-field.fill {
-        label {
+        .he-label {
           opacity: 0.7;
         }
       }
       .he-input-field.outline {
-        label {
+        .he-label {
           inset-block: var(--size-2);
         }
         .he-input-field {
@@ -41,7 +40,7 @@
         }
       }
       .he-input-field.round {
-        label {
+        .he-label {
           inset-inline: var(--size-3);
         }
         .he-input-field {
@@ -51,4 +50,3 @@
     }
   }
 }
-

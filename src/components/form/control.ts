@@ -187,6 +187,8 @@ export function useControlProvider<T extends Serializable>(props: ControlProps<T
 
   const ctx = { parent, control, change, name };
   useContextProvider<ControlCtx<T>>(ControlContext, ctx);
+  // TODO: remove after useContext is fixed in v2.0
+  useContext(ControlContext);
   return ctx;
 }
 

@@ -10,13 +10,13 @@ export default component$(() => {
   return <section id="dialog-page" aria-labelledby="dialog-title">
     <h2 id="dialog-title">Dialogs</h2>
     <div class="buttons">
-      <button class="he-btn-fill primary" onClick$={() => openModal.value = true}>
+      <button class="he-btn fill primary" onClick$={() => openModal.value = true}>
         Open Modal
       </button>
-      <button class="he-btn-fill secondary" onClick$={() => openBottomSheet.value = true}>
+      <button class="he-btn fill secondary" onClick$={() => openBottomSheet.value = true}>
         Open Bottom Sheet
       </button>
-      <button class="he-btn-fill gradient" onClick$={() => openSidenav.value = true}>
+      <button class="he-btn fill gradient" onClick$={() => openSidenav.value = true}>
         Open Sidenav
       </button>
     </div>

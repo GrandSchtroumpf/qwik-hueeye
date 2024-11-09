@@ -1,7 +1,6 @@
 import { component$, Slot, createContextId, useContextProvider, useContext, useStyles$, PropsOf } from "@builder.io/qwik";
 import { mergeProps } from "../../utils/attributes";
 import { useWithId } from "../../hooks/useWithId";
-import { Input, InputProps } from "../input/input";
 import styles from './form-field.scss?inline';
 
 interface FormFieldState {
@@ -34,16 +33,8 @@ export const FormField = component$((props: PropsOf<'div'>) => {
 
 export const Label = component$<PropsOf<'label'>>((props) => {
   const { id } = useContext(FormFieldContext);
-  return <label {...props} for={id} >
+  const attr = mergeProps<'label'>(props, { class: 'he-label', for: id });
+  return <label {...attr} >
     <Slot/>
   </label>
-})
-
-export const InputField = component$<InputProps>((props) => {
-  useStyles$(styles);
-  return <div class="he-input-field">
-    <Slot name="prefix"/>
-    <Input {...props} class={[props.class, 'he-field']} />
-    <Slot name="prefix"/>
-  </div>
-})
+});

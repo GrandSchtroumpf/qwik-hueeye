@@ -45,13 +45,13 @@
   grid-area: prefix;
   display: flex;
   gap: var(--size-1);
+  &:empty {
+    display: none;
+  }
 }
 
 .he-autocomplete-selection-item {
   padding: var(--size-0) var(--size-1);
   border: 1px solid var(--outline);
   border-radius: var(--size-1);
-}
-.he-autocomplete-selection-item:last-child {
-  margin-inline-end: var(--size-1);
 }

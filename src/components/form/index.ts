@@ -9,6 +9,7 @@ export * from './textarea/textarea';
 export * from './radio/radio';
 export * from './radio/toggle';
 export * from './form-field/form-field';
+export * from './field/field';
 export * from './select/select';
 export * from './combobox/combobox';
 export * from './listbox/listbox';

@@ -11,7 +11,7 @@ Dialog displaye on the top of the page with backdrop background
 export default component$(() => {
   const open = useSignal(false);
   return <>
-    <button class="he-btn-fill primary" onClick$={() => open.value = true}>
+    <button class="he-btn fill primary" onClick$={() => open.value = true}>
       Open Modal
     </button>
     <Modal open={open}>
@@ -44,7 +44,7 @@ export default component$(() => {
   const origin = useSignal<HTMLElement>();
   const open = useSignal(false);
   return <>
-    <button ref={origin} class="he-btn-fill primary" onClick$={() => open.value = true}>
+    <button ref={origin} class="he-btn fill primary" onClick$={() => open.value = true}>
       Open Modal
     </button>
     <Popover origin={origin} open={open} position="block">

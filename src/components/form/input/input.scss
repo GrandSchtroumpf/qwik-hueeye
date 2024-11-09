@@ -1,53 +1,73 @@
 @use '../../hue/utils' as hue;
-.he-input-field,
-.he-input:not(.he-field) {
-  --he-input-radius: var(--size-0);
-  --he-input-border-color: var(--outline);
-  --he-input-background: transparent;
-  
-  box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-input-radius);
-  background-color: var(--he-input-background);
-  border: none;
 
+.he-input {
+  box-sizing: border-box;
+  border: none;
   &::placeholder {
     color: color-mix(in oklch, transparent 70%, var(--text));
   }
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+  &::-webkit-calendar-picker-indicator:focus-visible {
+    outline-offset: 1px;
+    outline-color: var(--color, var(--primary));
+    border-radius: var(--he-radius);
+  }
+  &:focus-visible::placeholder {
+    color: color-mix(in oklch, transparent 50%, var(--text));
+  }
+}
+
+.he-input:not(.he-field > .he-input) {
+  --he-radius: var(--size-0);
+  --he-border-color: var(--outline);
+  --he-background: transparent;
+  
+  padding: var(--size-1) var(--size-2);
+  border-radius: var(--he-radius);
+  background-color: var(--he-background);
 
   &:hover {
-    @include hue.hover(var(--he-input-background), var(--text));
+    @include hue.hover(var(--he-background), var(--text));
   }
-  &:focus-within, &:focus-visible, &:active {
-    --he-input-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-input-background));
-  }
-  &:focus-within, &:focus-visible {
+  &:focus-visible, &:active {
+    --he-border-color: var(--color, var(--primary));
+    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
     outline: none;
   }
 
   &.underline {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-input-border-color);
+    border-bottom: solid 2px var(--he-border-color);
   }
   &.flat {
-    --he-input-radius: 0;
+    --he-radius: 0;
   }
   &.round {
-    --he-input-radius: var(--size-3);
+    --he-radius: var(--size-3);
   }
   &.outline {
-    border: solid 1px var(--he-input-border-color);
+    border: solid 1px var(--he-border-color);
   }
   &.fill {
-    --he-input-background: color-mix(in oklch, var(--text) 10%, transparent);
+    --he-background: color-mix(in oklch, var(--text) 10%, transparent);
     &::placeholder {
       color: color-mix(in oklch, transparent 60%, var(--text));
     }
   }
   &.round.underline {
-    --he-input-radius: var(--size-2);
+    --he-radius: var(--size-2);
   }
-}  
+}
 
+.he-field > .he-input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  &:focus-visible {
+    outline: none;
+    background-color: transparent;
+  }
+}

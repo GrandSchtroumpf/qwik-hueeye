@@ -149,7 +149,7 @@ export default component$(() => {
           {control.list.map((_, i) => (
             <li key={i}>
               <Input name={i} placeholder="Content"/>
-              <RemoveControl index={i} class="he-btn-icon">
+              <RemoveControl index={i} class="he-btn icon">
                 <MatIcon name="close" />
               </RemoveControl>
             </li>
@@ -167,7 +167,7 @@ export default component$(() => {
               <GroupController name={i}>
                 <Input name="key" placeholder="Key"/>
                 <Input name="value" placeholder="Value"/>
-                <RemoveControl index={i} class="he-btn-icon">
+                <RemoveControl index={i} class="he-btn icon">
                   <MatIcon name="close" />
                 </RemoveControl>
               </GroupController>
@@ -178,7 +178,7 @@ export default component$(() => {
     </div>
     <footer class="form-actions">
       <button class="he-btn" type="reset">Cancel</button>
-      <button class="he-btn-fill primary" type="submit">Save</button>
+      <button class="he-btn fill primary" type="submit">Save</button>
     </footer>
   </Form>;
 });
