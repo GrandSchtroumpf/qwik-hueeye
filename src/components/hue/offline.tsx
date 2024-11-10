@@ -2,7 +2,7 @@ import { component$, sync$, useVisibleTask$ } from "@builder.io/qwik"
 import { manifest } from '@qwik-client-manifest';
 
 export const Offline = component$(() => {
-  const bundles = Object.keys(manifest?.bundles ?? {}).map((bundle) => `build/${bundle}`);
+  const bundles = Object.keys(manifest?.bundles ?? {}).map((bundle) => `/build/${bundle}`);
   
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(sync$(() => {
