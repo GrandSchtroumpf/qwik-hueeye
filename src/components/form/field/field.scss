@@ -16,12 +16,15 @@
   // Workaround to prevent gap when .he-field-prefix/.he-field-suffix is not used
   &:has(.he-field-prefix):not(:has(.he-field-suffix)) {
     grid-template-areas: "prefix input";
+    grid-template-columns: auto 1fr;
   }
   &:not(:has(.he-field-prefix)):has(.he-field-suffix) {
     grid-template-areas: "input suffix";
+    grid-template-columns: 1fr auto;
   }
   &:has(.he-field-prefix):has(.he-field-suffix) {
     grid-template-areas: "prefix input suffix";
+    grid-template-columns: auto 1fr auto;
   }
 
   &:hover {
