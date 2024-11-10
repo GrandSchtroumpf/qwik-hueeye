@@ -4,6 +4,7 @@
   grid-area: input;
   background-color: transparent;
   border: none;
+  padding: var(--size-1) var(--size-2);
   &:focus-visible {
     outline: none;
   }
@@ -40,7 +41,7 @@
 
 .he-autocomplete-selection-list {
   margin: 0;
-  padding-inline-start: 0;
+  padding: var(--size-1);
   list-style: none;
   grid-area: prefix;
   display: flex;

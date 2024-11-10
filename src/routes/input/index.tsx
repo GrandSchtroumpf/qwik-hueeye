@@ -107,10 +107,10 @@ export default component$(() => {
 
         <FormField>
           <Label>Field with prefix & suffix actions</Label>
-          <Field class="outline fill">
-            <button type="button" class="he-btn he-field-prefix">Prefix</button>
+          <Field class="outline fill round">
+            <button type="button" class="he-btn he-field-prefix">Field Prefix</button>
             <Input placeholder="No prefix/suffix" />
-            <button type="button" class="he-btn round he-field-suffix">
+            <button type="button" class="he-btn icon he-field-suffix">
               <MatIcon name="add" />
             </button>
           </Field>

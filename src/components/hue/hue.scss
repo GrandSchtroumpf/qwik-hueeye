@@ -121,7 +121,6 @@
   
   
   ::backdrop, .theme, :root {
-    accent-color: var(--primary);
     --primary-hue: var(--hue);
     --secondary-hue: calc(var(--hue) + 90);
     --warn-hue: 30;
@@ -172,10 +171,8 @@
       --divider: oklch(70% var(--chroma) var(--hue));
     }
   }
-  body {
-    @include hue.primary;
-    @include hue.secondary;
-    @include hue.warn;
+  html {
+
   }
   .analog {
     --primary-hue: var(--hue);
@@ -309,14 +306,16 @@
   }
   
   html {
+    @include hue.primary;
+    @include hue.secondary;
+    @include hue.warn;
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
     tab-size: 4;
     font-family: var(--font-family);
     font-size: 1rem;
     color-scheme: dark light;
+    accent-color: var(--primary);
     
     background-image: var(--background);
     color: var(--text);
@@ -393,6 +392,13 @@
       flex-shrink: 0;
     }
   }
+  .he-btn:not(.gradient) {
+    &:focus-visible {
+      outline-style: solid;
+      outline-width: 1.5px;
+      outline-color: var(--color, var(--text));
+    }
+  }
 
   .he-btn:not(.fill, .outline, .icon) {
     color: var(--color, currentColor);
@@ -458,6 +464,9 @@
     transition: background-color 0.1s ease-in-out;
     border: var(--border-width, 1px) solid var(--color, var(--outline));
     padding: 8px 16px;
+    &:focus-visible {
+      outline-offset: 2px;
+    }
     &.gradient {
       --color: var(--background);
       background-image: var(--background-image);
@@ -483,6 +492,9 @@
   }
   
   .he-btn.icon {
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
     border: none;
     line-height: 0;
     padding: 8px;
@@ -555,9 +567,6 @@
     padding: 8px 16px;
     background-color: var(--color, var(--surface));
     color: var(--on-color, var(--text));
-    &:focus-visible {
-      outline-offset: 2px;
-    }
     &:hover {
       background-color: color-mix(
         in oklch,
@@ -593,52 +602,5 @@
     svg {
       fill: var(--on-color, currentColor);
     }
-  }
-  
-  ///////////////
-  /// TOOLTIP ///
-  ///////////////
-  
-  [class*="tooltip"] {
-    position: relative;
-    &::after {
-      content: attr(aria-description);
-      pointer-events: none;
-      padding: var(--size-0) var(--size-1);
-      position: absolute;
-      height: fit-content;
-      width: fit-content;
-  
-      box-shadow: var(--overlay-shadow);
-      background-color: var(--overlay);
-      border-radius: var(--size-0);
-      color: var(--secondary-text);
-      white-space: nowrap;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.2s var(--ease-in),
-        transform 0.2s var(--ease-in);
-    }
-    &:hover::after {
-      z-index: 1;
-      opacity: 1;
-      transform: scale(1);
-      transition: opacity 0.2s 0.5s var(--ease-out),
-        transform 0.2s 0.5s var(--ease-out);
-    }
-  }
-  .tooltip-top::after {
-    bottom: 110%;
-    right: -25%;
-  }
-  .tooltip-right::after {
-    left: 110%;
-  }
-  .tooltip-bottom::after {
-    top: 110%;
-    right: -25%;
-  }
-  .tooltip-left::after {
-    right: 110%;
   }
 }

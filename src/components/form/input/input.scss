@@ -66,6 +66,7 @@
   flex: 1;
   background-color: transparent;
   border: none;
+  padding: var(--size-1) var(--size-2);
   &:focus-visible {
     outline: none;
     background-color: transparent;

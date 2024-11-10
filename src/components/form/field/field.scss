@@ -5,13 +5,10 @@
   --he-border-color: var(--outline);
   --he-background: transparent;
   
-  display: grid;
+  display: inline-grid;
   grid-template-areas: "input";
-  align-items: center;
-  gap: var(--size-1);
 
   box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
   border-radius: var(--he-radius);
   background-color: var(--he-background);
   border: none;
@@ -58,16 +55,18 @@
 
 .he-field-prefix,
 .he-field-suffix {
-  --icon-size: 1rem;
-  padding: 2px;
-  line-height: 1rem;
+  width: max-content;
   &:focus-visible {
     outline-color: var(--color, var(--primary));
   }
 }
 .he-field-prefix {
   grid-area: prefix;
+  border-end-end-radius: 0;
+  border-start-end-radius: 0;
 }
 .he-field-suffix {
   grid-area: suffix;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
 }

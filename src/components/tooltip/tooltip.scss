@@ -1,0 +1,15 @@
+@import '../popover/popover.scss';
+
+.he-tooltip-trigger {
+  anchor-name: var(--anchor-id);
+}
+.he-tooltip-panel {
+  position-anchor: var(--anchor-id);
+  background-color: var(--overlay);
+  backdrop-filter: var(--overlay-filter);
+  box-shadow: var(--overlay-shadow);
+  border: none;
+  border-radius: var(--size-1);
+  padding: var(--size-1) var(--size-2);
+  margin: var(--size-1);
+}
