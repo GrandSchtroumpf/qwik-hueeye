@@ -1,6 +1,6 @@
-import { component$, Slot, $, useComputed$, useStyles$, sync$ } from "@builder.io/qwik";
+import { component$, Slot, $, useComputed$, useStyles$, sync$, useTask$ } from "@builder.io/qwik";
 import type { QRL, PropsOf, CorrectedToggleEvent } from "@builder.io/qwik";
-import { usePopoverProvider } from "../../popover/popover";
+import { usePopover, usePopoverProvider } from "../../popover/popover";
 import { useFormFieldId } from "../form-field/form-field";
 import type { Serializable } from '../types';
 import { mergeProps } from "../../utils/attributes";
@@ -60,6 +60,7 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
     <>
       <button {...triggerProps}>
         <Slot name="prefix"/>
+        {!multi && <AutoClose />}
         {multi
           ? <MultiTrigger display$={display$} placeholder={placeholder} />
           : <SingleTrigger display$={display$} placeholder={placeholder} />
@@ -76,6 +77,16 @@ export const BaseSelect = component$(function<T extends Serializable>(props: Bas
   );
 });
 
+
+const AutoClose = component$(() => {
+  const { open } = usePopover();
+  const { control } = useControl();
+  useTask$(({ track }) => {
+    track(() => control.value);
+    open.value = false;
+  });
+  return <></>;
+});
 
 interface BaseTrigger<T extends Serializable = Serializable> {
   placeholder?: string;

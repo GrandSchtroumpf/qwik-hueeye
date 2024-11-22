@@ -10,6 +10,7 @@ import {
   useSignal,
   untrack,
   useTask$,
+  unwrapStore,
 } from '@builder.io/qwik';
 import type { Serializable, ControlGroup } from './types';
 
@@ -17,12 +18,7 @@ const GroupContext = createContextId<any>('GroupContext');
 
 const copyStore = <T>(store: T): T => {
   if (!isProxy(store)) return store;
-  if (Array.isArray(store)) return store.map(copyStore) as T;
-  const copy = Object.create(null);
-  for (const key in store) {
-    copy[key] = isProxy(store[key]) ? copyStore(store[key]) : store[key];
-  }
-  return copy;
+  return unwrapStore(store);
 }
 
 // FORM
@@ -54,7 +50,7 @@ export interface ControlProps<T> {
 
 // GROUP
 function fromParent<T, P extends Object = Object>(parent?: P, name?: string | number) {
-  if (!parent) return;
+  if (!parent) return null;
   if (exists(name) && name in parent) return (parent as any)[name] as T;
 }
 function fromParentStore<T, P extends Object = Object>(parent?: P, name?: string | number) {

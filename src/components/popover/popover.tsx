@@ -1,10 +1,11 @@
 import type { CorrectedToggleEvent, JSXChildren, PropsOf, QRL, Signal } from "@builder.io/qwik";
-import { createContextId, useContext, useContextProvider, useStyles$ } from "@builder.io/qwik";
+import { createContextId, useContext, useContextProvider, useStyles$, useTask$ } from "@builder.io/qwik";
 import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
 import { mergeProps } from "../utils/attributes";
 import { useWithId } from "../hooks/useWithId";
 import { findNode } from "../utils/jsx";
 import style from './popover.scss?inline';
+import { isServer } from "@builder.io/qwik/build";
 
 
 export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
@@ -17,7 +18,7 @@ export interface PopoverProps extends Omit<PropsOf<'dialog'>, 'open'> {
 
 
 export const setPopoverPosition = $(async (
-  e: CorrectedToggleEvent,
+  e: { newState: 'open' | 'closed' },
   el: HTMLElement
 ) => {
   if (e.newState !== 'open') return;
@@ -96,11 +97,20 @@ export const usePopoverProvider = (props: Props) => {
     '--anchor-popover': `--${anchorId}`,
   });
 
-  const setOpen = $(async (e: CorrectedToggleEvent, el: HTMLElement) => {
-    open.value = e.newState === 'open';
-    const nextStyle = await setPopoverPosition(e, el);
+  useTask$(async ({ track }) => {
+    const opened = track(open);
+    if (isServer) return;
+    const popover = document.getElementById(popoverId)!;
+    const newState = opened ? 'open' : 'closed';
+    const nextStyle = await setPopoverPosition({ newState }, popover);
     if (nextStyle) style.value = nextStyle;
     anchored.value = true;
+    if (opened) popover?.showPopover();
+    else popover?.hidePopover();
+  });
+
+  const setOpen = $(async (e: CorrectedToggleEvent) => {
+    open.value = e.newState === 'open';
   });
 
   useContextProvider(PopoverContext, { popoverId, anchorId, open });
@@ -129,6 +139,8 @@ export const usePopoverProvider = (props: Props) => {
     }
   };
 }
+
+export const usePopover = () => useContext(PopoverContext);
 
 
 export type RootProps = Partial<ContextProps>;

@@ -63,7 +63,7 @@
 }
 
 .he-field > .he-input {
-  flex: 1;
+  grid-area: input;
   background-color: transparent;
   border: none;
   padding: var(--size-1) var(--size-2);
