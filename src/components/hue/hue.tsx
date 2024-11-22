@@ -4,6 +4,7 @@ import { IconConfig, useIconProvider } from "../icons/useIcon";
 import { HueEyeSpeculativeRules, useSpeculativeRulesProvider } from "./speculative-rules";
 import { HueEyeSession } from "./session";
 import style from './hue.scss?inline';
+import { isServer } from "@builder.io/qwik/build";
 
 
 export type HueEyeState = {
@@ -18,17 +19,18 @@ interface HueEyeProps {
   /** IMPORTANT: setting storage to true will download Qwik core at load time */
   storage?: boolean;
   icon?: IconConfig;
+  speculativeRules?: boolean;
 }
 
-export const HueEyeProvider = component$(({ storage, icon }: HueEyeProps) => {
+export const HueEyeProvider = component$(({ storage, icon, speculativeRules }: HueEyeProps) => {
   useStyles$(style);
   const state = useStore({
     hue: 0,
   });
   useTask$(({ track }) => {
     const change = track(() => state.hue);
+    if (isServer) return;
     if (typeof change === 'undefined') return;
-    if (typeof document === 'undefined') return;
     document.documentElement.style.setProperty('--hue', change.toString());
   });
   useContextProvider(HueEyeContext, state);
@@ -40,6 +42,6 @@ export const HueEyeProvider = component$(({ storage, icon }: HueEyeProps) => {
     {storage && <HueEyeSession/> }
     <Slot/>
     <SvgGradient/>
-    <HueEyeSpeculativeRules />
+    {speculativeRules && <HueEyeSpeculativeRules />}
   </>
 });

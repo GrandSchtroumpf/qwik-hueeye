@@ -49,7 +49,7 @@ export default () => {
         <RouterHead />
       </head>
       <body class="">
-        <HueEyeProvider icon={iconConfig} storage>
+        <HueEyeProvider icon={iconConfig}>
           <RouterOutlet />
         </HueEyeProvider>
         <Offline />
