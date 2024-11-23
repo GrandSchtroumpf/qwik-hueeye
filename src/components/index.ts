@@ -16,3 +16,4 @@ export * from './if';
 export * from './icons/icon';
 export * from './tooltip';
 export * from './script/script';
+export * from './Preload';

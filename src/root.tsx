@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { HueEyeProvider } from "./components/hue/hue";
 import { IconConfig } from './components/icons/useIcon';
 import { QwikCityProvider, RouterOutlet, useDocumentHead, useLocation  } from '@builder.io/qwik-city';
-import { Offline } from './components/hue/offline';
+import { PreloadAll } from './components/Preload';
 import './root.scss';
 
 /**
@@ -52,7 +52,7 @@ export default () => {
         <HueEyeProvider icon={iconConfig}>
           <RouterOutlet />
         </HueEyeProvider>
-        <Offline />
+        <PreloadAll />
         {/* <PrefetchServiceWorker />
         <PrefetchGraph /> */}
       </body>
