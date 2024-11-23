@@ -1,4 +1,4 @@
-import { component$, sync$, useOnDocument, useVisibleTask$ } from "@builder.io/qwik"
+import { component$, useVisibleTask$ } from "@builder.io/qwik"
 import { manifest } from '@qwik-client-manifest';
 
 const batchSize = 80;
@@ -36,53 +36,53 @@ export const PreloadAll = component$(() => {
   );
 })
 
-export const PrefetchTemplate = component$(() => {
-  useOnDocument('qprefetch', sync$((event: CustomEvent<{ bundles: string[] }>) => {
-    const { bundles } = (event as CustomEvent).detail;
-    if (!Array.isArray(bundles)) return;
-    for (const bundle of bundles) {
-      const template = document.getElementById(bundle) as HTMLTemplateElement;
-      const links = template.content.cloneNode(true);
-      document.head.appendChild(links);
-    }
-  }));
+// export const PrefetchTemplate = component$(() => {
+//   useOnDocument('qprefetch', sync$((event: CustomEvent<{ bundles: string[] }>) => {
+//     const { bundles } = (event as CustomEvent).detail;
+//     if (!Array.isArray(bundles)) return;
+//     for (const bundle of bundles) {
+//       const template = document.getElementById(bundle) as HTMLTemplateElement;
+//       const links = template.content.cloneNode(true);
+//       document.head.appendChild(links);
+//     }
+//   }));
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(sync$(() => {
-    const template = document.getElementById('offline-preload') as HTMLTemplateElement;
-    const links = template.content.cloneNode(true);
-    document.head.appendChild(links);
-  }), { strategy: 'document-idle' });
+//   // eslint-disable-next-line qwik/no-use-visible-task
+//   useVisibleTask$(sync$(() => {
+//     const template = document.getElementById('offline-preload') as HTMLTemplateElement;
+//     const links = template.content.cloneNode(true);
+//     document.head.appendChild(links);
+//   }), { strategy: 'document-idle' });
 
-  return Object.entries(manifest.bundles).map(([bundleName, bundle]) => (
-    <template key={bundleName} id={bundleName}>
-      {bundle.imports?.map((name) => (
-        <link key={name} rel="modulepreload" href={`/build/${name}`} />
-      ))}
-      {bundle.dynamicImports?.map((name) => (
-        <link key={name} rel="prefetch" as="script" href={`/build/${name}`} />
-      ))}
-    </template>
-  ))
-})
+//   return Object.entries(manifest.bundles).map(([bundleName, bundle]) => (
+//     <template key={bundleName} id={bundleName}>
+//       {bundle.imports?.map((name) => (
+//         <link key={name} rel="modulepreload" href={`/build/${name}`} />
+//       ))}
+//       {bundle.dynamicImports?.map((name) => (
+//         <link key={name} rel="prefetch" as="script" href={`/build/${name}`} />
+//       ))}
+//     </template>
+//   ))
+// })
 
-export const PrefetchJSON = component$(() => {
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(sync$(() => {
-    const script = document.getElementById('q-bundle-graph');
-    const content = script?.textContent;
-    if (!content) return;
-    const graph = JSON.parse(content);
-    (globalThis as any).scheduler.postTask(() => {
-      for (const bundle of Object.keys(graph)) {
-        const link = document.createElement('link');
-        link.setAttribute('href', `/build/${bundle}`);
-        link.setAttribute('rel', 'modulepreload');
-        document.head.appendChild(link);
-      }
-    }, { priority: "background" })
-  }), { strategy: 'document-idle' });
-  return (
-    <script id="q-bundle-graph" dangerouslySetInnerHTML={JSON.stringify(manifest.bundles)}></script>
-  )
-})
+// export const PrefetchJSON = component$(() => {
+//   // eslint-disable-next-line qwik/no-use-visible-task
+//   useVisibleTask$(sync$(() => {
+//     const script = document.getElementById('q-bundle-graph');
+//     const content = script?.textContent;
+//     if (!content) return;
+//     const graph = JSON.parse(content);
+//     (globalThis as any).scheduler.postTask(() => {
+//       for (const bundle of Object.keys(graph)) {
+//         const link = document.createElement('link');
+//         link.setAttribute('href', `/build/${bundle}`);
+//         link.setAttribute('rel', 'modulepreload');
+//         document.head.appendChild(link);
+//       }
+//     }, { priority: "background" })
+//   }), { strategy: 'document-idle' });
+//   return (
+//     <script id="q-bundle-graph" dangerouslySetInnerHTML={JSON.stringify(manifest.bundles)}></script>
+//   )
+// })
