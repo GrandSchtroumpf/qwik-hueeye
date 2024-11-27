@@ -21,20 +21,30 @@ export const Form = component$(function <T extends object>(props: FormProps<T>) 
 });
 
 /** Deeply mutate the form */
-export function updateForm<T>(source: T, target: Partial<T>): void {
+export function resetForm<T>(source: T, target: Partial<T>): void {
   for (const key in target) {
-    if (key in target) {
-      const sourceValue = source[key];
-      const targetValue = target[key];
+    const sourceValue = source[key];
+    const targetValue = target[key];
 
-      if (typeof targetValue === 'object' && targetValue !== null) {
-        if (sourceValue === undefined) {
+    if (typeof targetValue === 'object' && targetValue !== null) {
+      if (sourceValue === undefined) {
+        if (Array.isArray(targetValue)) {
+          (source as any)[key] = [];
+        } else if (targetValue instanceof Date) {
+          (source as any)[key] = new Date(targetValue.getTime());
+        } else {
           (source as any)[key] = {};
         }
-        updateForm(source[key], targetValue);
-      } else {
-        (source as any)[key] = targetValue;
       }
+
+      // Remove remaining items if array
+      if (Array.isArray(sourceValue) && Array.isArray(targetValue)) {
+        sourceValue.splice(targetValue.length, sourceValue.length);
+      }
+
+      resetForm(source[key], targetValue);
+    } else {
+      (source as any)[key] = targetValue;
     }
   }
 }
