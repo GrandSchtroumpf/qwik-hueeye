@@ -26,7 +26,7 @@ export const PreloadAll = component$(() => {
       }
     }
   }, { strategy: 'document-idle' });
-
+  
   return (
     <template id="offline-preload">
       {bundles.map((bundle, i) => (

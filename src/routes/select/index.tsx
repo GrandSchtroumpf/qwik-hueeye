@@ -17,7 +17,8 @@ export default component$(() => {
       <h2>Select one option</h2>
       <FormField>
         <Label>Meal Options</Label> 
-        <Select class="outline" placeholder="Options" value="pickles">
+        <Select class="outline" placeholder="Options">
+          <Option value="">-- Select an option --</Option>
           {Object.entries(options).map(([key, text]) => (
             <Option key={key} value={key}>{text}</Option>
           ))}

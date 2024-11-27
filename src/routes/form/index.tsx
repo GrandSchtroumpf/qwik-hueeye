@@ -61,7 +61,7 @@ export default component$(() => {
     radio: 'c',
     checkbox: ['a', 'c'],
     toggle: 'medium',
-    list: [],
+    list: [] as string[],
     listObject: [] as { key: string, value: string }[],
   });
 

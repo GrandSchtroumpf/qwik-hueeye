@@ -19,3 +19,22 @@ export const Form = component$(function <T extends object>(props: FormProps<T>) 
     <Slot />
   </form>
 });
+
+/** Deeply mutate the form */
+export function updateForm<T>(source: T, target: Partial<T>): void {
+  for (const key in target) {
+    if (key in target) {
+      const sourceValue = source[key];
+      const targetValue = target[key];
+
+      if (typeof targetValue === 'object' && targetValue !== null) {
+        if (sourceValue === undefined) {
+          (source as any)[key] = {};
+        }
+        updateForm(source[key], targetValue);
+      } else {
+        (source as any)[key] = targetValue;
+      }
+    }
+  }
+}

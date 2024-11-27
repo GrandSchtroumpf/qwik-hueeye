@@ -23,8 +23,8 @@ const getOptions = (node: JSXChildren) => {
   if (node instanceof Array) {
     for (const child of node) Object.assign(options, getOptions(child));
   } else if (typeof node === 'object' && node) {
-    if ('type' in node && node.type === Option && node.props.value) {
-      options[toKey(node.props.value as any)] = getNodeText(node);
+    if ('type' in node && node.type === Option) {
+      options[toKey(node.props.value as string)] = getNodeText(node);
     }
     if ('props' in node && node.props.children === 'object' && node.props.children) {
       Object.assign(options, getOptions(node.props.children));
@@ -44,7 +44,7 @@ const displayMultiNodeContent = (children: JSXChildren) => {
 const displaySingleNodeContent = (children: JSXChildren) => {
   const options = getOptions(children);
   return $((value?: Serializable) => {
-    if (!value) return;
+    if (!value) return options[''];
     return options[toKey(value)];
   });
 }

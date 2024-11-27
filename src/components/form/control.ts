@@ -194,7 +194,7 @@ export function useControl<T extends Serializable>() {
 
 // ITEM 
 export interface ControlItemProps<T> {
-  value: T;
+  value?: T;
 }
 
 
