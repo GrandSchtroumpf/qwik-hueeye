@@ -1,31 +1,33 @@
 @use '../index' as list;
 @use '../../hue/utils' as hue;
 
-.he-item-anchor,
-.he-item-link,
-.he-item-button {
-  box-sizing: border-box;
-  &:hover {
-    @include hue.hover(transparent, var(--text));
+@layer hueeye {
+  .he-item-anchor,
+  .he-item-link,
+  .he-item-button {
+    box-sizing: border-box;
+    &:hover {
+      @include hue.hover(transparent, var(--text));
+    }
+    &:active {
+      @include hue.focus(transparent, var(--text));
+    }
   }
-  &:active {
-    @include hue.focus(transparent, var(--text));
+  
+  .he-item-button {
+    @include list.item-selectable;
   }
-}
-
-.he-item-button {
-  @include list.item-selectable;
-}
-
-.he-item-anchor,
-.he-item-link {
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--border-radius);
-  color: currentColor;
-  text-decoration: none;
-  @include list.item-selectable;
-  @include list.item-horizontal-selectable;
-  &[aria-current="page"] {
-    @include list.item-selected;
+  
+  .he-item-anchor,
+  .he-item-link {
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--border-radius);
+    color: currentColor;
+    text-decoration: none;
+    @include list.item-selectable;
+    @include list.item-horizontal-selectable;
+    &[aria-current="page"] {
+      @include list.item-selected;
+    }
   }
 }

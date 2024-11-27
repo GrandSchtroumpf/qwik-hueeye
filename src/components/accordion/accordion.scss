@@ -1,85 +1,87 @@
 @use '../hue/utils' as hue;
-.he-accordion {
-  list-style: none;
-  margin-block: 0;
-  padding-left: 0;
-  display: grid;
-  border-radius: 4px;
-  li {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--surface);
-
-    &:first-child {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-    }
-    &:last-child {
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
-    }
-  }
-  .he-summary {
-    display: flex;
-    gap: var(--size-1);
-    padding: var(--size-1) var(--size-2);
-    text-align: start;
-    width: 100%;
-    min-height: 48px;
-    border: none;
-    background-color: transparent;
-    overflow: hidden;
-    &:focus-visible {
-      // We use border, else outline is hidden by next button
-      outline: none;
-      border: solid 1px var(--divider);
-    }
-    &:hover {
-      @include hue.hover(transparent, var(--text));
-    }
-    &:active {
-      @include hue.focus(transparent, var(--text));
-    }
-    .he-summary-prefix {
-      transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
-    }
-    .he-summary-title {
-      transform-origin: left;
-      transition: transform 0.2s var(--ease-out);
-    }
-  }
+@layer hueeye {
+  .he-accordion {
+    list-style: none;
+    margin-block: 0;
+    padding-left: 0;
+    display: grid;
+    border-radius: 4px;
+    li {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--surface);
   
-  .he-details-panel {
-    transform-origin: top;
-    height: 0;
-    display: none;
-  }
-  
-  li.open {
-    margin-block: 16px;
-    &:first-child {
-      margin-top: 0;
+      &:first-child {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+      &:last-child {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
     }
-    &:last-child {
-      margin-bottom: 0;
-    } 
     .he-summary {
+      display: flex;
+      gap: var(--size-1);
+      padding: var(--size-1) var(--size-2);
+      text-align: start;
+      width: 100%;
+      min-height: 48px;
+      border: none;
+      background-color: transparent;
+      overflow: hidden;
+      &:focus-visible {
+        // We use border, else outline is hidden by next button
+        outline: none;
+        border: solid 1px var(--divider);
+      }
+      &:hover {
+        @include hue.hover(transparent, var(--text));
+      }
+      &:active {
+        @include hue.focus(transparent, var(--text));
+      }
       .he-summary-prefix {
-        opacity: 0;
-        transform: scale(0.2);
-        pointer-events: none;
+        transition: transform 0.2s var(--ease-out), opacity 0.2s var(--ease-out);
       }
       .he-summary-title {
-        transform: scale(1.4);
-      }
-      .he-summary-prefix + .he-summary-title {
-        transform: translateX(calc(-24px - var(--size-1))) scale(1.4);
+        transform-origin: left;
+        transition: transform 0.2s var(--ease-out);
       }
     }
+    
     .he-details-panel {
-      display: block;
-      height: auto;
+      transform-origin: top;
+      height: 0;
+      display: none;
     }
+    
+    li.open {
+      margin-block: 16px;
+      &:first-child {
+        margin-top: 0;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      } 
+      .he-summary {
+        .he-summary-prefix {
+          opacity: 0;
+          transform: scale(0.2);
+          pointer-events: none;
+        }
+        .he-summary-title {
+          transform: scale(1.4);
+        }
+        .he-summary-prefix + .he-summary-title {
+          transform: translateX(calc(-24px - var(--size-1))) scale(1.4);
+        }
+      }
+      .he-details-panel {
+        display: block;
+        height: auto;
+      }
+    }
+    
   }
-  
 }

@@ -1,74 +1,76 @@
 @use '../../hue/utils' as hue;
 
-.he-input {
-  box-sizing: border-box;
-  border: none;
-  &::placeholder {
-    color: color-mix(in oklch, transparent 70%, var(--text));
-  }
-  &::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-  }
-  &::-webkit-calendar-picker-indicator:focus-visible {
-    outline-offset: 1px;
-    outline-color: var(--color, var(--primary));
-    border-radius: var(--he-radius);
-  }
-  &:focus-visible::placeholder {
-    color: color-mix(in oklch, transparent 50%, var(--text));
-  }
-}
-
-.he-input:not(.he-field > .he-input) {
-  --he-radius: var(--size-0);
-  --he-border-color: var(--outline);
-  --he-background: transparent;
-  
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-radius);
-  background-color: var(--he-background);
-
-  &:hover {
-    @include hue.hover(var(--he-background), var(--text));
-  }
-  &:focus-visible, &:active {
-    --he-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
-    outline: none;
-  }
-
-  &.underline {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-border-color);
-  }
-  &.flat {
-    --he-radius: 0;
-  }
-  &.round {
-    --he-radius: var(--size-3);
-  }
-  &.outline {
-    border: solid 1px var(--he-border-color);
-  }
-  &.fill {
-    --he-background: color-mix(in oklch, var(--text) 10%, transparent);
+@layer hueeye {
+  .he-input {
+    box-sizing: border-box;
+    border: none;
     &::placeholder {
-      color: color-mix(in oklch, transparent 60%, var(--text));
+      color: color-mix(in oklch, transparent 70%, var(--text));
+    }
+    &::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+    }
+    &::-webkit-calendar-picker-indicator:focus-visible {
+      outline-offset: 1px;
+      outline-color: var(--color, var(--primary));
+      border-radius: var(--he-radius);
+    }
+    &:focus-visible::placeholder {
+      color: color-mix(in oklch, transparent 50%, var(--text));
     }
   }
-  &.round.underline {
-    --he-radius: var(--size-2);
+  
+  .he-input:not(.he-field > .he-input) {
+    --he-radius: var(--size-0);
+    --he-border-color: var(--outline);
+    --he-background: transparent;
+    
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--he-radius);
+    background-color: var(--he-background);
+  
+    &:hover {
+      @include hue.hover(var(--he-background), var(--text));
+    }
+    &:focus-visible, &:active {
+      --he-border-color: var(--color, var(--primary));
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
+      outline: none;
+    }
+  
+    &.underline {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 2px var(--he-border-color);
+    }
+    &.flat {
+      --he-radius: 0;
+    }
+    &.round {
+      --he-radius: var(--size-3);
+    }
+    &.outline {
+      border: solid 1px var(--he-border-color);
+    }
+    &.fill {
+      --he-background: color-mix(in oklch, var(--text) 10%, transparent);
+      &::placeholder {
+        color: color-mix(in oklch, transparent 60%, var(--text));
+      }
+    }
+    &.round.underline {
+      --he-radius: var(--size-2);
+    }
   }
-}
-
-.he-field > .he-input {
-  grid-area: input;
-  background-color: transparent;
-  border: none;
-  padding: var(--size-1) var(--size-2);
-  &:focus-visible {
-    outline: none;
+  
+  .he-field > .he-input {
+    grid-area: input;
     background-color: transparent;
+    border: none;
+    padding: var(--size-1) var(--size-2);
+    &:focus-visible {
+      outline: none;
+      background-color: transparent;
+    }
   }
 }

@@ -1,32 +1,33 @@
 @use '../../list' as list;
 @use '../../hue/utils' as hue;
-
-.he-option {
-  cursor: pointer;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--border-radius);
-  &:hover {
-    @include hue.hover(transparent, var(--text));
-  }
-  &:active {
-    @include hue.focus(transparent, var(--text));
-  }
-  &:focus-visible, &[data-focus] {
-    outline: solid 1px var(--color, var(--divider));
-  }
-
-  @include list.item-horizontal-selectable;
-
-  &[aria-checked="true"], &[aria-checked="false"] {
-    @include list.item-multi-selectable;
-  }
-  &[aria-checked="true"] {
-    @include list.item-multi-selected;
-  }
-  &[aria-selected="true"], &[aria-selected="false"] {
-    @include list.item-selectable;
-  }
-  &[aria-selected="true"] {
-    @include list.item-selected;
+@layer hueeye {
+  .he-option {
+    cursor: pointer;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--border-radius);
+    &:hover {
+      @include hue.hover(transparent, var(--text));
+    }
+    &:active {
+      @include hue.focus(transparent, var(--text));
+    }
+    &:focus-visible, &[data-focus] {
+      outline: solid 1px var(--color, var(--divider));
+    }
+  
+    @include list.item-horizontal-selectable;
+  
+    &[aria-checked="true"], &[aria-checked="false"] {
+      @include list.item-multi-selectable;
+    }
+    &[aria-checked="true"] {
+      @include list.item-multi-selected;
+    }
+    &[aria-selected="true"], &[aria-selected="false"] {
+      @include list.item-selectable;
+    }
+    &[aria-selected="true"] {
+      @include list.item-selected;
+    }
   }
 }

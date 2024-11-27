@@ -1,86 +1,88 @@
-.he-check-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-0);
-}
-.he-checkbox, .he-check-item, .he-check-all {
-  position: relative;
-  & input {
-    cursor: pointer;
-    position: absolute;
-    opacity: 0;
-    height: 1.2rem;
-    width: 1.2rem;
-    margin: 0;
-    &.blue {
-      opacity: 1;
-    }
-    &:checked, &:indeterminate, &.he-check-indeterminate {
-      & + label svg {
-        border-color: var(--color, var(--primary));
-        background-color: var(--color, var(--primary));
-        color: var(--on-color, var(--on-primary));
-        & path {
-          stroke-dashoffset: 0;
-          transition: d 0.1s var(--ease-out),
-            stroke-dashoffset 0.4s var(--ease-in-out),
-            transform 0.3s var(--ease-back-in-out);
+@layer hueeye {
+  .he-check-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-0);
+  }
+  .he-checkbox, .he-check-item, .he-check-all {
+    position: relative;
+    & input {
+      cursor: pointer;
+      position: absolute;
+      opacity: 0;
+      height: 1.2rem;
+      width: 1.2rem;
+      margin: 0;
+      &.blue {
+        opacity: 1;
+      }
+      &:checked, &:indeterminate, &.he-check-indeterminate {
+        & + label svg {
+          border-color: var(--color, var(--primary));
+          background-color: var(--color, var(--primary));
+          color: var(--on-color, var(--on-primary));
+          & path {
+            stroke-dashoffset: 0;
+            transition: d 0.1s var(--ease-out),
+              stroke-dashoffset 0.4s var(--ease-in-out),
+              transform 0.3s var(--ease-back-in-out);
+          }
         }
       }
-    }
-    &:checked + label {
-      & path {
-        d: path('M 2 13 L 8 19 L 23 5');
+      &:checked + label {
+        & path {
+          d: path('M 2 13 L 8 19 L 23 5');
+          stroke: var(--on-color, var(--on-primary));
+        }
+        &:hover {
+          & path {
+            transform: scale(0.8);
+          }
+        }
+      }
+      &.he-check-indeterminate + label path,
+      &:indeterminate + label path {
+        d: path('M 4 13 L 13 13 L 20 13');
         stroke: var(--on-color, var(--on-primary));
       }
-      &:hover {
+      &:focus-visible + label svg {
+        outline: solid 2px var(--color, var(--divider));
+        outline-offset: 2px;
+      }
+    }
+    & label {
+      display: flex;
+      align-items: center;
+      gap: var(--size-1);
+      height: var(--size-3);
+      cursor: pointer;
+      & svg {
+        pointer-events: none;
+        height: var(--size-2);
+        width: var(--size-2);
+        border-radius: var(--size-0);
+        border: solid 1px var(--outline);
+        transition: background-color 0.2s, border-color 0.2s;
+        
         & path {
-          transform: scale(0.8);
+          transform-origin: center;
+          d: path('M 2 13 L 8 19 L 23 5');
+          stroke-width: 2px;
+          stroke-dasharray: 30;
+          stroke-dashoffset: 30;
+          transition:
+            d 0.2s 0.3s var(--ease-out),
+            stroke-dashoffset 0.4s var(--ease-out),
+            transform 0.4s var(--ease-back-in-out);
         }
       }
-    }
-    &.he-check-indeterminate + label path,
-    &:indeterminate + label path {
-      d: path('M 4 13 L 13 13 L 20 13');
-      stroke: var(--on-color, var(--on-primary));
-    }
-    &:focus-visible + label svg {
-      outline: solid 2px var(--color, var(--divider));
-      outline-offset: 2px;
-    }
-  }
-  & label {
-    display: flex;
-    align-items: center;
-    gap: var(--size-1);
-    height: var(--size-3);
-    cursor: pointer;
-    & svg {
-      pointer-events: none;
-      height: var(--size-2);
-      width: var(--size-2);
-      border-radius: var(--size-0);
-      border: solid 1px var(--outline);
-      transition: background-color 0.2s, border-color 0.2s;
-      
-      & path {
-        transform-origin: center;
-        d: path('M 2 13 L 8 19 L 23 5');
-        stroke-width: 2px;
-        stroke-dasharray: 30;
-        stroke-dashoffset: 30;
-        transition:
-          d 0.2s 0.3s var(--ease-out),
-          stroke-dashoffset 0.4s var(--ease-out),
-          transform 0.4s var(--ease-back-in-out);
+      &:hover svg {
+        background-color: var(--surface);
+        border-color: var(--text);
       }
-    }
-    &:hover svg {
-      background-color: var(--surface);
-      border-color: var(--text);
-    }
-    &:active svg {
-      border-color: var(--color, var(--primary));
+      &:active svg {
+        border-color: var(--color, var(--primary));
+      }
     }
   }
 }

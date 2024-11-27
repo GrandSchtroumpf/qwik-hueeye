@@ -1,58 +1,59 @@
 @use '../../hue/utils' as hue;
- 
-.he-autocomplete-input {
-  grid-area: input;
-  background-color: transparent;
-  border: none;
-  padding: var(--size-1) var(--size-2);
-  &:focus-visible {
-    outline: none;
+@layer hueeye {
+  .he-autocomplete-input {
+    grid-area: input;
+    background-color: transparent;
+    border: none;
+    padding: var(--size-1) var(--size-2);
+    &:focus-visible {
+      outline: none;
+    }
+    &::placeholder {
+      color: color-mix(in oklch, transparent 70%, var(--text));
+    }
   }
-  &::placeholder {
-    color: color-mix(in oklch, transparent 70%, var(--text));
+  
+  .he-autocomplete-listbox {
+    margin-block: 0;
+    list-style: none;
+    padding-inline-start: 0;
+    padding: var(--size-0);
+    max-height: 275px;
+    overflow: auto;
+    scrollbar-width: thin;
   }
-}
-
-.he-autocomplete-listbox {
-  margin-block: 0;
-  list-style: none;
-  padding-inline-start: 0;
-  padding: var(--size-0);
-  max-height: 275px;
-  overflow: auto;
-  scrollbar-width: thin;
-}
-
-.he-autocomplete-option {
-  cursor: pointer;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--border-radius);
-
-  &:hover {
-    @include hue.hover(transparent, var(--text));
+  
+  .he-autocomplete-option {
+    cursor: pointer;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--border-radius);
+  
+    &:hover {
+      @include hue.hover(transparent, var(--text));
+    }
+    &:active {
+      @include hue.focus(transparent, var(--text));
+    }
+    &[data-focus] {
+      outline: solid 1px var(--color, var(--divider));
+    }
   }
-  &:active {
-    @include hue.focus(transparent, var(--text));
+  
+  .he-autocomplete-selection-list {
+    margin: 0;
+    padding: var(--size-1);
+    list-style: none;
+    grid-area: prefix;
+    display: flex;
+    gap: var(--size-1);
+    &:empty {
+      display: none;
+    }
   }
-  &[data-focus] {
-    outline: solid 1px var(--color, var(--divider));
+  
+  .he-autocomplete-selection-item {
+    padding: var(--size-0) var(--size-1);
+    border: 1px solid var(--outline);
+    border-radius: var(--size-1);
   }
-}
-
-.he-autocomplete-selection-list {
-  margin: 0;
-  padding: var(--size-1);
-  list-style: none;
-  grid-area: prefix;
-  display: flex;
-  gap: var(--size-1);
-  &:empty {
-    display: none;
-  }
-}
-
-.he-autocomplete-selection-item {
-  padding: var(--size-0) var(--size-1);
-  border: 1px solid var(--outline);
-  border-radius: var(--size-1);
 }

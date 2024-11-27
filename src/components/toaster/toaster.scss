@@ -1,51 +1,53 @@
-.toaster {
-  --leave-duration: var(--toaster-leave-duration, 300ms);
-  position: fixed;
-  z-index: 1;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--toaster-gap, var(--size-1));
-  margin: auto;
-  list-style: none;
-  padding: var(--size-3);
-  box-sizing: border-box;
-  pointer-events: none;
-
-  li {
-    --slide-from: 100%;
-    display: block;
-    align-self: var(--toast-position);
-    margin-bottom: var(--toaster-gap, var(--size-1));
-    animation: 
-      stayhidden .05s,
-      slideup .3s .05s var(--ease-out);
-    &.leave {
-      opacity: 0;
-      animation:
-        fadeout var(--leave-duration) var(--ease-in),
-        scaledown var(--leave-duration) var(--ease-in);
+@layer hueeye {
+  .toaster {
+    --leave-duration: var(--toaster-leave-duration, 300ms);
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--toaster-gap, var(--size-1));
+    margin: auto;
+    list-style: none;
+    padding: var(--size-3);
+    box-sizing: border-box;
+    pointer-events: none;
+  
+    li {
+      --slide-from: 100%;
+      display: block;
+      align-self: var(--toast-position);
+      margin-bottom: var(--toaster-gap, var(--size-1));
+      animation: 
+        stayhidden .05s,
+        slideup .3s .05s var(--ease-out);
+      &.leave {
+        opacity: 0;
+        animation:
+          fadeout var(--leave-duration) var(--ease-in),
+          scaledown var(--leave-duration) var(--ease-in);
+      }
+    }
+  
+    output {
+      display: flex;
+      align-items: center;
+      padding: var(--size-1) var(--size-2);
+      border-radius: var(--size-0);
+      background-color: var(--text);
+      color: var(--overlay);
+      box-shadow: var(--overlay-shadow);
+      pointer-events: all;
+      max-width: min(500px, 80%);
     }
   }
-
-  output {
-    display: flex;
-    align-items: center;
-    padding: var(--size-1) var(--size-2);
-    border-radius: var(--size-0);
-    background-color: var(--text);
-    color: var(--overlay);
-    box-shadow: var(--overlay-shadow);
-    pointer-events: all;
-    max-width: min(500px, 80%);
-  }
-}
-
-@keyframes stayhidden {
-  from, to {
-    opacity: 0;
+  
+  @keyframes stayhidden {
+    from, to {
+      opacity: 0;
+    }
   }
 }

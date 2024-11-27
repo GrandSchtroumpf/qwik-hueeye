@@ -47,14 +47,14 @@ export const Carousel = component$(() => {
     document.getElementById(state.previousId)?.scrollIntoView({behavior: 'smooth'});
   });
 
-  return <div ref={ref} class="carousel">
-    <button class="carousel-previous" hidden={!state.previousVisible} onClick$={previous}>
+  return <div ref={ref} class="he-carousel">
+    <button class="he-carousel-previous" hidden={!state.previousVisible} onClick$={previous}>
       <Slot name="previous"/>
     </button>
-    <ul class="carousel-list">
+    <ul class="he-carousel-list">
       <Slot/>
     </ul>
-    <button class="carousel-next" hidden={!state.nextVisible} onClick$={next}>
+    <button class="he-carousel-next" hidden={!state.nextVisible} onClick$={next}>
       <Slot name="next"/>
     </button>
   </div>
@@ -69,7 +69,7 @@ export const CarouselItem = component$(() => {
   useVisibleTask$(() => {
     return () => ids.value = ids.value.filter(item => item !== id);
   });
-  return <li id={id} class="carousel-item">
+  return <li id={id} class="he-carousel-item">
     <Slot/>
   </li>
 });

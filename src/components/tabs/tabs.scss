@@ -1,73 +1,75 @@
 @use '../hue/utils' as hue;
 @use '../list';
 
-.tab-group {
-  display: flex;
-  &.vertical {
-    flex-direction: row;
-    .tab-list {
-      flex-direction: column;
-      border-inline-end: 1px solid var(--divider);
-      padding-inline: var(--size-1);
-      @include list.list-vertical-selectable(tab);
-    }
-    .tab {
-      text-align: start;
-      @include list.item-horizontal-selectable;
-    }
-  }
-  &:not(.vertical) {
-    flex-direction: column;
-    .tab-list {
+@layer hueeye {
+  .tab-group {
+    display: flex;
+    &.vertical {
       flex-direction: row;
-      border-block-end: 1px solid var(--divider);
-      padding-block: var(--size-1);
-      @include list.list-horizontal-selectable(tab);
+      .tab-list {
+        flex-direction: column;
+        border-inline-end: 1px solid var(--divider);
+        padding-inline: var(--size-1);
+        @include list.list-vertical-selectable(tab);
+      }
+      .tab {
+        text-align: start;
+        @include list.item-horizontal-selectable;
+      }
     }
-    .tab {
-      @include list.item-vertical-selectable;
+    &:not(.vertical) {
+      flex-direction: column;
+      .tab-list {
+        flex-direction: row;
+        border-block-end: 1px solid var(--divider);
+        padding-block: var(--size-1);
+        @include list.list-horizontal-selectable(tab);
+      }
+      .tab {
+        @include list.item-vertical-selectable;
+      }
     }
   }
-}
-.tab-list {
-  display: flex;
-  gap: var(--size-1);
-  box-sizing: border-box;
-  position: relative;
-  flex-shrink: 0;
-  overflow: auto;
-  &:focus-within {
-    border-color: var(--color, var(--primary));
+  .tab-list {
+    display: flex;
+    gap: var(--size-1);
+    box-sizing: border-box;
+    position: relative;
+    flex-shrink: 0;
+    overflow: auto;
+    &:focus-within {
+      border-color: var(--color, var(--primary));
+    }
   }
-}
-
-.tab {
-  cursor: pointer;
-  background-color: transparent;
-  border-radius: 4px;
-  padding: var(--size-1) var(--size-2);
-  box-sizing: border-box;
-  border: 1px solid transparent;
-  flex-shrink: 0;
-  &:focus-visible {
-    outline: solid 1px var(--divider);
+  
+  .tab {
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 4px;
+    padding: var(--size-1) var(--size-2);
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    flex-shrink: 0;
+    &:focus-visible {
+      outline: solid 1px var(--divider);
+    }
+    &:hover {
+      @include hue.hover(transparent, var(--on-color, var(--text)));
+    }
+    &:active {
+      @include hue.focus(transparent, var(--on-color, var(--text)));
+    }
+    @include list.item-selectable;
+    &[aria-selected="true"] {
+      @include list.item-selected;
+    }
   }
-  &:hover {
-    @include hue.hover(transparent, var(--on-color, var(--text)));
+  .tab-panel-container {
+    overflow-x: hidden;
+    display: flex;
   }
-  &:active {
-    @include hue.focus(transparent, var(--on-color, var(--text)));
+  .tab-panel {
+    width: 100%;
+    flex-shrink: 0;
   }
-  @include list.item-selectable;
-  &[aria-selected="true"] {
-    @include list.item-selected;
-  }
-}
-.tab-panel-container {
-  overflow-x: hidden;
-  display: flex;
-}
-.tab-panel {
-  width: 100%;
-  flex-shrink: 0;
 }

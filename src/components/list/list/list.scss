@@ -1,27 +1,30 @@
 @use '../index' as list;
-.he-action-list {
-  list-style: none;
-  padding-left: 0;
-  margin-block: 0;
-  & > li {
-    display: contents;
-  }
-}
 
-.he-action-list,
-.he-nav-list {
-  display: flex;
-  padding: var(--list-padding, var(--size-1));
-  &[aria-orientation="vertical"] {
-    flex-direction: column;
+@layer hueeye {
+  .he-action-list {
+    list-style: none;
+    padding-left: 0;
+    margin-block: 0;
+    & > li {
+      display: contents;
+    }
   }
-}
-
-.he-nav-list {
-  &[aria-orientation="vertical"] {
-    @include list.list-vertical-selectable(list);
+  
+  .he-action-list,
+  .he-nav-list {
+    display: flex;
+    padding: var(--list-padding, var(--size-1));
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+    }
   }
-  &[aria-orientation="horizontal"] {
-    @include list.list-horizontal-selectable(list);
+  
+  .he-nav-list {
+    &[aria-orientation="vertical"] {
+      @include list.list-vertical-selectable(list);
+    }
+    &[aria-orientation="horizontal"] {
+      @include list.list-horizontal-selectable(list);
+    }
   }
 }

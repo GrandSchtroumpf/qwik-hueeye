@@ -28,135 +28,137 @@
   }
 }
 
-.he-dialog {
-  border: none;
-  padding: 0;
-  overflow: hidden;
-  background-color: var(--overlay);
-  backdrop-filter: var(--overlay-filter);
-  box-shadow: var(--overlay-shadow);
-  box-sizing: border-box;
-  transition:
-    display 0.3s allow-discrete,
-    overlay 0.3s allow-discrete,
-    opacity 0.3s,
-    transform 0.3s;
-  &[open] {
-    transition-timing-function: var(--ease-out);
-  }
-  &:not([open]) {
-    transition-timing-function: var(--ease-in);
-  }
-
-
-  @include backdrop('[open]');
-
-
-  &.modal {
-    border-radius: 8px;
-    @supports not (transition-behavior: allow-discrete) {
-      animation: scalein 0.3s var(--ease-out);
+@layer hueeye {
+  .he-dialog {
+    border: none;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--overlay);
+    backdrop-filter: var(--overlay-filter);
+    box-shadow: var(--overlay-shadow);
+    box-sizing: border-box;
+    transition:
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete,
+      opacity 0.3s,
+      transform 0.3s;
+    &[open] {
+      transition-timing-function: var(--ease-out);
     }
     &:not([open]) {
-      opacity: 0;
-      transform: scale(1.1);
+      transition-timing-function: var(--ease-in);
     }
-    @starting-style {
-      opacity: 0;
-      transform: scale(0.9);
+  
+  
+    @include backdrop('[open]');
+  
+  
+    &.modal {
+      border-radius: 8px;
+      @supports not (transition-behavior: allow-discrete) {
+        animation: scalein 0.3s var(--ease-out);
+      }
+      &:not([open]) {
+        opacity: 0;
+        transform: scale(1.1);
+      }
+      @starting-style {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+    &.bottom-sheet {
+      // Prevent refresh pages on swipe down
+      touch-action: none;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      margin-bottom: 0;
+      @media (max-width: 599px) {
+        width: 100dvw;
+      }
+      @supports not (transition-behavior: allow-discrete) {
+        animation: slideUp 0.3s var(--ease-out);
+      }
+      &:not([open]) {
+        transform: translateY(100%);
+      }
+      @starting-style {
+        transform: translateY(100%);
+      }
+    }
+    &.sidenav {
+      margin-left: 0;
+      max-height: 100%; /* Firefox set max-height: calc(100% - 6px -2em) */
+      height: auto;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      @supports not (transition-behavior: allow-discrete) {
+        animation: slideLeft 0.3s var(--ease-out);
+      }
+      &:not([open]) {
+        transform: translateX(-100%);
+      }
+      @starting-style {
+        transform: translateX(-100%);
+      }
+    }
+    & .he-dialog-content {
+      padding: var(--size-1) var(--size-2);
+    }
+    & .he-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: var(--size-1);
+      padding: var(--size-1) var(--size-2);
+      background-color: var(--background);
     }
   }
-  &.bottom-sheet {
-    // Prevent refresh pages on swipe down
-    touch-action: none;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    margin-bottom: 0;
-    @media (max-width: 599px) {
-      width: 100dvw;
+  
+  @media (prefers-color-scheme: dark) {
+    dialog.modal {
+      border: solid 1px var(--outline);
     }
-    @supports not (transition-behavior: allow-discrete) {
-      animation: slideUp 0.3s var(--ease-out);
+    dialog.bottom-sheet {
+      border: solid 1px var(--outline);
+      border-bottom: none;
     }
-    &:not([open]) {
-      transform: translateY(100%);
-    }
-    @starting-style {
-      transform: translateY(100%);
+    dialog.sidenav {
+      border-right: solid 1px var(--outline);
     }
   }
-  &.sidenav {
-    margin-left: 0;
-    max-height: 100%; /* Firefox set max-height: calc(100% - 6px -2em) */
-    height: auto;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    @supports not (transition-behavior: allow-discrete) {
-      animation: slideLeft 0.3s var(--ease-out);
-    }
-    &:not([open]) {
+  
+  @keyframes slideLeft {
+    from {
       transform: translateX(-100%);
     }
-    @starting-style {
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
       transform: translateX(-100%);
     }
   }
-  & .he-dialog-content {
-    padding: var(--size-1) var(--size-2);
+  
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
-  & .he-dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--size-1);
-    padding: var(--size-1) var(--size-2);
-    background-color: var(--background);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  dialog.modal {
-    border: solid 1px var(--outline);
-  }
-  dialog.bottom-sheet {
-    border: solid 1px var(--outline);
-    border-bottom: none;
-  }
-  dialog.sidenav {
-    border-right: solid 1px var(--outline);
-  }
-}
-
-@keyframes slideLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-@keyframes slideRight {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes slideUp {
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-@keyframes slideDown {
-  from {
-    transform: translateY(0px);
-  }
-  to {
-    transform: translateY(100%);
+  @keyframes slideDown {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(100%);
+    }
   }
 }

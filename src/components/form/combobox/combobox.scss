@@ -1,121 +1,124 @@
 @use "../../popover/popover.scss" as popover;
 @use "../../dialog/dialog.scss" as dialog;
 @import "../../popover/popover.scss";
-.he-combobox-field,
-.he-combobox:not(.he-field) {
-  --he-input-radius: var(--size-0);
-  --he-input-border-color: var(--outline);
-  --he-input-background: transparent;
 
+@layer hueeye {
+  .he-combobox-field,
+  .he-combobox:not(.he-field) {
+    --he-input-radius: var(--size-0);
+    --he-input-border-color: var(--outline);
+    --he-input-background: transparent;
   
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-1);
-  min-height: 1rem;
-  box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-input-radius);
-  background-color: var(--he-input-background);
-  border: none;
-  cursor: pointer;
-
-  /* Prevent blue flash on android */
-  &[aria-expanded="true"] {
-    -webkit-tap-highlight-color: transparent;
-  }
-  &:focus-visible {
-    outline: none;
-    & span.value {
-      color: currentColor;
+    
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-1);
+    min-height: 1rem;
+    box-sizing: border-box;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--he-input-radius);
+    background-color: var(--he-input-background);
+    border: none;
+    cursor: pointer;
+  
+    /* Prevent blue flash on android */
+    &[aria-expanded="true"] {
+      -webkit-tap-highlight-color: transparent;
+    }
+    &:focus-visible {
+      outline: none;
+      & span.value {
+        color: currentColor;
+      }
+    }
+    & span {
+      text-align: left;
+      display: inline-block;
+      flex: 1;
+    }
+    & span.placeholder {
+      opacity: 0.5;
+    }
+    & svg {
+      height: 4px;
+      transition: transform 0.1s var(--ease-in-out);
+      &.opened {
+        transform: rotate(180deg);
+      }
+    }
+  
+    &:hover {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--he-input-background));
+    }
+    &:focus-within, &:focus-visible, &:active {
+      --he-input-border-color: var(--color, var(--primary));
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-input-background));
+    }
+    &:focus-within, &:focus-visible {
+      outline: none;
+    }
+  
+    &.underline {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 2px var(--he-input-border-color);
+    }
+    &.flat {
+      --he-input-radius: 0;
+    }
+    &.round {
+      --he-input-radius: var(--size-3);
+    }
+    &.outline {
+      border: solid 1px var(--he-input-border-color);
+    }
+    &.fill {
+      --he-input-background: var(--surface);
+    }
+    &.round.underline {
+      --he-input-radius: var(--size-2);
     }
   }
-  & span {
-    text-align: left;
-    display: inline-block;
-    flex: 1;
-  }
-  & span.placeholder {
-    opacity: 0.5;
-  }
-  & svg {
-    height: 4px;
-    transition: transform 0.1s var(--ease-in-out);
-    &.opened {
-      transform: rotate(180deg);
+  
+  .he-combobox-popover {
+    overflow: auto;
+    scrollbar-width: thin;
+    @media (min-width: 600px) {
+      max-height: 275px;
+      @include popover.anchor;
+    }
+    @media (max-width: 599px) {
+      position: fixed;
+      // Prevent refresh pages on swipe down
+      touch-action: none;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0;
+      width: 100dvw;
+      transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete, transform 0.3s;
+      @supports not (transition-behavior: allow-discrete) {
+        animation: slideUp 0.3s var(--ease-out);
+      }
+      &:not(:popover-open) {
+        transform: translateY(100%);
+      }
+      @starting-style {
+        transform: translateY(100%);
+      }
+      @include dialog.backdrop(':popover-open');
+    }
+    &:popover-open {
+      display: grid;
     }
   }
-
-  &:hover {
-    background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--he-input-background));
-  }
-  &:focus-within, &:focus-visible, &:active {
-    --he-input-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-input-background));
-  }
-  &:focus-within, &:focus-visible {
-    outline: none;
-  }
-
-  &.underline {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-input-border-color);
-  }
-  &.flat {
-    --he-input-radius: 0;
-  }
-  &.round {
-    --he-input-radius: var(--size-3);
-  }
-  &.outline {
-    border: solid 1px var(--he-input-border-color);
-  }
-  &.fill {
-    --he-input-background: var(--surface);
-  }
-  &.round.underline {
-    --he-input-radius: var(--size-2);
-  }
-}
-
-.he-combobox-popover {
-  overflow: auto;
-  scrollbar-width: thin;
-  @media (min-width: 600px) {
-    max-height: 275px;
-    @include popover.anchor;
-  }
-  @media (max-width: 599px) {
-    position: fixed;
-    // Prevent refresh pages on swipe down
-    touch-action: none;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-bottom: 0;
-    width: 100dvw;
-    transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete, transform 0.3s;
-    @supports not (transition-behavior: allow-discrete) {
-      animation: slideUp 0.3s var(--ease-out);
+  .he-combobox-input {
+    padding: var(--size-1);
+    background-color: transparent;
+    border: none;
+    border-block-end: solid 1px var(--divider);
+    &:focus-visible {
+      outline: none;
+      border-color: var(--color, var(--primary));
     }
-    &:not(:popover-open) {
-      transform: translateY(100%);
-    }
-    @starting-style {
-      transform: translateY(100%);
-    }
-    @include dialog.backdrop(':popover-open');
-  }
-  &:popover-open {
-    display: grid;
-  }
-}
-.he-combobox-input {
-  padding: var(--size-1);
-  background-color: transparent;
-  border: none;
-  border-block-end: solid 1px var(--divider);
-  &:focus-visible {
-    outline: none;
-    border-color: var(--color, var(--primary));
   }
 }

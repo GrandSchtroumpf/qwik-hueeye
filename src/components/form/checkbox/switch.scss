@@ -1,97 +1,98 @@
 $size: 16px;
 $padding: 2px;
 $distance: calc($size - $padding);
-
-.he-switch-group {
-  border: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-1);
-  border-radius: 4px;
-  padding: var(--size-1) 0;
-  &.outline {
-    padding: var(--size-1) var(--size-2);
-    border: solid 1px var(--outline);
-  }
-  &.fill {
-    background-color: var(--surface);
-  }
-  &:has(:focus-visible), &:active {
-    border-color: var(--primary);
-  }
-  &:has(input:invalid) {
-    border-color: var(--error);
-  }
-}
-
-.he-switch, .he-switch-item {
-  position: relative;
-  label {
+@layer hueeye {
+  .he-switch-group {
+    border: none;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: var(--size-1);
-    padding: 4px;
-    border-radius: var(--size-0);
-    cursor: pointer;
+    border-radius: 4px;
+    padding: var(--size-1) 0;
+    &.outline {
+      padding: var(--size-1) var(--size-2);
+      border: solid 1px var(--outline);
+    }
+    &.fill {
+      background-color: var(--surface);
+    }
+    &:has(:focus-visible), &:active {
+      border-color: var(--primary);
+    }
+    &:has(input:invalid) {
+      border-color: var(--error);
+    }
   }
-  .track {
-    box-sizing: border-box;
-    height: calc($size + 4px);
-    width: calc(2 * $size + 4px);
-    display: flex;
-    align-items: center;
-    padding: 2 * $padding;
-    border-radius: $size;
-    border: 1px solid var(--text);
-  }
-  .thumb {
-    transform-origin: center;
-    height: calc(0.8 * $size);
-    width: calc(0.8 * $size);
-    border-radius: $size;
-    background-color: var(--text);
-    transform: scale(0.9);
-    transition: transform 0.2s var(--ease-out);
-  }
-  input {
-    z-index: -1;
-    position: absolute;
-    opacity: 0;
-
-    &:focus-visible + label {
-      outline: solid 1px var(--divider);
+  
+  .he-switch, .he-switch-item {
+    position: relative;
+    label {
+      display: flex;
+      align-items: center;
+      gap: var(--size-1);
+      padding: 4px;
+      border-radius: var(--size-0);
+      cursor: pointer;
+    }
+    .track {
+      box-sizing: border-box;
+      height: calc($size + 4px);
+      width: calc(2 * $size + 4px);
+      display: flex;
+      align-items: center;
+      padding: 2 * $padding;
+      border-radius: $size;
+      border: 1px solid var(--text);
+    }
+    .thumb {
+      transform-origin: center;
+      height: calc(0.8 * $size);
+      width: calc(0.8 * $size);
+      border-radius: $size;
+      background-color: var(--text);
+      transform: scale(0.9);
+      transition: transform 0.2s var(--ease-out);
+    }
+    input {
+      z-index: -1;
+      position: absolute;
+      opacity: 0;
+  
+      &:focus-visible + label {
+        outline: solid 1px var(--divider);
+        .track {
+          background-color: var(--surface);
+        }
+      }
+  
+      &:checked + label .track {
+        border-color: var(--primary);
+        background-color: var(--primary);
+        .thumb {
+          background-color: var(--on-primary);
+          transform: translateX($distance);
+        }
+      }
+      &:active + label .track {
+        .thumb {
+          transform: scale(1.1, 1) translateX(-2px);
+        }
+      }
+    }
+  
+    &:hover {
+      color: var(--text);
       .track {
         background-color: var(--surface);
       }
-    }
-
-    &:checked + label .track {
-      border-color: var(--primary);
-      background-color: var(--primary);
       .thumb {
-        background-color: var(--on-primary);
-        transform: translateX($distance);
+        background-color: var(--text);
+        transform: scale(1.1);
       }
-    }
-    &:active + label .track {
-      .thumb {
-        transform: scale(1.1, 1) translateX(-2px);
-      }
-    }
-  }
-
-  &:hover {
-    color: var(--text);
-    .track {
-      background-color: var(--surface);
-    }
-    .thumb {
-      background-color: var(--text);
-      transform: scale(1.1);
-    }
-    input:checked + label .track {
-      .thumb {
-        transform: scale(1.1) translateX($distance);
+      input:checked + label .track {
+        .thumb {
+          transform: scale(1.1) translateX($distance);
+        }
       }
     }
   }

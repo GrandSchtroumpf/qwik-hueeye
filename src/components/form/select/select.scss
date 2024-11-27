@@ -1,97 +1,27 @@
 @use '../../popover/popover.scss' as popover;
 @import '../../popover/popover.scss';
 
-@layer popover, select;
-.he-select-field,
-.he-select:not(.he-field) {
-  --he-input-radius: var(--size-0);
-  --he-input-border-color: var(--outline);
-  --he-input-background: transparent;
-    
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-2);
-  min-height: 1rem;
-
-  box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-input-radius);
-  background-color: var(--he-input-background);
-  border: none;
-  cursor: pointer;
-
-
-  /* Prevent blue flash on android */
-  &[aria-expanded="true"] {
-    -webkit-tap-highlight-color: transparent;
-  }
-  &:focus-visible {
-    outline: none;
-    & span.value {
-      color: currentColor;
-    }
-  }
-  & span {
-    text-align: left;
-    display: inline-block;
-    flex: 1;
-  }
-  & span.placeholder {
-    opacity: 0.5;
-  }
-  & svg {
-    height: 4px;
-    transition: transform 0.1s var(--ease-in-out);
-    &.opened {
-      transform: rotate(180deg);
-    }
-  }
-
-  &:hover {
-    background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--he-input-background));
-  }
-  &:focus-within, &:focus-visible, &:active {
-    --he-input-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-input-background));
-  }
-  &:focus-within, &:focus-visible {
-    outline: none;
-  }
-
-  &.underline {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-input-border-color);
-  }
-  &.flat {
-    --he-input-radius: 0;
-  }
-  &.round {
-    --he-input-radius: var(--size-3);
-  }
-  &.outline {
-    border: solid 1px var(--he-input-border-color);
-  }
-  &.fill {
-    --he-input-background: var(--surface);
-  }
-  &.round.underline {
-    --he-input-radius: var(--size-2);
-  }
-
-  & button {
-    font-size: 1rem;
-    flex: 1;
-    cursor: pointer;
-    background-color: transparent;
-    
-    border: none;
-    box-sizing: content-box;
-    display: flex;
+@layer hueeye-popover, he-select;
+@layer hueeye {
+  .he-select-field,
+  .he-select:not(.he-field) {
+    --he-input-radius: var(--size-0);
+    --he-input-border-color: var(--outline);
+    --he-input-background: transparent;
+      
+    display: inline-flex;
     align-items: center;
     gap: var(--size-2);
     min-height: 1rem;
-
+  
+    box-sizing: border-box;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--he-input-radius);
+    background-color: var(--he-input-background);
+    border: none;
+    cursor: pointer;
+  
+  
     /* Prevent blue flash on android */
     &[aria-expanded="true"] {
       -webkit-tap-highlight-color: transparent;
@@ -116,14 +46,86 @@
       &.opened {
         transform: rotate(180deg);
       }
-      & polygon {
-        fill: currentColor;
+    }
+  
+    &:hover {
+      background-color: color-mix(in oklch, var(--text) var(--alpha-hover), var(--he-input-background));
+    }
+    &:focus-within, &:focus-visible, &:active {
+      --he-input-border-color: var(--color, var(--primary));
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-input-background));
+    }
+    &:focus-within, &:focus-visible {
+      outline: none;
+    }
+  
+    &.underline {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 2px var(--he-input-border-color);
+    }
+    &.flat {
+      --he-input-radius: 0;
+    }
+    &.round {
+      --he-input-radius: var(--size-3);
+    }
+    &.outline {
+      border: solid 1px var(--he-input-border-color);
+    }
+    &.fill {
+      --he-input-background: var(--surface);
+    }
+    &.round.underline {
+      --he-input-radius: var(--size-2);
+    }
+  
+    & button {
+      font-size: 1rem;
+      flex: 1;
+      cursor: pointer;
+      background-color: transparent;
+      
+      border: none;
+      box-sizing: content-box;
+      display: flex;
+      align-items: center;
+      gap: var(--size-2);
+      min-height: 1rem;
+  
+      /* Prevent blue flash on android */
+      &[aria-expanded="true"] {
+        -webkit-tap-highlight-color: transparent;
+      }
+      &:focus-visible {
+        outline: none;
+        & span.value {
+          color: currentColor;
+        }
+      }
+      & span {
+        text-align: left;
+        display: inline-block;
+        flex: 1;
+      }
+      & span.placeholder {
+        opacity: 0.5;
+      }
+      & svg {
+        height: 4px;
+        transition: transform 0.1s var(--ease-in-out);
+        &.opened {
+          transform: rotate(180deg);
+        }
+        & polygon {
+          fill: currentColor;
+        }
       }
     }
   }
 }
 
-@layer select {
+@layer hueeye-select {
   .he-select-popover {
     overflow: auto;
     scrollbar-width: thin;

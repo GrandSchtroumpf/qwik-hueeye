@@ -1,75 +1,77 @@
 @use '../../hue/utils' as hue;
 
-.he-field {
-  --he-radius: var(--size-0);
-  --he-border-color: var(--outline);
-  --he-background: transparent;
+@layer hueeye {
+  .he-field {
+    --he-radius: var(--size-0);
+    --he-border-color: var(--outline);
+    --he-background: transparent;
+    
+    display: inline-grid;
+    grid-template-areas: "input";
   
-  display: inline-grid;
-  grid-template-areas: "input";
-
-  box-sizing: border-box;
-  border-radius: var(--he-radius);
-  background-color: var(--he-background);
-  border: none;
-
-  // Workaround to prevent gap when .he-field-prefix/.he-field-suffix is not used
-  &:has(.he-field-prefix):not(:has(.he-field-suffix)) {
-    grid-template-areas: "prefix input";
-    grid-template-columns: auto 1fr;
+    box-sizing: border-box;
+    border-radius: var(--he-radius);
+    background-color: var(--he-background);
+    border: none;
+  
+    // Workaround to prevent gap when .he-field-prefix/.he-field-suffix is not used
+    &:has(.he-field-prefix):not(:has(.he-field-suffix)) {
+      grid-template-areas: "prefix input";
+      grid-template-columns: auto 1fr;
+    }
+    &:not(:has(.he-field-prefix)):has(.he-field-suffix) {
+      grid-template-areas: "input suffix";
+      grid-template-columns: 1fr auto;
+    }
+    &:has(.he-field-prefix):has(.he-field-suffix) {
+      grid-template-areas: "prefix input suffix";
+      grid-template-columns: auto 1fr auto;
+    }
+  
+    &:hover {
+      @include hue.hover(var(--he-background), var(--text));
+    }
+    &:has(:focus-visible) {
+      --he-border-color: var(--color, var(--primary));
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
+    }
+    &.underline {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 2px var(--he-border-color);
+    }
+    &.flat {
+      --he-radius: 0;
+    }
+    &.round {
+      --he-radius: var(--size-3);
+    }
+    &.outline {
+      border: solid 1px var(--he-border-color);
+    }
+    &.fill {
+      --he-background: color-mix(in oklch, var(--text) 10%, transparent);
+    }
+    &.round.underline {
+      --he-radius: var(--size-2);
+    }
   }
-  &:not(:has(.he-field-prefix)):has(.he-field-suffix) {
-    grid-template-areas: "input suffix";
-    grid-template-columns: 1fr auto;
+  
+  .he-field-prefix,
+  .he-field-suffix {
+    width: max-content;
+    &:focus-visible {
+      outline-color: var(--color, var(--primary));
+    }
   }
-  &:has(.he-field-prefix):has(.he-field-suffix) {
-    grid-template-areas: "prefix input suffix";
-    grid-template-columns: auto 1fr auto;
+  .he-field-prefix {
+    grid-area: prefix;
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
   }
-
-  &:hover {
-    @include hue.hover(var(--he-background), var(--text));
+  .he-field-suffix {
+    grid-area: suffix;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
   }
-  &:has(:focus-visible) {
-    --he-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-background));
-  }
-  &.underline {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-border-color);
-  }
-  &.flat {
-    --he-radius: 0;
-  }
-  &.round {
-    --he-radius: var(--size-3);
-  }
-  &.outline {
-    border: solid 1px var(--he-border-color);
-  }
-  &.fill {
-    --he-background: color-mix(in oklch, var(--text) 10%, transparent);
-  }
-  &.round.underline {
-    --he-radius: var(--size-2);
-  }
-}
-
-.he-field-prefix,
-.he-field-suffix {
-  width: max-content;
-  &:focus-visible {
-    outline-color: var(--color, var(--primary));
-  }
-}
-.he-field-prefix {
-  grid-area: prefix;
-  border-end-end-radius: 0;
-  border-start-end-radius: 0;
-}
-.he-field-suffix {
-  grid-area: suffix;
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
 }

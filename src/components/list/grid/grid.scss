@@ -1,23 +1,24 @@
 @use '../index.scss' as list;
-
-.he-list-grid,
-.he-nav-grid,
-.he-action-grid {
-  list-style: none;
-  margin-block: 0;
-  list-style: none;
-  margin-block: 0;
-  padding: var(--size-2);
-  display: grid;
-  gap: var(--size-2);
-  grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-width, 250px), 1fr));
-
-  & > li {
-    display: contents;
+@layer hueeye {
+  .he-list-grid,
+  .he-nav-grid,
+  .he-action-grid {
+    list-style: none;
+    margin-block: 0;
+    list-style: none;
+    margin-block: 0;
+    padding: var(--size-2);
+    display: grid;
+    gap: var(--size-2);
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-item-width, 250px), 1fr));
+  
+    & > li {
+      display: contents;
+    }
   }
-}
-
-.he-nav-grid,
-.he-action-grid {
-  @include list.list-vertical-selectable(grid);
+  
+  .he-nav-grid,
+  .he-action-grid {
+    @include list.list-vertical-selectable(grid);
+  }
 }

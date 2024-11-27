@@ -1,50 +1,52 @@
-.he-form-field {
-  display: inline-grid;
-  gap: var(--size-1);
-
-  .he-input-field {
-    display: inline-flex;
-  }
+@layer hueeye {
+  .he-form-field {
+    display: inline-grid;
+    gap: var(--size-1);
   
-  @supports selector(:has(input)) {
-    &.overlap {
-      position: relative;
-      .he-label {
-        position: absolute;
-        inset: var(--size-1) var(--size-2);
-        opacity: 0.5;
-        pointer-events: none;
-        transform: translateY(-0.8rem) scale(0.6);
-        transform-origin: 0 0;
-        transition: transform 0.1s var(--ease-in-out);
-      }
-      input::placeholder {
-        opacity: 0;
-      }
-      &:has(input:placeholder-shown) {
+    .he-input-field {
+      display: inline-flex;
+    }
+    
+    @supports selector(:has(input)) {
+      &.overlap {
+        position: relative;
         .he-label {
-          transform: translateY(0) scale(1);
+          position: absolute;
+          inset: var(--size-1) var(--size-2);
+          opacity: 0.5;
+          pointer-events: none;
+          transform: translateY(-0.8rem) scale(0.6);
+          transform-origin: 0 0;
+          transition: transform 0.1s var(--ease-in-out);
         }
-      }
-      .he-input-field.fill {
-        .he-label {
-          opacity: 0.7;
+        input::placeholder {
+          opacity: 0;
         }
-      }
-      .he-input-field.outline {
-        .he-label {
-          inset-block: var(--size-2);
+        &:has(input:placeholder-shown) {
+          .he-label {
+            transform: translateY(0) scale(1);
+          }
         }
-        .he-input-field {
-          padding-block: var(--size-2);
+        .he-input-field.fill {
+          .he-label {
+            opacity: 0.7;
+          }
         }
-      }
-      .he-input-field.round {
-        .he-label {
-          inset-inline: var(--size-3);
+        .he-input-field.outline {
+          .he-label {
+            inset-block: var(--size-2);
+          }
+          .he-input-field {
+            padding-block: var(--size-2);
+          }
         }
-        .he-input-field {
-          padding-inline: var(--size-3);
+        .he-input-field.round {
+          .he-label {
+            inset-inline: var(--size-3);
+          }
+          .he-input-field {
+            padding-inline: var(--size-3);
+          }
         }
       }
     }

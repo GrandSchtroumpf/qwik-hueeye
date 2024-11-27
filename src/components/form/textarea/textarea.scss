@@ -1,53 +1,55 @@
 @use '../../hue/utils' as hue;
-.he-textarea-field,
-.he-textarea:not(.he-field) {
-  --he-textarea-radius: var(--size-0);
-  --he-textarea-border-color: var(--outline);
-  --he-textarea-background: transparent;
+
+@layer hueeye {
+  .he-textarea-field,
+  .he-textarea:not(.he-field) {
+    --he-textarea-radius: var(--size-0);
+    --he-textarea-border-color: var(--outline);
+    --he-textarea-background: transparent;
+    
+    box-sizing: border-box;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--he-textarea-radius);
+    background-color: var(--he-textarea-background);
+    border: none;
   
-  box-sizing: border-box;
-  padding: var(--size-1) var(--size-2);
-  border-radius: var(--he-textarea-radius);
-  background-color: var(--he-textarea-background);
-  border: none;
-
-  &::placeholder {
-    color: color-mix(in oklch, transparent 70%, var(--text));
-  }
-
-  &:hover {
-    @include hue.hover(var(--he-textarea-background), var(--text));
-  }
-  &:focus-within, &:focus-visible, &:active {
-    --he-textarea-border-color: var(--color, var(--primary));
-    background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-textarea-background));
-  }
-  &:focus-within, &:focus-visible {
-    outline: none;
-  }
-
-  &.underline {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom: solid 2px var(--he-textarea-border-color);
-  }
-  &.flat {
-    --he-textarea-radius: 0;
-  }
-  &.round {
-    --he-textarea-radius: var(--size-3);
-  }
-  &.outline {
-    border: solid 1px var(--he-textarea-border-color);
-  }
-  &.fill {
-    --he-textarea-background: color-mix(in oklch, var(--text) 10%, transparent);
     &::placeholder {
-      color: color-mix(in oklch, transparent 60%, var(--text));
+      color: color-mix(in oklch, transparent 70%, var(--text));
     }
-  }
-  &.round.underline {
-    --he-textarea-radius: var(--size-2);
-  }
+  
+    &:hover {
+      @include hue.hover(var(--he-textarea-background), var(--text));
+    }
+    &:focus-within, &:focus-visible, &:active {
+      --he-textarea-border-color: var(--color, var(--primary));
+      background-color: color-mix(in oklch, var(--text) var(--alpha-focus), var(--he-textarea-background));
+    }
+    &:focus-within, &:focus-visible {
+      outline: none;
+    }
+  
+    &.underline {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 2px var(--he-textarea-border-color);
+    }
+    &.flat {
+      --he-textarea-radius: 0;
+    }
+    &.round {
+      --he-textarea-radius: var(--size-3);
+    }
+    &.outline {
+      border: solid 1px var(--he-textarea-border-color);
+    }
+    &.fill {
+      --he-textarea-background: color-mix(in oklch, var(--text) 10%, transparent);
+      &::placeholder {
+        color: color-mix(in oklch, transparent 60%, var(--text));
+      }
+    }
+    &.round.underline {
+      --he-textarea-radius: var(--size-2);
+    }
+  }  
 }  
-
