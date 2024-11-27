@@ -10,7 +10,6 @@ import {
   useSignal,
   untrack,
   useTask$,
-  unwrapStore,
 } from '@builder.io/qwik';
 import type { Serializable, ControlGroup } from './types';
 
@@ -18,7 +17,12 @@ const GroupContext = createContextId<any>('GroupContext');
 
 const copyStore = <T>(store: T): T => {
   if (!isProxy(store)) return store;
-  return unwrapStore(store);
+  const copy = Object.create(null);
+  for (const key in store) {
+    copy[key] = isProxy(store[key]) ? copyStore(store[key]) : store[key];
+  }
+  return copy;
+  // return unwrapStore(store); <-- TODO: use unwrapStore when lib bug is fixed
 }
 
 // FORM
