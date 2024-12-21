@@ -1,5 +1,5 @@
-import { component$, useTask$, Slot, useSignal, $, useStyles$ } from "@builder.io/qwik";
-import type { QRL, Signal } from "@builder.io/qwik";
+import { component$, useTask$, Slot, useSignal, $, useStyles$, createContextId, useContextProvider, useContext } from "@builder.io/qwik";
+import type { PropsOf, QRL, Signal } from "@builder.io/qwik";
 import type { DialogAttributes } from "../types";
 import { mergeProps } from "../utils/attributes";
 import styles from './dialog.scss?inline';
@@ -51,10 +51,14 @@ function useSwipeLeft<E extends HTMLElement = HTMLElement>(cb: QRL<(el: E) => an
   }
 }
 
+
+const DialogContext = createContextId<{ open: Signal<boolean>}>('>DialogContext');
+
 export const Dialog = component$((props: DialogProps) => {
   useStyles$(styles);
   const ref = useSignal<HTMLDialogElement>();
   const { 'bind:open': boundOpen, type = 'modal', ...dialogProps }  = props;
+  useContextProvider(DialogContext, { open: boundOpen });
 
   useTask$(({ track }) => {
     const opened = track(() => boundOpen.value);
@@ -91,4 +95,14 @@ export const Dialog = component$((props: DialogProps) => {
   return <dialog {...attr}>
     <Slot />
   </dialog>
+})
+
+export const CloseDialog = component$<PropsOf<'button'>>((props) => {
+  const { open } = useContext(DialogContext);
+  const attr = mergeProps<'button'>(props, {
+    onClick$: $(() => open.value = false),
+  })
+  return <button {...attr}>
+    <Slot />
+  </button>
 })

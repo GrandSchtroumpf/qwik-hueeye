@@ -8,6 +8,7 @@
     
     display: inline-grid;
     grid-template-areas: "input";
+    align-items: center;
   
     box-sizing: border-box;
     border-radius: var(--he-radius);
@@ -59,6 +60,7 @@
   
   .he-field-prefix,
   .he-field-suffix {
+    padding: var(--size-1);
     width: max-content;
     &:focus-visible {
       outline-color: var(--color, var(--primary));
