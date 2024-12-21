@@ -1,6 +1,6 @@
 {
   "name": "qwik-hueeye",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "UI library for Qwik",
   "main": "./lib/index.qwik.mjs",
   "qwik": "./lib/index.qwik.mjs",
