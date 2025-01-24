@@ -14,7 +14,7 @@ let workerRequests = 0;
 
 const getWorkerRequest = () => ++workerRequests;
 
-const getWorker = (qrl: QRL) => {
+const createWorker = (qrl: QRL) => {
   let worker = qwikWorkers.get(qrl.getHash());
   if (!worker) {
     qwikWorkers.set(
@@ -26,42 +26,77 @@ const getWorker = (qrl: QRL) => {
     );
   }
   return worker;
+}
+const getWorker = (qrl: QRL) => {
+  const worker = qwikWorkers.get(qrl.getHash());
+  if (!worker) throw new Error('[QwikWorker] Try to access Web Worker before it is created');
+  return worker;
 };
 
 type Callback<T> = (args: T) => any | QRL<(args: T) => any>;
 
 export interface QwikWorker<Message> {
   onmessage: (cb: Callback<Message>) => any;
-  onclose: (cb: Callback<void>) => any;
+  cleanup: (cb: Callback<void>) => any;
   postMessage: QRL<(data: Message) => any>;
 }
 
 export const webWorkerQrl = <T = unknown>(qrl: QRL<(this: any, props: QwikWorker<T>) => any>) => {
-  const sendMessage = $((type: 'init' | 'close' | 'message', data?: string) => {
+
+  const sendMessage = $((type: 'apply' | 'close' | 'message', data?: string) => {
     const worker = getWorker(qrl);
     const ctxElement = (_getContextElement() as HTMLElement | undefined);
     const containerEl = ctxElement?.closest('[q\\:container]') ?? document.documentElement;
     const qbase = containerEl.getAttribute('q:base') ?? '/';
     const baseURI = document.baseURI;
-    const requestId = getWorkerRequest();  
-    worker.postMessage([type, requestId, baseURI, qbase, data]);
-  })
-
-  const create = $(async () => {
-    const data = await _serializeData([qrl], false);
-    sendMessage('init', data);
+    const requestId = getWorkerRequest();
+    return new ReadableStream({
+      start(controller) {
+        const handler = ({ data }: MessageEvent) => {
+          if (!Array.isArray(data)) return;
+          if (data[0] !== type) return;
+          if (data[1] !== requestId) return;
+          const { status, result, done } = data[2];
+          if (status !== 'success') {
+            controller.error(result);
+          }
+          if (done) {
+            worker.removeEventListener('message', handler)
+            controller.close();
+          } else {
+            controller.enqueue(result);
+          }
+        };
+        worker.addEventListener('message', handler);
+        worker.postMessage([type, requestId, baseURI, qbase, data]);
+      }
+    });
   });
+  
+  /** 
+   * Create the worker and apply qrl callback.
+   */
+  const create = $(async () => {
+    createWorker(qrl)
+    const data = await _serializeData([qrl], false);
+    return sendMessage('apply', data);
+  });
+
 
   /** Post message to web worker instance */
   const postMessage = $(async (...args: any[]) => {  
     const data = await _serializeData(args, false);
-    sendMessage('message', data);
+    return sendMessage('message', data);
   });
 
-  /** Close current process be do not use */
+  /** Clear current callbacks but keep the worker alive for future message */
   const close = $(() => sendMessage('close'))
 
-  /** Register callback when worker post message to main thread */
+  /**
+   * Register callback when worker post message to main thread
+   * @param cb The callback to run when message arrives
+   * @returns unsubscribe function
+   */
   const onMessage$ = $((cb: (...args: any[]) => any) => {
     const worker = getWorker(qrl);
     const handler = ({ data }: MessageEvent) => {

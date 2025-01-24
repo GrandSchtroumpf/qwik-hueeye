@@ -52,7 +52,7 @@ function useSwipeLeft<E extends HTMLElement = HTMLElement>(cb: QRL<(el: E) => an
 }
 
 
-const DialogContext = createContextId<{ open: Signal<boolean>}>('>DialogContext');
+const DialogContext = createContextId<{ open: Signal<boolean>}>('DialogContext');
 
 export const Dialog = component$((props: DialogProps) => {
   useStyles$(styles);
