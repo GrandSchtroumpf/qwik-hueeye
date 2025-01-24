@@ -3,8 +3,8 @@ import { useWebWorker$, useWorker$ } from "../../components/worker/useWebWorker"
 
 export default component$(() => {
   const count = useSignal(0);
-  const worker = useWebWorker$<string>((worker) => {
-    const { postMessage, onmessage, cleanup } = worker;
+  const worker = useWebWorker$(function() {
+    const { postMessage, onmessage, cleanup } = this;
     onmessage((content) => {
       console.log('Received message', content);
       console.log('counter', count.value);
@@ -16,7 +16,7 @@ export default component$(() => {
     track: [count],
   });
 
-  const result = useWorker$<string>(async function*() {
+  const result = useWorker$(async function*() {
     yield '1';
     await new Promise(res => setTimeout(res, 3000));
     yield '2';
@@ -25,6 +25,8 @@ export default component$(() => {
   return <>
     <button onClick$={() => worker.postMessage('Coucou')}>Post Message</button>
     <button onClick$={() => count.value++}>Counter</button>
-    {result.value}
+    <p>
+      <b>{result.value}</b>
+    </p>
   </>
 })

@@ -1,19 +1,19 @@
-import { implicit$FirstArg, OnVisibleTaskOptions, QRL, Signal, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import { QwikWorker, webWorkerQrl } from "./web-worker";
+import { implicit$FirstArg, OnVisibleTaskOptions, Signal, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { ExtractOuputResult, WorkerQRL, createWorkerQrl } from "./web-worker";
 
 interface OnWebWorkerOptions extends OnVisibleTaskOptions {
   track?: Signal[],
 }
 
-export const useWebWorkerQrl = <T = unknown>(
-  qrlFn: QRL<(args: QwikWorker<T>) => any>,
+export const useWebWorkerQrl = <O>(
+  qrlFn: WorkerQRL<[], O>,
   options?: OnWebWorkerOptions
 ) => {
   const {
     track = [],
     ...visibleOptions
   } = options ?? {};
-  const worker = webWorkerQrl(qrlFn);
+  const worker = createWorkerQrl(qrlFn);
   
   // Terminate worker when component is closed
   useTask$(({ cleanup }) => {
@@ -23,7 +23,7 @@ export const useWebWorkerQrl = <T = unknown>(
   useVisibleTask$(async (task) => {
     track.forEach(task.track);
     // Cannot use terminate in cleanup because it resolves after
-    await worker.terminate();
+    worker.terminate();
     await worker.create();
   }, visibleOptions);
 
@@ -32,16 +32,16 @@ export const useWebWorkerQrl = <T = unknown>(
 
 export const useWebWorker$ = implicit$FirstArg(useWebWorkerQrl);
 
-export const useWorkerQrl = <T = unknown>(
-  qrlFn: QRL<(args: QwikWorker<T>) => any>,
+export const useWorkerQrl = <O>(
+  qrlFn: WorkerQRL<[], O>,
   options?: OnWebWorkerOptions
 ) => {
   const {
     track = [],
     ...visibleOptions
   } = options ?? {};
-  const worker = webWorkerQrl(qrlFn);
-  const signal = useSignal<T>();
+  const worker = createWorkerQrl(qrlFn);
+  const signal = useSignal<ExtractOuputResult<O>>();
   
   // Terminate worker when component is closed
   useTask$(({ cleanup }) => {
@@ -52,14 +52,18 @@ export const useWorkerQrl = <T = unknown>(
     track.forEach(task.track);
     // Cannot use terminate in cleanup because it resolves after
     await worker.terminate();
-    const stream = await worker.create();
-    // Cannot use async iterator because it's not supported by Safari
-    const reader = stream.getReader();
-    let streaming = true;
-    while (streaming) {
-      const {done, value} = await reader.read();
-      if (done) streaming = false;
-      else signal.value = value;
+    const result = await worker.create();
+    if (result instanceof ReadableStream) {
+      // Cannot use async iterator because it's not supported by Safari
+      const reader = result.getReader();
+      let streaming = true;
+      while (streaming) {
+        const {done, value} = await reader.read();
+        if (done) streaming = false;
+        else signal.value = value;
+      }
+    } else {
+      signal.value = result as any;
     }
   }, visibleOptions);
 

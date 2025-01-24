@@ -17,7 +17,7 @@ globalThis.document = {
 const msgCallbacks = new Set<(...args: any[]) => any>();
 const closeCallbacks = new Set<() => any>();
 
-const props: QwikWorker<unknown> = {
+const qwikWorker: QwikWorker = {
   // Marking it as QRL rerender the worker for some reason
   onmessage: (cb) => msgCallbacks.add(cb),
   cleanup: (cb) => closeCallbacks.add(cb),
@@ -40,12 +40,12 @@ globalThis.onmessage = async ({ data }) => {
   };
   try {
     if (type === 'apply') {
-      const [qrl] = _deserializeData(params, containerEl);
-      const output = await qrl.apply(self, [props]);
+      const [qrl, ...inputParams] = _deserializeData(params, containerEl);
+      const output = await qrl.apply(qwikWorker, inputParams);
       // Add cleanup callback if output is a function
       if (typeof output === 'function') {
         closeCallbacks.add(output);
-        return self.postMessage([type, requestId, { status: 'success', done: true }]);
+        return self.postMessage([type, requestId, { status: 'success', done: true, resultType: 'promise' }]);
       }
       
       // If function is an iterator and not an array iterate over it
@@ -53,15 +53,13 @@ globalThis.onmessage = async ({ data }) => {
         if (Array.isArray(output)) break isObject;
         if (Symbol.iterator in output || Symbol.asyncIterator in output) {
           for await (const result of output) {
-            console.log(result);
-            self.postMessage([type, requestId, { status: 'success', result, done: false }]);
+            self.postMessage([type, requestId, { status: 'success', result, done: false, resultType: 'stream' }]);
           }
-          return self.postMessage([type, requestId, { status: 'success', done: true }]);
+          return self.postMessage([type, requestId, { status: 'success', done: true, resultType: 'stream' }]);
         }
       }
       // We need to emit twice because ReadableStream emit last close() event with undefined value
-      self.postMessage([type, requestId, { status: 'success', result: output, done: false }])
-      self.postMessage([type, requestId, { status: 'success', done: true }]);
+      self.postMessage([type, requestId, { status: 'success', done: true, resultType: 'promise' }]);
     }
     if (type === 'message') {
       const args = _deserializeData(params, containerEl);
